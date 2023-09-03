@@ -1,0 +1,361 @@
+<%- include ('../layouts/homeHeader.ejs') -%>
+<style>
+.button {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+.button.selected {
+    background-color:#ff084e ;
+    color: #fff;
+}
+</style>
+    <!-- <<<<<<<<<<<<<<<<<<<< Breadcumb Area Start <<<<<<<<<<<<<<<<<<<< -->
+    <!-- <div class="breadcumb_area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <ol class="breadcrumb d-flex align-items-center">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Dresses</a></li>
+                            <li class="breadcrumb-item active">Long Dress</li>
+                        </ol> -->
+    <!-- btn -->
+    <!-- <a href="#" class="backToHome d-block"><i class="fa fa-angle-double-left"></i> Back to Category</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- <<<<<<<<<<<<<<<<<<<< Breadcumb Area End <<<<<<<<<<<<<<<<<<<< -->
+    <!-- <<<<<<<<<<<<<<<<<<<< Single Product Details Area Start >>>>>>>>>>>>>>>>>>>>>>>>> -->
+    <section class="single_product_details_area p-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="product-imgs">
+                        <div class="img-display">
+                            <div class="img-showcase p-0" style="border: 1px solid #858585; width:fit-content; height: auto;">
+                                <div class="main-image">
+                                    <img class="imgg" src="/assets/product-images/<%=prodsData.images[0] %>"
+                                        id="main-img" alt="Responsive image" style="object-fit: cover; width: 100%; height: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="img-select">
+                            <div class="img-item" style="border: 1px solid #858585; width:fit-content;">
+                                <a data-id="1">
+                                    <img class="imgg" src="/assets/product-images/<%=prodsData.images[0] %>"
+                                        id="<%=prodsData.images[0] %>" alt=""
+                                        onclick="imgClick(this.id)">
+                                </a>
+                            </div>
+                            <div class="img-item" style="border: 1px solid #858585; width:fit-content;">
+                                <a data-id="2">
+                                    <img class="imgg" src="/assets/product-images/<%=prodsData.images[1] %>"
+                                        id="<%=prodsData.images[1] %>" alt=""
+                                        onclick="imgClick(this.id)">
+                                </a>
+                            </div>
+                            <div class="img-item" style="border: 1px solid #858585; width:fit-content;">
+                                <a data-id="3">
+                                    <img class="imgg" src="/assets/product-images/<%=prodsData.images[2] %>"
+                                        id="<%=prodsData.images[2] %>" alt=""
+                                        onclick="imgClick(this.id)">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="single_product_desc">
+                        <small>
+                            <%= prodsData.brand %>
+                        </small>
+                        <h4 class="title"><a href="#"></a>
+                            <%= prodsData.name %>
+                        </h4>
+                        <h4 class="price">&#8377;<%= prodsData.price %>&nbsp;<span class="dPrice fw-normal strike-through text-secondary fs-4"><del>₹<%=prodsData.price +
+                            prodsData.discountPrice %></del></span><span class="discount fs-5 text-success">
+                                <% if(prodsData.offer) {%>
+                                    <small class=" text-white p-1 ps-2 pe-2 bg-secondary"
+                                        style="font-weight: 100;">Special
+                                        <% const discountPercentage = 100-(prodsData.price/(prodsData.discountPrice+prodsData.price)) * 100;
+                                        %>
+                                            <%= Math.round(discountPercentage) %>% off
+                                    </small>
+                                <% } else{%>
+                                    <span class="discount">
+                                        <% const discountPercentage = 100-(prodsData.price/(prodsData.discountPrice+prodsData.price)) * 100;
+                                        %>
+                                            <%= Math.round(discountPercentage) %>% off
+                                    </span>
+                                <% } %>
+                            </span>
+                        </h4>
+                            <p class="available">Availabiliy:<% if (prodsData.quantity>0){ %> 
+                                <span class="text-muted fw-bold"><%=prodsData.quantity%></span>
+                        <%}else{%>
+                            <span class="text-danger">Out of stock</span>
+                        <%} %>
+                            </p>
+                        <div class="product-rating">
+                            <%if(prodsData.reviews && prodsData.reviews.length>0) {%>
+                                <% for(let i=1;i<=5;i++){ %>
+                                    <% if(i>prodsData.totalRating){ %>
+                                        <i class="bi bi-star"></i>
+                                        <% }else if(!Number.isInteger(prodsData.totalRating)&&
+                                            ((parseInt(prodsData.totalRating+1))==i)){ %>
+                                            <i class="bi bi-star-half"></i>
+                                            <% }else{ %>
+                                                <i class="bi bi-star-fill"></i>
+                                                <% } %>
+                                                    <% } %>
+                                                        <span id="rating-number">
+                                                            <%=prodsData.totalRating%>
+                                                        </span><span>(<%=prodsData.reviews.length %>)</span>
+                                                        <% } %>
+                        </div>
+                        <!-- <div class="single_product_ratings mb-15">
+                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                            <i class="bi bi-star" aria-hidden="true"></i>
+                        </div> -->
+                        <div class="mb-3 mt-5">
+                            <h6 class="widget-title">Size</h6>
+                            <div class="mb-5" id="buttonContainer">
+                                <% prodsData.size.forEach((siz, index) => { %>
+                                    <a href="#">
+                                        <button type="button" class="button custom-label fw-bold" style="border: 1px solid #ccc;
+                                        padding: 0.5rem 1rem;
+                                        margin: 0.25rem;" data-value="<%= siz %>"
+                                            onclick="selectButton('<%= siz %>', this)">
+                                            <%= siz %>
+                                        </button>
+                                    </a>
+                                <% }) %>
+                                <br><small style="color: red;" id="size-error"></small>
+                            </div>
+                        </div>
+                        <!-- Add to Cart Form -->
+                        <div class="cart clearfix mb-50 mt-50">
+                            <div class="d-flex column-gap-1">
+                                <% if (locals.user) { %>
+                                    <!-- Cart Button -->
+                                    <% const cartProductIds = cartData.map(item => item.productId._id.toString()); %>
+                                                        <% if (cartProductIds.includes(prodsData._id.toString())) { %>
+                                                            <form action='/removecartproduct/<%= prodsData._id %>' method="post">
+                                                                <button
+                                                                class="btn btn-outline-dark text-center border-1 w-100 h-100"
+                                                                type="submit" style="border-width: 4px;">REMOVE FROM CART
+                                                                <i class="bi bi-bag-check-fill text-danger"></i>
+                                                            </button>                                                              
+                                                            </form>
+                                                        <% } else if(!cartProductIds.includes(prodsData._id.toString()) && prodsData.quantity>0) { %>
+                                                            <form action="/addtocart/<%= prodsData._id %>" onsubmit="return check();" method="post">
+                                                                <input type="hidden" id="selectedValueInput" name="size">
+                                                                    <button
+                                                                        class="btn btn-outline-dark text-center button border-1 w-100 h-100"
+                                                                        type="submit" style="border-width: 4px;">ADD TO CART
+                                                                        <i class="bi bi-cart-plus"></i>
+                                                                    </button>
+                                                                </form>
+                                                        <% }else{%>
+                                                                    <button
+                                                                        class="btn btn-outline-danger text-center button border-1 h-100"
+                                                                        type="submit" style="border-width: 4px;">OUT OF STOCK
+                                                                        <i class="bi bi-cart-x"></i>
+                                                                    </button>
+                                                        <%} %> 
+                                    <!-- Wishlist Button -->
+                                        <form action="/wishlist/<%= prodsData._id %>" method="post">
+                                        <% if (wishlist.includes(prodsData._id)) { %>
+                                                    <button
+                                                        class="btn btn-outline-dark text-center h-100 border-1 p-2 w-100 d-flex justify-content-center align-items-center p-2"
+                                                        type="submit" style="border-width: 4px;">REMOVE FROM WISHLIST&nbsp;<i class="bi bi-heart-fill text-danger"></i>
+                                                    </button>
+                                                    <% } else { %>
+                                                        <button
+                                                            class="btn btn-outline-dark text-center h-100 border-1 p-2 w-100 d-flex justify-content-center align-items-center p-2"
+                                                            type="submit" style="border-width: 4px;">ADD TO WISHLIST&nbsp;<i class="bi bi-heart"></i>
+                                                        </button>
+                                                    <% } %>
+                                                </form>
+                                    <% } else { %>
+                                        <a href="/login"
+                                            class="btn btn-outline-dark w-50 btn-add-to-cart d-flex justify-content-center align-items-center">ADD
+                                            TO CART&nbsp;<i class="bi bi-cart-plus"></i></a>
+                                        <a href="/login"
+                                            class="btn btn-outline-dark w-50 btn-add-to-cart d-flex justify-content-center align-items-center">ADD
+                                            TO WISHLIST&nbsp;<i class="bi bi-heart"></i></a>
+                                        <% } %>
+                            </div>
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <h4>Shipping and Returns</h4>
+                    Free standard delivery on all orders
+                    and free return for all qualifying orders
+                    within
+                    <strong>14 days of
+                        your order date</strong>.
+                </div>
+                <div id="accordion" role="tablist">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <h6 class="mb-0">
+                                <a data-bs-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">DESCRIPTION</a>
+                            </h6>
+                        </div>
+                        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                            <div class="card-body p-4">
+                                <p>
+                                    <%=prodsData.description %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Other Accordion Cards... -->
+                </div>
+            </div>
+            <div class="ratingAndReview mt-5">
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <h3>Rating and Reviews</h3>
+                    <% if(userReviewed==0){ %>
+                        <button class="btn rounded-0 p-2 text-dark"
+                            style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                            <a href="/review-product?prodId=<%=prodsData._id%>" class="text-dark">Rate
+                                Product</a></button>
+                        <% }else{%>
+                            <button class="btn rounded-0 p-2 text-dark"
+                                style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                                <a href="/edit-review-product?prodId=<%=prodsData._id%>" class="text-dark">Edit
+                                    Review</a></button>
+                            <%}%>
+                </div>
+                <div class="mt-4">
+                    <div class="row">
+                        <%if(prodsData.reviews.length>0){ for(let i=0;i<prodsData.reviews.length&& i<4;i++) {%>
+                                <div class="col-md-6 mb-3">
+                                    <div class="p-3" style="border: 1px solid rgb(222, 222, 222);">
+                                        <div class=" ">
+                                            <div class="d-flex align-items-center">
+                                                <div <% if(prodsData.reviews[i].rating>2) {%>
+                                                    style="background-color: #000000;padding: 2px 5px;"<% } else
+                                                        if(prodsData.reviews[i].rating==2){%>
+                                                        style="background-color: rgb(255,
+                                                        150,13);border-radius:4px;padding: 2px 5px;"
+                                                        <% } else if(prodsData.reviews[i].rating==1){%>
+                                                            style="background-color: rgb(237, 40,
+                                                            33);border-radius:4px;padding: 2px 5px;"
+                                                            <%}%>>
+                                                                <span class="text-white">
+                                                                    <%=prodsData.reviews[i].rating %> <i
+                                                                            class="bi bi-star-fill text-white"></i>
+                                                                </span>
+                                                </div>
+                                                <strong class="ms-2" style="font-size: 1.2rem;">
+                                                    <%=prodsData.reviews[i].title %>
+                                                </strong>
+                                            </div>
+                                            <div class="review-content mt-2">
+                                                <span class="">
+                                                    <%=prodsData.reviews[i].description %>
+                                                </span><br>
+                                                <span class="text-secondary" style="font-size: .8rem;"><strong
+                                                        class=" text-uppercase ">
+                                                        <%=prodsData.reviews[i].userId.firstName %>
+                                                            <%=prodsData.reviews[i].userId.lastName %>
+                                                    </strong><i
+                                                    class="bi bi-check-circle-fill  me-2"></i>Certified
+                                                    Buyer
+                                                    <% const dd=prodsData.reviews[i].createdAt.getDate(); const
+                                                        mm=prodsData.reviews[i].createdAt.getMonth() + 1; const
+                                                        yyyy=prodsData.reviews[i].createdAt.getFullYear(); const
+                                                        formattedDate=`${dd}-${mm}-${yyyy}`; %>
+                                                        <span>
+                                                            <%=formattedDate %>
+                                                        </span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }} %>
+                                    <% if(prodsData.reviews.length>0) {%> <div class=" p-2 text-center">
+                                            <a href="/more-reviews?prodId=<%=prodsData._id%>"
+                                                class="btn rounded-0 btn-dark">More reviews <i class="bi bi-chevron-down"></i></a>
+                                        </div>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- <<<<<<<<<<<<<<<<<<<< Single Product Details Area End >>>>>>>>>>>>>>>>>>>>>>>>> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <script src="/static/js/productView.js"></script>
+    <!-- Plugins js -->
+    <script src="/static/js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/static/js/active.js"></script>
+    <!-- For Zoom Image -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.zoomable-image').elevateZoom({
+                zoomType: "inner",
+                cursor: "crosshair"
+            });
+        });
+    </script>
+<script>
+    let errorDiv = document.getElementById('size-error')
+    function sizeCheck() {
+        let sizeVal = document.getElementById('selectedValueInput').value
+        if (sizeVal.length == 0) {
+            errorDiv.innerHTML = 'Choose a size'
+            return false
+        }
+        errorDiv.innerHTML = ""
+        return true
+    }
+    function check() {
+        if (!sizeCheck()) return false
+        return true
+    }
+</script>
+<script>
+    let selectedButton = null;
+    const selectedValueInput = document.getElementById("selectedValueInput");
+    // function selectButton(buttonIndex) {
+    //     const buttonContainer = document.getElementById("buttonContainer");
+    //     const buttons = buttonContainer.getElementsByClassName("button");
+    //     if (selectedButton !== null) {
+    //         selectedButton.classList.remove("selected");
+    //     }
+    //     selectedButton = buttons[buttonIndex - 1];
+    //     selectedButton.classList.add("selected");
+    //     const selectedValue = selectedButton.getAttribute("data-value");
+    //     selectedValueInput.value = selectedValue;
+    // }
+    function selectButton(size, button) {
+    // Remove 'selected' class from all buttons
+    const buttons = document.querySelectorAll('.button');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    // Add 'selected' class to the clicked button
+    button.classList.add('selected');
+    // Update selectedValueInput value
+    const selectedValueInput = document.getElementById('selectedValueInput');
+    selectedValueInput.value = size;
+}
+</script>
+    <%- include ('../layouts/footer.ejs') -%>

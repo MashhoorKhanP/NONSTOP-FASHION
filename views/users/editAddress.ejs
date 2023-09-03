@@ -1,0 +1,254 @@
+<!-- Header Start -->
+<%- include ('../layouts/homeHeader.ejs') -%>
+    <!-- Header End -->
+    <div class="center-div py-5 col-md-12 col-12">
+        <div class="container w-50 pt-5 pb-5 border border-dark">
+            <h1 class="fs-3 text-black text-center">EDIT ADDRESS</h1>
+            <div class="text-center text-danger">
+                <% if(typeof message !=='undefined' ){ %>
+                    <p class="">
+                        <%= message %>
+                    </p>
+                    <%} %>
+            </div>
+            <form action="/manageaddress/editaddress/<%= address._id %>" method="post" id="submit-form">
+                <div class="row justify-content-center py-4 ps-4 pe-4">
+                    <div class="col-md-6 col-12">
+                        <!--  Name Field -->
+                        <div class="mb-3">
+                            <label for="name-input" class="form-label">Name *</label>
+                            <input type="text" class="rounded-0 form-control" name="name"
+                                value="<%= address.userName %>" id="name-input">
+                        </div>
+                        <!-- Mobile No Field -->
+                        <div class="mb-3">
+                            <label for="mobno-input" class="form-label">Mobile No *</label>
+                            <input type="text" class="rounded-0 form-control" name="mobno" value="<%= address.mobile %>"
+                                id="mobno-input">
+                        </div>
+                        <!-- State -->
+                        <div class="mb-3">
+                            <label for="state-input" class="form-label">State *</label>
+                            <input type="text" class="rounded-0 form-control" name="state" value="<%= address.state %>"
+                                id="state-input">
+                        </div>
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label for="address-input" class="form-label">Address *</label>
+                            <textarea class="rounded-0 form-control address-input" name="address" id="address-input"
+                                rows="5"><%= address.address %></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="email-input" class="form-label">Email *</label>
+                            <input type="email" class="rounded-0 form-control" name="email" value="<%= address.email %>"
+                                id="email-input">
+                        </div>
+                        <!-- Town/City -->
+                        <div class="mb-3">
+                            <label for="town-input" class="form-label">Town/City *</label>
+                            <input type="text" class="rounded-0 form-control" name="town" value="<%= address.town %>"
+                                id="town-input">
+                        </div>
+                        <!-- Country -->
+                        <div class="mb-3">
+                            <label for="country-input" class="form-label">Country *</label>
+                            <input type="text" class="rounded-0 form-control" name="country"
+                                value="<%= address.country %>" id="country-input">
+                        </div>
+                        <!-- Zipcode -->
+                        <div class="mb-3">
+                            <label for="-input" class="form-label">Zip/Pin Code *</label>
+                            <input type="number" class="rounded-0 form-control" name="zipcode"
+                                value="<%= address.zip %>" id="zipcode-input">
+                            <small id="zip-error" class="text-danger fw-bold text-small"></small>
+                        </div>
+                    </div>
+                    <div class="text-danger text-center fw-bold" id="message-error"></div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="rounded-0 btn btn-dark w-50">ADD ADDRESS</button>
+                    <br>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        /** Form Validation Start **/
+        const form = document.getElementById('submit-form');
+        const userName = document.getElementById('name-input');
+        const country = document.getElementById('country-input');
+        const emailId = document.getElementById('email-input');
+        const mobNo = document.getElementById('mobno-input');
+        const town = document.getElementById('town-input');
+        const address = document.getElementById('address-input');
+        const state = document.getElementById('state-input');
+        const zipCode = document.getElementById('zipcode-input');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            validateInput();
+        });
+        const setError = (element, message) => {
+            const inputControl = element.parentElement;
+            // const errorDisplay = inputControl.querySelector('.error');
+            // errorDisplay.innerText=message;
+            element.placeholder = message;
+            userName.style.border = '1.5px solid red';
+            country.style.border = '1.5px solid red';
+            emailId.style.border = '1.5px solid red';
+            mobNo.style.border = '1.5px solid red';
+            town.style.border = '1.5px solid red';
+            address.style.border = '1.5px solid red';
+            state.style.border = '1.5px solid red';
+            zipCode.style.border = '1.5px solid red';
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success');
+        };
+        const setSuccess = element => {
+            const inputControl = element.parentElement;
+            // const errorDisplay= inputControl.querySelector('.error');
+            // errorDisplay.innerText='';
+            element.placeholder = '';
+            inputControl.classList.add('success');
+            inputControl.classList.remove('error');
+        };
+        const isValidUserName = userName => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(userName));
+        };
+        const isValidCountry = country => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(country));
+        };
+        const isValidEmail = emailId => {
+            const re = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+            return re.test(String(emailId).toLowerCase());
+        };
+        const isValidMobNo = mobNo => {
+            const re = /^[0-9]{10}$/;
+            return re.test(mobNo);
+        };
+        const isValidTown = town => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(town));
+        };
+        const isValidAddress = address => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(address));
+        };
+        const isValidState = state => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(state));
+        };
+        const isValidZip = zipCode => {
+            const rename = /^[1-9][0-9]{5}$/;
+            return rename.test(String(zipCode));
+        };
+        const validateInput = () => {
+            console.log("Entered to validate input");
+            const userNameValue = userName.value.trim();
+            const countryValue = country.value.trim();
+            const emailIdValue = emailId.value.trim();
+            const mobNoValue = mobNo.value.trim();
+            const townValue = town.value.trim();
+            const addressValue = address.value.trim();
+            const stateValue = state.value.trim();
+            const zipCodeValue = zipCode.value.trim();
+            if (userNameValue === '') {
+                setError(userName, 'Name is required');
+            } else if (!isValidUserName(userNameValue)) {
+                //setError(username);
+                document.getElementById('message-error').innerHTML = 'Names should be alphabets';
+            } else {
+                console.log("fName Ok");
+                setSuccess(userName);
+            }
+            if (countryValue === '') {
+                setError(country, 'Country is required');
+            } else if (!isValidCountry(countryValue)) {
+                //setError(username);
+                document.getElementById('message-error').innerHTML = 'Enter a valid country';
+            } else {
+                console.log("lName Ok");
+                setSuccess(country);
+            }
+            if (emailIdValue === '') {
+                setError(emailId, 'Email is required');
+            } else if (!isValidEmail(emailIdValue)) {
+                //alert('Provide a valid Email address')
+                document.getElementById('message-error').innerHTML = 'Provide a valid email address';
+            } else {
+                console.log("email Ok");
+                setSuccess(emailId);
+            }
+            if (mobNoValue === '') {
+                setError(mobNo, 'Mobile No is required');
+            } else if (!isValidMobNo(mobNoValue)) {
+                //alert('Provide a valid Email address')
+                document.getElementById('message-error').innerHTML = 'Provide a valid mobile number';
+            } else {
+                console.log("Mobile oK")
+                setSuccess(mobNo);
+            }
+            if (townValue === '') {
+                setError(town, 'Town/city is required');
+            } else if (!isValidTown(townValue)) {
+                //alert('Provide a valid Email address')
+                document.getElementById('message-error').innerHTML = 'Provide a correct town name';
+                //setError(password,'Provide a strong password');
+            } else {
+                console.log("Town Ok")
+                setSuccess(town);
+            }
+            if (addressValue === '') {
+                setError(address, 'Address is required');
+            } else if (!isValidAddress(addressValue)) {
+                document.getElementById('message-error').innerHTML = 'Enter a valid Address';
+            } else {
+                console.log("Address ok");
+                setSuccess(address);
+            }
+            if (stateValue === '') {
+                setError(state, 'State is required');
+            } else if (!isValidState(stateValue)) {
+                document.getElementById('message-error').innerHTML = 'Enter a valid State';
+            } else {
+                console.log("State ok");
+                setSuccess(state);
+            }
+            if (zipCodeValue === '') {
+                setError(zipCode, 'Zip Code is required');
+            } else if (!isValidZip(zipCodeValue)) {
+                document.getElementById('zip-error').innerHTML = 'Enter a valid zip code';
+            } else {
+                console.log("Zip ok");
+                setSuccess(zipCode);
+            }
+            // if(messagesInboxValue===''){
+            //     setError(messagesInbox,'Message is mandatory');
+            // }else if(messagesInboxValue.split(' ').length<10){
+            //     document.getElementById('message-error').innerHTML='Messages should be atleast 10 words';
+            //     // setError(messagesInbox,'Messages should be atleast 10 words')
+            // }else{
+            //     setSuccess(messagesInbox);
+            // }
+            //FOR SUBMISSION:
+            const inputs = [userName, country, emailId, mobNo, town, address, state, zipCode];
+            if (inputs.every(input => input.parentElement.classList.contains('success'))) {
+                form.submit();
+                console.log("Form submission successful")
+            }
+        };
+        /** Form Validation End **/
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    </body>
+    </html>
+    <%- include ('../layouts/footer.ejs') -%>

@@ -1,0 +1,27 @@
+.pagination-btn {
+    color: rgb(0, 0, 0);/* Dark background color */
+    outline: 1px solid black;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination-btn.active {
+    background-color:#000000; /* Active link background color */
+    color: white;
+}
+
+.pagination-btn:hover {
+    background-color: #858585; /* Hover background color */
+    color: white;
+}
+
+.show-upto-item {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    border: none;
+}
+
+.limit-text{
+    color:#000000;
+    font-weight: bold;
+    text-decoration: underline;
+}

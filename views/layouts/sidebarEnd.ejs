@@ -1,0 +1,26 @@
+</div>
+</div>
+<!-- Sidebar End -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous"></script>
+<script>
+    let notificationCount = 0;
+    function showNotification() {
+        notificationCount++;
+        const badge = document.getElementById('notification-badge');
+        badge.textContent = notificationCount;
+        badge.classList.remove('d-none');
+    }
+    // Simulate a notification after 3 seconds (you can trigger this function when a real notification comes)
+    setTimeout(showNotification, 2000);
+    var currentDateTime = new Date();
+    // Format the date and time as a string
+    var formattedDateTime = currentDateTime.toLocaleString();
+    // Update the element's content with the formatted date and time
+    document.getElementById("datetime").textContent = formattedDateTime;
+</script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>

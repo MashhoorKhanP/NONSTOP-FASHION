@@ -1,0 +1,165 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+  <!-- Sidebar Start -->
+  <%- include('../layouts/sidebar.ejs') -%>
+    <main class="w-75">
+      <div class="p-5 container">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative   z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3 fs-5 fw-bold">Offers</h6>
+              <div class="text-end pe-4">
+                <a href="/admin/offers/add-offer">
+                  <button class="btn btn-dark text-white rounded-0 fw-bold fs-7"><i class="bi bi-plus-lg"></i>
+                    OFFER</button>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0 ">
+              <table class="table align-items-center mb-0">
+                <div class="text-center text-success">
+                  <% if(typeof offerUpdateMessage !=='undefined' ){ %>
+                    <p class="fw-bold">
+                      <%= offerUpdateMessage %>
+                    </p>
+                    <%} %>
+                </div>
+                <thead class="text-center">
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Discount
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Expiry
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(offers.length>0){ offers.forEach((offer)=>{ %>
+                    <tr class="align-middle">
+                      <td class="text-xs font-weight-bold mb-0 text-center">
+                        <%=offers.indexOf(offer)+1%>
+                      </td>
+                      <td class="text-xs font-weight-bold mb-0 text-center">
+                        <%=offer.offerName %>
+                      </td>
+                      <td class="text-xs font-weight-bold mb-0 text-center">
+                        <%=offer.discount %>%
+                      </td>
+                      <% const dd=offer.expiryDate.getDate(); const mm=offer.expiryDate.getMonth() + 1; const
+                        yyyy=offer.expiryDate.getFullYear(); const formattedDate=`${dd}-${mm}-${yyyy}`; %>
+                        <td class="text-xs font-weight-bold mb-0 text-center">
+                          <%=formattedDate %>
+                        </td>
+                        <td class="text-xs font-weight-bold mb-0 text-center">
+                          <a href="/admin/offers/edit-offer?id=<%=offer._id%>" title="Edit Offer"><i
+                              class="bi bi-pencil-square text-dark fs-6"></i></a>
+                        </td>
+                        <td class="text-xs font-weight-bold mb-0 text-center">
+                          <%if(offer.status===true){%>
+                            <a class="justify-content-center align-items-center btn btn-outline-success m-2 fw-bold list-btn"
+                              onclick="showConfirmationModal('<%=offer._id%>')">LISTED</a>
+                            <%}else{%>
+                              <a class="justify-content-center align-items-center btn btn-outline-danger m-2 fw-bold  unList-btn"
+                                onclick="showConfirmationModal('<%=offer._id%>')">UNLISTED</a>
+                              <%}%>
+                                </button>
+                        </td>
+                    </tr>
+                    <% })} %>
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination and Show upto -->
+            <div class="mx-3 d-flex justify-content-between border-top pt-3">
+              <div class="text-center">
+                <ul class="list-unstyled d-flex justify-content-center mb-4">
+                  <li class="mx-1 ps-2 pe-2 rounded-pill show-upto-item">SHOW UPTO:</li>
+                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 10 ? 'active' : '' %>">
+                    <a href="?limit=10" class="">10</a>
+                  </li>
+                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 25 ? 'active' : '' %>">
+                    <a href="?limit=25" class="">25</a>
+                  </li>
+                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 50 ? 'active' : '' %>">
+                    <a href="?limit=50" class="">50</a>
+                  </li>
+                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 100 ? 'active' : '' %>">
+                    <a href="?limit=100" class="">100</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- Pagination  -->
+              <nav aria-label="...">
+                <div class="row">
+                  <div class="col-lg-12 d-flex  align-items-center justify-content-center">
+                    <div class="product__pagination  d-flex justify-content-end">
+                      <% if(pageNum> 1){
+                        %>
+                        <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum-1 %>&limit=<%= limit %>">Prev
+                        </a>
+                        <% } for(let i=1; i<=pageCount; i++){ %>
+                          <a class="mx-1 btn ps-2 pe-2 rounded-0 pagination-btn" <% if(pageNum===i){ %>
+                            style="color: white; background:black"
+                            <% } %>
+                              href="?pageNum=<%= i %>&limit=<%= limit %>"><%= i %>
+                          </a>
+                          <% } if(pageNum < pageCount){ %>
+                            <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum+1 %>&limit=<%= limit %>">Next
+                            </a>
+                            <% } %>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to perform this action?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </button>
+                <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+    </main>
+    <%- include('../layouts/sidebarEnd.ejs') -%>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+      <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+      <script>
+        function showConfirmationModal(offerId) {
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmationModal")
+          );
+          const confirmationAction = document.getElementById("confirmationAction");
+          confirmationAction.href = `/admin/offers/change-offer-status/${offerId}`
+          modal.show();
+        }
+      </script>
+      <script>
+        $('#sortTable').DataTable({
+          responsive: true
+        });
+      </script>
+      <%- include('../layouts/generalFooter.ejs') -%>

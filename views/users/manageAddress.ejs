@@ -1,0 +1,80 @@
+<%- include ('../layouts/homeHeader.ejs') -%>
+    <div class="container align-items-center border d-flex justify-content-center m-5">
+        <div class="center-div w-75 my-5" id="login">
+            <div class="d-flex justify-content-center mb-3">
+                <h4 class="mb-5 text-decoration-underline">MANAGE ADDRESS</h4>
+                <% if (userAddress && userAddress.addresses.length>= 6) { %>
+                    <div class="row d-flex justify-content-end mx-3">
+                        <p>You can add a maximum of 6 Addresses</p>
+                    </div>
+                    <% } %>
+            </div>
+            <div class="row">
+                <% if (userAddress && userAddress.addresses.length> 0) { %>
+                    <% userAddress.addresses.forEach((address)=> { %>
+                        <div class="col-md-6 mb-3">
+                            <div class="card position-relative" style="max-width: 300px;">
+                                <div class="card-icons position-absolute top-0 end-0 pe-3 pt-3">
+                                    <a href="/manageaddress/editaddress/<%= address._id %>" title="Edit Address">
+                                        <i class="bi bi-pencil-square text-dark edit-icon"></i>
+                                    </a>
+                                    <a href="/manageaddress/deleteaddress/<%= address._id %>" class="ms-2"
+                                        title="Delete Address" onclick="confirm('You want to delete this address?')">
+                                        <i class="bi bi-trash3-fill delete-icon text-danger delete-icon"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= address.userName %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= address.email %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= address.address %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= address.town %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= address.zip %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= address.state %>
+                                    </p>
+                                    <p class="card-text fw-bold"><i class="bi bi-telephone"></i>
+                                        <%= address.mobile %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                            <% } else { %>
+                                <div class="d-flex justify-content-center align-items-center mt-5">
+                                    <h5>No addresses saved</h5>
+                                </div>
+                                <% } %>
+            </div>
+            <div class="text-center mt-3">
+                <% if (userAddress && userAddress.addresses.length < 6) { %>
+                    <a href="/profile/id=<%= user._id %>/addaddress">
+                        <button type="button" class="rounded-0 btn btn-dark">ADD ADDRESS</button>
+                    </a>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <script>
+        var currentDateTime = new Date();
+        // Format the date and time as a string
+        var formattedDateTime = currentDateTime.toLocaleString();
+        // Update the element's content with the formatted date and time
+        document.getElementById("datetime").textContent = formattedDateTime;
+    </script>
+    <%- include ('../layouts/footer.ejs') -%>

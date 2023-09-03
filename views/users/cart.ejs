@@ -1,0 +1,207 @@
+<%- include('../layouts/homeHeader.ejs') -%>
+  <section class="shopping-cart spad mt-5">
+    <div class="container">
+      <div class="mb-4">
+        <h1 class="mb-0">CART</h1>
+      </div>
+      <% if (cartData.length> 0) { %>
+        <div class="row">
+          <div class="col-lg-8 align-items-center justify-content-center">
+            <div class="shopping__cart__table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% cartData.forEach(prod=> { %>
+                    <tr class="align-items-center">
+                      <td class="product__cart__item">
+                        <div class="d-flex">
+                          <div class="product__cart__item__pic">
+                            <a href="/productdetails/<%= prod.productId._id %>">
+                              <img width="80px" src="/assets/product-images/<%= prod.productId.images[0] %>" alt="">
+                            </a>
+                          </div>
+                          <div class="product__cart__item__text ms-3 d-flex flex-column justify-content-center">
+                            <small class="m-0 text-secondary">
+                              <%= prod.productId.brand %>
+                            </small>
+                            <h6 class="">
+                              <%= prod.productId.name %>
+                            </h6>
+                            <div class="d-flex align-items-center">
+                              <!-- Create a flex container for price and discount -->
+                              <h5 id="<%= prod._id %>price" class="m-0">₹ <%= prod.productId.price %>
+                              </h5>
+                              <span class="dPrice strike-through text-secondary ms-2"><del>₹<%= prod.productId.price +
+                                    prod.productId.discountPrice %></del></span>
+                            </div>
+                            <small class="mt-1">Size: <%= prod.size %></small>
+                            <span class="text-danger fw-bold fw-6" id="<%=prod.productId._id%>quantity-msg"></span>
+                          </div>
+                        </div>
+                      </td>
+                      <!-- Quantity column -->
+                      <td class="quantity__item align-middle">
+                        <div class="quantity">
+                          <div class="justify-content-center align-items-center text-nowrap">
+                            <button id="<%=prod.productId._id%>quantityminus" class="border-1 w-25 h-25 bg-dark text-white"
+                              onclick="updateCart(-1,'<%= prod.productId._id%>','<%=prod.size%>','<%=prod.productId._id%>quantity')"><i
+                                class="bi bi-dash-lg"></i>
+                            </button>
+                            <span class="mx-2 quantity" id='<%= prod.productId._id%>quantity'
+                              data-max-quantity="<%= prod.productId.quantity %>">
+                              <%= prod.quantity %>
+                            </span>
+                            <button id="<%= prod.productId._id %>quantityplus" class="border-1 w-25 h-25 bg-dark text-white"
+                              onclick="updateCart(1,'<%=prod.productId._id%>','<%=prod.size%>','<%= prod.productId._id%>quantity')"><i
+                                class="bi bi-plus-lg"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Check the id -->
+                      </td>
+                      <td class="cart__price align-middle text-nowrap" id="<%=prod.productId._id%>quantity-singleProduct">₹<%=
+                          prod.cartPrice%>
+                      </td>
+                      <td class="cart__close align-middle justify-content-center">
+                        <form action="/removecartproduct/<%= prod.productId._id %>" method="post">
+                          <button class="btn btn-link text-danger" title="Remove Item"><i
+                              class="bi bi-x-lg"></i></button>
+                        </form>
+                      </td>
+                    </tr>
+                    <% }); %>
+                      <span id="messageServer"></span>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-lg-4 border align-items-center p-4 w-auto h-100 ms-5 text-nowrap">
+            <div class="cart__total">
+              <h6 class="fw-bold text-decoration-underline">Cart Total</h6>
+              <div class="col-lg-4">
+                <!-- <div class="cart__discount">
+            <small class="">DISCOUNT CODE</small>
+            <form action="#">
+                <input type="text" placeholder="MRP30%" class="">
+                <button type="submit" class="btn btn-outline-dark text-center border-1 p-0 rounded-0 fs-7 ps-1 pe-1 mb-1">APPLY</button>
+            </form>
+        </div> -->
+                <ul class="list-unstyled ms-2 mt-4">
+                  <li>
+                    Subtotal: <span id="subTotal" class="fw-bold">&#8377;<%=subtotalPrice%></span>
+                  </li>
+                  <li>Discount: <span id="discount" class="fw-bold text-success"> -&#8377;<%=subtotalPrice-totalPrice
+                        %></span></li>
+                  <li class="fs-5 mt-3 fw-bold">Total: <span id="totalPrice" class="fw-bold"> &#8377;<%=totalPrice%>
+                        </span></li>
+                  <!-- Add more li elements for total, discounts, etc. -->
+                </ul><br>
+                <% if(cartData){%>
+                  <a href="/proceedtocheckout" class="btn primaryplusbtn"><button
+                      class="btn btn-outline-dark text-center border-1 w-100 h-100 rounded-0" type="submit"
+                      style="border-width: 4px;">PROCEED TO CHECKOUT
+                    </button></a>
+                  <%} %>
+              </div>
+            </div>
+            <% } else { %>
+              <div class="mainDiv text-center container">
+                <h1>Your cart is empty!</h1>
+                <img src="/assets/extra-images/image_processing20201106-11709-18misc6.gif" width="300rem"
+                  class="img-fluid rounded-5" alt="">
+                <div class="mt-3">
+                  <a href="/shop" class="rounded-0 btn btn-white border-1 border-dark">ADD SOMETHING TO CART</a>
+                </div>
+              </div>
+              <% } %>
+          </div>
+  </section>
+  <script src="https:cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https:cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+    integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    function updateCart(operation, prodId, size, spanID) {
+      console.log(operation, prodId, size, spanID);
+      let quantity = document.getElementById(spanID)
+      console.log(quantity);
+      let parsedQuantity = parseInt(quantity.innerText)
+      let minQuantity = 1;
+      let maxQuantity = parseInt(quantity.dataset.maxQuantity);
+      maxQuantity = Math.min(maxQuantity, 10);
+      if (operation == 1 && parsedQuantity < maxQuantity) {
+        parsedQuantity++
+      } else if (operation == -1 && parsedQuantity > 1) {
+        parsedQuantity--
+      }
+      quantity.innerText = parsedQuantity
+      ajaxConnection(parsedQuantity, prodId, size, spanID)
+      //btn dis
+      var minusBtn = document.getElementById(`${spanID}minus`)
+      var plusBtn = document.getElementById(`${spanID}plus`)
+      minusBtn.disabled = true
+      plusBtn.disabled = true
+      if (parsedQuantity === 1) {
+          console.log('- Btn disabled'); // Change the text color
+          minusBtn.style.border = '3px solid red';
+          minusBtn.style.display = 'none' // Change the border color
+          minusBtn.disabled = true;
+      } else {
+          console.log('minus Btn disabled');// Reset the text color (empty string to remove inline style)
+          minusBtn.style.border = '';
+          minusBtn.style.display= 'inline' // Reset the border color (empty string to remove inline style)
+          minusBtn.disabled = false;
+      }
+      if (parsedQuantity == 10 || parsedQuantity == maxQuantity) {
+        plusBtn.style.border = '3px solid red';
+        plusBtn.disabled = true;
+      } else {
+        plusBtn.style.border = '';
+        plusBtn.disabled = false;
+      }
+      //making error msg
+      let messageElement = document.getElementById(`${spanID}-msg`);
+      if (parsedQuantity == 10) {
+        messageElement.innerText = "Max quantity reached";
+      } else if (parsedQuantity == maxQuantity) {
+        messageElement.innerText = "Stock limit reached"; // Clear the message if not at the limit
+      } else {
+        messageElement.innerText = ""
+      }
+    }
+    //ajax
+    function ajaxConnection(amt, prodId, size, spanID) {
+      $.ajax({
+        method: 'put',
+        url: '/updatecart',
+        data: { amt, prodId, size },
+        success: (res) => {
+          if (res.status == true) {
+            // $(`#${spanID}msg`).html(res.data.st)
+            $('#subTotal').html(`₹ ${res.data.subTotal}`)
+            $('#totalPrice').html(`₹ ${res.data.totalPrice}`)
+            $(`#${spanID}-singleProduct`).html(`₹${res.data.productPrice}`)
+            $(`#discount`).html(`-₹${res.data.discountPrice}`)
+            $(`#${spanID}price`).html(`₹${res.data.price}`)
+            document.getElementById(`${spanID}minus`).disabled = false
+            document.getElementById(`${spanID}-`).disabled = false
+          } else if (res.status == false) {
+            $(`#${spanID}quantity-msg`).html(res.data)
+          }
+        }
+      })
+    }
+  </script>
+  <%- include ('../layouts/footer.ejs') -%>

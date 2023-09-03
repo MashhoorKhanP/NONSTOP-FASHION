@@ -1,0 +1,141 @@
+<%- include ('../layouts/homeHeader.ejs') -%>
+<style>
+  .wallet-history:hover{
+            text-decoration: underline;
+          }
+</style>
+  <div class="container align-items-center w-100 d-flex justify-content-center">
+    <div class="center-div w-75 m-5" id="login">
+      <div class="border pe-3 ps-3">
+        <div class="pt-5 d-flex justify-content-between align-items-center">
+          <h4 class="fw-bold text-center text-decoration-underline">User Profile<i class="bi bi-person-check"></i></h4>
+          <a class="text-dark" title="Edit Profile" href="/editprofile?id=<%= user._id %>"><i
+              class="bi bi-pencil-square"></i></a>
+        </div>
+        <div class="text-center text-danger">
+          <% if(typeof addressErrorMessage!=='undefined' ){ %>
+              <p class="text-danger">
+                  <%= addressErrorMessage %>
+              </p>
+              <%} %>
+      </div>
+        <br>
+        <div class="text-end">
+          <input type="hidden" id="referralCode" name="referral" value="http://localhost:<%=3000%>/signup?referral=<%=user.referralCode %>" readonly>
+                                          <button onclick="copyReferralCode()" class="btn btn-dark rounded-0 my-1" title="Copy referral code">REFERRAL CODE <i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="text-start flex-grow-1">
+          <p><strong>Wallet Balance <i class="bi bi-wallet2"></i></strong><br>&nbsp;&#8377;<%=user.wallet%></p>
+          <span><p class="wallet-history"><a href="/wallet-history">Wallet History&nbsp;<i class="bi bi-arrow-down-up"></i></a></p></span>
+      </div>
+        <% if (user) { %>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="fw-bold">Name:</span>
+              <%= user.firstName %>
+                <%= user.lastName %>
+            </li>
+            <li class="list-group-item">
+              <span class="fw-bold">Mobile:</span>
+              <%= user.mobile %>
+            </li>
+            <li class="list-group-item">
+              <span class="fw-bold">Email:</span>
+              <%= user.email %>
+            </li>
+            <% if(userAddress){ %>
+              <li class="list-group-item">
+                <span class=""><b>Address:</b><br>
+                  <%= userAddress.addresses[0].userName %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].email %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].address %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].town %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].state %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].country %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].zip %>
+                </span><br>
+                <span class="">
+                  <%= userAddress.addresses[0].mobile %>
+                </span><br>
+              </li>
+              <% }else{ %>
+                <li class="list-group-item">
+                  <span class=""><b>Address:</b> No saved address <a
+                      class="fw-bold text-primary text-decoration-underline"
+                      href="/profile/id=<%= user._id %>/addaddress">Add Address</a> </span>
+                </li>
+                <% } %>
+                  <li class="list-group-item text-center">
+                    <span class="fw-bold text-success"><a href="/myorders">
+                        <button class="btn btn-dark text-white rounded-0 fw-bold fs-7 mt-2 mb-2"><i
+                            class="bi bi-border-style"></i>
+                          MY ORDERS</button>
+                      </a></span>
+                    <span class="fw-bold text-success"><a href="/profile/id=<%= user._id %>/addaddress">
+                        <button class="btn btn-dark text-white rounded-0 fw-bold fs-7 mt-2 mb-2"><i
+                            class="bi bi-plus-lg"></i>
+                          ADD ADDRESS</button>
+                      </a></span>
+                    <span class="fw-bold text-success"><a href="/profile/<%= user._id %>/manageaddress">
+                        <button class="btn btn-dark text-white rounded-0 fw-bold fs-7 mt-2 mb-2"><i
+                            class="bi bi-house"></i>
+                          MANAGE ADDRESS</button>
+                      </a></span>
+                    <span class="fw-bold text-success"><a href="/profile/id=<%= user._id %>/managepassword">
+                        <button class="btn btn-dark text-white rounded-0 fw-bold fs-7 mt-2 mb-2"><i
+                            class="bi bi-key"></i>
+                          MANAGE PASSWORD</button>
+                      </a></span>
+                  </li>
+                  <li class="list-group-item text-center">
+                    <span class="fw-bold  text-success">Logged in:</span> <span id="datetime" class="ps-2 pe-2"></span>
+                  </li>
+                  <!-- You can add more profile details as needed -->
+          </ul>
+          <% } else { %>
+            <!-- User not found -->
+            <p>User not found</p>
+            <% } %>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous"></script>
+    <script>
+      // Function to copy the referral code to clipboard
+      function copyReferralCode() {
+          const referralCodeValue = document.getElementById('referralCode').value;
+          const tempInput = document.createElement('input');
+          document.body.appendChild(tempInput);
+          tempInput.value = referralCodeValue;
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+          // Optionally, you can show a notification to indicate the code has been copied
+          alert('Referral code copied to clipboard!');
+      }
+    </script>
+  <script>
+    var currentDateTime = new Date();
+    // Format the date and time as a string
+    var formattedDateTime = currentDateTime.toLocaleString();
+    // Update the element's content with the formatted date and time
+    document.getElementById("datetime").textContent = formattedDateTime;
+  </script>
+  <%- include ('../layouts/footer.ejs') -%>

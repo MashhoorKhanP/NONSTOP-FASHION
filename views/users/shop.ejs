@@ -1,0 +1,308 @@
+<%- include ('../layouts/shopHeader.ejs') -%>
+    <div class="container">
+        <div>
+            <h1>ALL PRODUCTS</h1>
+        </div>
+        <div class="row ">
+            <div class="col-md-3 col-lg-2 mb-4 mb-md-0 filter-bar" style="height: fit-content;">
+                <div class="pt-2" style="height: 100%;">
+                    <h4 class="text-center">ADD FILTER<i class="bi bi-funnel"></i></h4>
+                    <% if(removeFilter==='true' ) { %>
+                        <a href="/shop?page=1" class="bg-danger px-3 py-1 text-white text-decoration-none"
+                            style="cursor: pointer;">
+                            Remove Filters&nbsp;<i class="bi bi-x-square"></i>
+                        </a>
+                        <% } %>
+                            <div class="ps-2 mt-2 pt-3">
+                                <h5><strong>CATEGORIES</strong></h5>
+                                <div class="ps-2 mt-2">
+                                    <% categoryNames.forEach((cat)=> { %>
+                                        <p>
+                                            <% if(category==cat._id) { %>
+                                                <a href="?category=<%=cat._id%>&sortValue=<%=sortValue%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                                    style="color:#f44072;">
+                                                    <%=cat.name %>
+                                                </a>
+                                                <% } else { %>
+                                                    <a href="?category=<%=cat._id%>&sortValue=<%=sortValue%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                                        style="color: #636363;">
+                                                        <%=cat.name %>
+                                                    </a>
+                                                    <% } %>
+                                        </p>
+                                        <% }); %>
+                                </div>
+                            </div>
+                            <div class="ps-2 pt-4">
+                                <h5><strong>BRAND</strong></h5>
+                                <div class="ps-2">
+                                    <% brands.forEach((brand)=>{ %>
+                                        <p>
+                                            <% if(brand==brand._id) {%>
+                                                <a href="?brand=<%=brand._id %>&sortValue=<%=sortValue%>&category=<%=category%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                                    style="color:#f44072;">
+                                                    <%=brand._id %>
+                                                </a>
+                                                <% } else{%>
+                                                    <a href="?brand=<%=brand._id %>&sortValue=<%=sortValue%>&category=<%=category%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                                        style="color: #636363;">
+                                                        <%=brand._id %>
+                                                    </a>
+                                                    <% } %>
+                                        </p>
+                                        <% }) %>
+                                </div>
+                            </div>
+                            <div class="ps-2 pt-4">
+                                <h5><strong>PRICE</strong></h5>
+                                <div class="ps-2">
+                                    <% if(maxPrice==3999){ %>
+                                        <p><a href="?minPrice=0&maxPrice=3999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                style="color:#f44072;">₹0 - ₹3999</a></p>
+                                        <% }else{ %>
+                                            <p><a href="?minPrice=0&maxPrice=3999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                    style="color: #636363;">₹0 - ₹3999</a></p>
+                                            <% } %>
+                                                <% if(maxPrice==8999){ %>
+                                                    <p><a href="?minPrice=4000&maxPrice=8999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                            style="color:#f44072;">₹4000 - ₹8999</a>
+                                                    </p>
+                                                    <% }else{ %>
+                                                        <p><a href="?minPrice=4000&maxPrice=8999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                style="color: #636363;">₹4000 - ₹8999</a>
+                                                        </p>
+                                                        <% } %>
+                                                            <% if(maxPrice==13999){ %>
+                                                                <p><a href="?minPrice=9000&maxPrice=13999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                        style="color:#f44072;">₹9000 -
+                                                                        ₹13999</a></p>
+                                                                <% }else{ %>
+                                                                    <p><a href="?minPrice=9000&maxPrice=13999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                            style="color: #636363;">₹9000 -
+                                                                            ₹13999</a></p>
+                                                                    <% } %>
+                                                                        <% if(maxPrice==18999){ %>
+                                                                            <p><a href="?minPrice=14000&maxPrice=18999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                                    style="color:#f44072;">₹14000
+                                                                                    -
+                                                                                    ₹18999</a></p>
+                                                                            <% }else{ %>
+                                                                                <p><a href="?minPrice=14000&maxPrice=18999&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                                        style="color: #636363;">₹14000
+                                                                                        -
+                                                                                        ₹18999</a></p>
+                                                                                <% } %>
+                                                                                    <% if(minPrice==19000){ %>
+                                                                                        <p><a href="?minPrice=19000&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                                                style="color:#f44072;">₹19000+</a>
+                                                                                        </p>
+                                                                                        <% }else{ %>
+                                                                                            <p><a href="?minPrice=19000&sortValue=<%=sortValue%>&category=<%=category%>&brand=<%=brand%>&search=<%=search%>"
+                                                                                                    style="color: #636363;">₹19000+</a>
+                                                                                            </p>
+                                                                                            <% } %>
+                                </div>
+                            </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-lg-10">
+                <div class="row">
+                    <div class="col me-3 text-end">
+                        <label for="" class="fw-bold">Sort:</label>
+                        <% if(sortValue&&sortValue==3) {%>
+                            <a href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                style="color:#f44072;">&nbsp;Latest<i class="bi bi-arrow-repeat"></i>&nbsp;|</a>
+                            <% } else{%>
+                                <a
+                                    href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Latest<i
+                                        class="bi bi-arrow-repeat"></i>&nbsp;|</a>
+                                <% } %>
+                                    <% if(sortValue&&sortValue==2) {%>
+                                        <a href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                            style="color:#f44072;">&nbsp;Price Low to
+                                            High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
+                                        <% } else{%>
+                                            <a
+                                                href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
+                                                Low to High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
+                                            <% } %>
+                                                <% if(sortValue&&sortValue==1) {%>
+                                                    <a href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                                                        style="color:#f44072;">&nbsp;Price High
+                                                        to Low<i class="bi bi-sort-numeric-up"></i></a>
+                                                    <% } else{%>
+                                                        <a
+                                                            href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
+                                                            High to Low<i class="bi bi-sort-numeric-up"></i></a>
+                                                        <% } %>
+                                                            <!-- <a href="?sortValue=1">&nbsp;Price High to Low</a> -->
+                                                            <!-- <select class="border-0" id="sortSelect">
+                                    <option value="low">Price low to high</option>
+                                    <option value="high">Price high to low</option>
+                                </select> -->
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <% if (prodsData.length> 0) { %>
+                        <% prodsData.forEach((prod)=> { %>
+                            <div class="col-lg-3 col-6 pb-5">
+                                <a href="/productdetails/<%= prod._id %>"
+                                    style="text-decoration: none; color: inherit;">
+                                    <div class="card border-1 img-fluid" style="width: 15rem;">
+                                        <div class="image-container">
+                                            <img class="card-img-top" src="/assets/product-images/<%= prod.images[0] %>"
+                                                alt="Card image cap">
+                                        </div>
+                                        <div class="card-body">
+                                            <small>
+                                                <%= prod.brand %>
+                                            </small>
+                                            <p class="card-title prod-name text-uppercase">
+                                                <%= prod.name %>
+                                            </p>
+                                            <p class="card-text">
+                                                <span class="price">₹<%= prod.price %></span>
+                                                <span class="dPrice strike-through"><del>₹<%=prod.price +
+                                                            prod.discountPrice %></del></span>
+                                                <br>
+                                                <% if(prod.offer) {%>
+                                                    <small class=" text-white p-1 ps-2 pe-2 bg-secondary"
+                                                        style="font-weight: 100;">Special
+                                                        <% const
+                                                            discountPercentage=100-(prod.price/(prod.discountPrice+prod.price))
+                                                            * 100; %>
+                                                            <%= Math.round(discountPercentage) %>% off
+                                                    </small>
+                                                    <% } else{%>
+                                                        <span class="discount">
+                                                            <% const
+                                                                discountPercentage=100-(prod.price/(prod.discountPrice+prod.price))
+                                                                * 100; %>
+                                                                <%= Math.round(discountPercentage) %>% off
+                                                        </span>
+                                                        <% } %>
+                                                            <br>
+                                                            <div class="pt-2">
+                                                                <% if(locals.user) { %>
+                                                                    <div class=" d-flex column-gap-1">
+                                                                        <!-- Add to Cart button -->
+                                                                        <% const cartProductIds=cartData.map(item=>
+                                                                            item.productId._id.toString()); %>
+                                                                            <% if
+                                                                                (cartProductIds.includes(prod._id.toString()))
+                                                                                { %>
+                                                                                <form
+                                                                                    action='/removecartproduct/<%= prod._id %>'
+                                                                                    method="post">
+                                                                                    <button
+                                                                                        class="btn btn-outline-dark text-center border-1"
+                                                                                        type="submit"
+                                                                                        style="border-width: 4px;">
+                                                                                        <i
+                                                                                            class="bi bi-bag-check-fill text-danger"></i>
+                                                                                    </button>
+                                                                                </form>
+                                                                                <!-- else if (not in !cartProductsIds....) -->
+                                                                                <% } else
+                                                                                    if(!cartProductIds.includes(prod._id.toString())
+                                                                                    && prod.quantity>0) { %>
+                                                                                    <form
+                                                                                        action="/productdetails/<%= prod._id %>"
+                                                                                        method="get">
+                                                                                        <button
+                                                                                            class="btn btn-outline-dark text-center border-1"
+                                                                                            type="submit"
+                                                                                            style="border-width: 4px;">
+                                                                                            <i
+                                                                                                class="bi bi-cart-plus"></i>
+                                                                                        </button>
+                                                                                    </form>
+                                                                                    <% }else{%>
+                                                                                        <button
+                                                                                            class="btn btn-outline-danger text-center button border-1 h-100"
+                                                                                            type="submit"
+                                                                                            title="Out of stock"
+                                                                                            style="border-width: 4px;">
+                                                                                            <i class="bi bi-cart-x"></i>
+                                                                                        </button>
+                                                                                        <%} %>
+                                                                                            <!-- Wishlist button -->
+                                                                                            <form
+                                                                                                action="/wishlist/<%= prod._id %>"
+                                                                                                method="post">
+                                                                                                <% if
+                                                                                                    (wishlist.includes(prod._id.toString()))
+                                                                                                    { %>
+                                                                                                    <button
+                                                                                                        class="btn btn-outline-dark text-center border-1"
+                                                                                                        type="submit"
+                                                                                                        style="border-width: 4px;">
+                                                                                                        <i
+                                                                                                            class="bi bi-heart-fill text-danger"></i>
+                                                                                                    </button>
+                                                                                                    <% } else { %>
+                                                                                                        <button
+                                                                                                            class="btn btn-outline-dark text-center border-1"
+                                                                                                            type="submit"
+                                                                                                            style="border-width: 4px;">
+                                                                                                            <i
+                                                                                                                class="bi bi-heart"></i>
+                                                                                                        </button>
+                                                                                                        <% } %>
+                                                                                            </form>
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        <div
+                                                                            class="justify-content-between d-flex column-gap-1">
+                                                                            <!-- Cart button for guest users -->
+                                                                            <a href="/login"
+                                                                                class="btn btn-outline-dark w-50 text-center"><i
+                                                                                    class="bi bi-cart-plus"></i></a>
+                                                                            <!-- Wishlist button for guest users -->
+                                                                            <a href="/login"
+                                                                                class="btn btn-outline-dark w-50 text-center"><i
+                                                                                    class="bi bi-heart"></i></a>
+                                                                        </div>
+                                                                        <% } %>
+                                                            </div>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <% }); %>
+                                <% } else { %>
+                                    <div style="height: 80vh; display: grid;place-content: center;">
+                                        <img src="/extras/no-products.jpg" width="400rem" alt="" class="img-fluid">
+                                    </div>
+                                    <% } %>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="...">
+            <ul class="pagination justify-content-end">
+                <% for (let i=1; i <=pageCount; i++) { %>
+                    <li class="page-item <%= locals.currentPage == i ? 'active' : '' %>">
+                        <a class="page-link bg-dark <%= locals.currentPage == i ? 'text-white' : 'text-secondary' %>"
+                            href="/shop?page=<%= i %>&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>&search=<%= search %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                    <% } %>
+            </ul>
+        </nav>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="/static/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Plugins js -->
+    <script src="/static/js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/static/js/active.js"></script>
+    <%- include ('../layouts/footer.ejs') -%>

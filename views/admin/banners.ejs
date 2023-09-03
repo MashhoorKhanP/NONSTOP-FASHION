@@ -1,0 +1,523 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+    <%- include('../layouts/sidebar.ejs') -%>
+        <div class="p-5 w-75 container ">
+            <div class="card my-4 p-3">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div
+                        class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+                        <h6 class="text-white text-capitalize ps-3">Banners</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-5">
+                    <div class="table-responsive p-0">
+                        <!-- <div class="text-center text-danger fw-bold">
+                            <% //if(typeof locals.message !=='undefined' ) { %>
+                                <p class="">
+                                    <%//= locals.message %>
+                                </p>
+                                <%// } %>
+                        </div> -->
+                        <% if(banner.length>1) { %>
+                            <!-- Add First Banner Form -->
+                            <div class="d-flex justify-content-between border-0 mb-4">
+                                <div class="card p-4 w-100">
+                                    <div
+                                        class="text-center d-flex justify-content-center align-items-center flex-column">
+                                        <h4>First Banner</h4>
+                                        <img src="/assets/banner-images/<%=banner[0].image %>" class="img-fluid" alt=""
+                                            style="max-width: 60%;">
+                                    </div>
+                                    <form action="/admin/updatebanner" method="post" enctype="multipart/form-data"
+                                        id="submit-form">
+                                        <input type="text" name="name" value="banner1" hidden>
+                                        <label for="">URL: </label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" name="url" id="editableInput1" class="form-control"
+                                                placeholder="Enter URL" value="<%=banner[0].url %>" readonly>
+                                            <button type="button" id="editButton1" class="btn btn-link">
+                                                <i class="bi bi-pencil-square pe-1 text-dark"></i>
+                                            </button>
+                                        </div>
+                                        <!-- <input type="file" accept="image/*" name="image"><br> -->
+                                        <%- include('../partials/imageCropper.ejs') -%>
+                                            <div class="text-center">
+                                                <button class="btn btn-success mt-3" type="submit">
+                                                    Update First Banner
+                                                </button>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <% } else { %>
+                                <div style="display: grid; place-content: center;">
+                                    <div class="card p-4">
+                                        <div class="text-center">
+                                            <h4>First Banner</h4>
+                                        </div>
+                                        <form action="/admin/updatebanner" method="post" enctype="multipart/form-data"
+                                            id="submit-form">
+                                            <input type="text" name="name" id="" value="banner1" hidden>
+                                            <label for="">URL: </label>
+                                            <div class="mb-3">
+                                                <input type="text" name="url" id="" placeholder="Enter url" required>
+                                                &nbsp;
+                                                <input type="file" class="form-control-file" name="image" id="image"
+                                                    single accept="image/*"><br>
+                                            </div>
+                                            <div class="text-center">
+                                                <button class="btn btn-success mt-3" type="submit">
+                                                    Add First Banner
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <% if(banner.length>1) { %>
+                                        <!-- Add Second Banner Form -->
+                                        <div class="d-flex justify-content-between border-0 mb-4">
+                                            <div class="card p-4 w-100">
+                                                <div
+                                                    class="text-center d-flex justify-content-center align-items-center flex-column">
+                                                    <h4>Second Banner</h4>
+                                                    <img src="/assets/banner-images/<%=banner[1].image %>"
+                                                        class="img-fluid" alt="" style="max-width: 60%;">
+                                                </div>
+                                                <form action="/admin/updatebanner" method="post"
+                                                    enctype="multipart/form-data" id="submit-form">
+                                                    <label for="">URL: </label>
+                                                    <input type="text" name="name" value="banner2" hidden>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" name="url" id="editableInput2"
+                                                            class="form-control" placeholder="Enter URL"
+                                                            value="<%=banner[1].url  %>" required>
+                                                        <button type="button" id="editButton2" class="btn btn-link">
+                                                            <i class="bi bi-pencil-square pe-1 text-dark"></i>
+                                                        </button>
+                                                    </div>
+                                                    <!-- <input type="file" accept="image/*" name="image"><br> -->
+                                                    <%- include('../partials/imageCropper.ejs') -%>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-success mt-3" type="submit">
+                                                                Update Second Banner
+                                                            </button>
+                                                        </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <% } else { %>
+                                            <div style="display: grid; place-content: center;">
+                                                <div class="card p-4 ">
+                                                    <div class="text-center">
+                                                        <h4>Second Image</h4>
+                                                    </div>
+                                                    <form action="/admin/updatebanner" method="post"
+                                                        enctype="multipart/form-data" id="submit-form">
+                                                        <input type="text" name="name" id="" value="banner2" hidden>
+                                                        <label for="">URL: </label>
+                                                        <div class="mb-3">
+                                                            <input type="text" name="url" id="" placeholder="Enter url"
+                                                                required>
+                                                            &nbsp;<input type="file" class="form-control-file"
+                                                                name="image" id="image" single accept="image/*"><br>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-success mt-3" type="submit">
+                                                                Add Second Banner
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                                <% if(banner.length>2) { %>
+                                                    <!-- Add Third Banner Form -->
+                                                    <div class="d-flex justify-content-between border-0 mb-4">
+                                                        <div class="card p-4 w-100">
+                                                            <div
+                                                                class="text-center d-flex justify-content-center align-items-center flex-column">
+                                                                <h4>Third Banner</h4>
+                                                                <img src="/assets/banner-images/<%=banner[2].image %>"
+                                                                    class="img-fluid" alt="" style="max-width: 60%;">
+                                                            </div>
+                                                            <form action="/admin/updatebanner" method="post"
+                                                                enctype="multipart/form-data" id="submit-form">
+                                                                <label for="">URL: </label>
+                                                                <input type="text" name="name" value="banner3" hidden>
+                                                                <div class="input-group mb-3">
+                                                                    <input type="text" name="url" id="editableInput4"
+                                                                        class="form-control" placeholder="Enter URL"
+                                                                        value="<%=banner[3].url  %>" required>
+                                                                    <button type="button" id="editButton4"
+                                                                        class="btn btn-link">
+                                                                        <i
+                                                                            class="bi bi-pencil-square pe-1 text-dark"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <!-- <input type="file" accept="image/*"
+                                                                                name="image"><br> -->
+                                                                <%- include('../partials/imageCropper.ejs') -%>
+                                                                    <div class="text-center">
+                                                                        <button class="btn btn-success mt-3"
+                                                                            type="submit">
+                                                                            Update Third Banner
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div style="display: grid; place-content: center;">
+                                                            <div class="card p-4 ">
+                                                                <div class="text-center">
+                                                                    <h4>Third Image</h4>
+                                                                </div>
+                                                                <form action="/admin/updatebanner" method="post"
+                                                                    enctype="multipart/form-data" id="submit-form">
+                                                                    <input type="text" name="name" id="" value="banner3"
+                                                                        hidden>
+                                                                    <label for="">URL: </label>
+                                                                    <div class="mb-3">
+                                                                        <input type="text" name="url" id=""
+                                                                            placeholder="Enter url" required>
+                                                                        &nbsp;
+                                                                        <input type="file" class="form-control-file"
+                                                                            name="image" id="image" single
+                                                                            accept="image/*"><br>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        <button class="btn btn-success mt-3"
+                                                                            type="submit">
+                                                                            Add Third Banner
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <% } %>
+                                                            <% if(banner.length>3) { %>
+                                                                <!-- Add Fourth Banner Form -->
+                                                                <div
+                                                                    class="d-flex justify-content-between border-0 mb-4">
+                                                                    <div class="card p-4 w-100">
+                                                                        <div
+                                                                            class="text-center d-flex justify-content-center align-items-center flex-column">
+                                                                            <h4>Fourth Banner</h4>
+                                                                            <img src="/assets/banner-images/<%=banner[3].image %>"
+                                                                                class="img-fluid" alt=""
+                                                                                style="max-width: 60%;">
+                                                                        </div>
+                                                                        <form action="/admin/updatebanner" method="post"
+                                                                            enctype="multipart/form-data"
+                                                                            id="submit-form">
+                                                                            <label for="">URL: </label>
+                                                                            <input type="text" name="name"
+                                                                                value="banner4" hidden>
+                                                                            <div class="input-group mb-3">
+                                                                                <input type="text" name="url"
+                                                                                    id="editableInput4"
+                                                                                    class="form-control"
+                                                                                    placeholder="Enter URL"
+                                                                                    value="<%=banner[3].url  %>"
+                                                                                    required>
+                                                                                <button type="button" id="editButton4"
+                                                                                    class="btn btn-link">
+                                                                                    <i
+                                                                                        class="bi bi-pencil-square pe-1 text-dark"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <!-- <input type="file" accept="image/*"
+                                                                                name="image"><br> -->
+                                                                            <%- include('../partials/imageCropper.ejs')
+                                                                                -%>
+                                                                                <div class="text-center">
+                                                                                    <button class="btn btn-success mt-3"
+                                                                                        type="submit">
+                                                                                        Update Fourth Banner
+                                                                                    </button>
+                                                                                </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <% } else { %>
+                                                                    <div style="display: grid; place-content: center;">
+                                                                        <div class="card p-4 ">
+                                                                            <div class="text-center">
+                                                                                <h4>Fourth Image</h4>
+                                                                            </div>
+                                                                            <form action="/admin/updatebanner"
+                                                                                method="post"
+                                                                                enctype="multipart/form-data"
+                                                                                id="submit-form">
+                                                                                <input type="text" name="name" id=""
+                                                                                    value="banner4" hidden>
+                                                                                <label for="">URL: </label>
+                                                                                <div class="mb-3">
+                                                                                    <input type="text" name="url" id=""
+                                                                                        placeholder="Enter url"
+                                                                                        required>
+                                                                                    &nbsp;<input type="file"
+                                                                                        class="form-control-file"
+                                                                                        name="image" id="image" single
+                                                                                        accept="image/*"><br>
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <button class="btn btn-success mt-3"
+                                                                                        type="submit">
+                                                                                        Add Fourth Banner
+                                                                                    </button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <% if(banner.length>4) { %>
+                                                                            <!-- Add Fifth Banner Form -->
+                                                                            <div
+                                                                                class="d-flex justify-content-between border-0 mb-4">
+                                                                                <div class="card p-4 w-100">
+                                                                                    <div
+                                                                                        class="text-center d-flex justify-content-center align-items-center flex-column">
+                                                                                        <h4>Fifth Banner</h4>
+                                                                                        <img src="/assets/banner-images/<%=banner[4].image %>"
+                                                                                            class="img-fluid" alt=""
+                                                                                            style="max-width: 60%;">
+                                                                                    </div>
+                                                                                    <form action="/admin/updatebanner"
+                                                                                        method="post"
+                                                                                        enctype="multipart/form-data"
+                                                                                        id="submit-form">
+                                                                                        <label for="">URL: </label>
+                                                                                        <input type="text" name="name"
+                                                                                            value="banner5" hidden>
+                                                                                        <div class="input-group mb-3">
+                                                                                            <input type="text"
+                                                                                                name="url"
+                                                                                                id="editableInput5"
+                                                                                                class="form-control"
+                                                                                                placeholder="Enter URL"
+                                                                                                value="<%=banner[4].url  %>"
+                                                                                                required>
+                                                                                            <button type="button"
+                                                                                                id="editButton5"
+                                                                                                class="btn btn-link">
+                                                                                                <i
+                                                                                                    class="bi bi-pencil-square pe-1 text-dark"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <!-- <input type="file"
+                                                                                            accept="image/*"
+                                                                                            name="image"><br> -->
+                                                                                        <%- include('../partials/imageCropper.ejs')
+                                                                                            -%>
+                                                                                            <div class="text-center">
+                                                                                                <button
+                                                                                                    class="btn btn-success mt-3"
+                                                                                                    type="submit">
+                                                                                                    Update Fifth Banner
+                                                                                                </button>
+                                                                                            </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                            <% } else { %>
+                                                                                <div
+                                                                                    style="display: grid; place-content: center;">
+                                                                                    <div class="card p-4 ">
+                                                                                        <div class="text-center">
+                                                                                            <h4>Fifth Image</h4>
+                                                                                        </div>
+                                                                                        <form
+                                                                                            action="/admin/updatebanner"
+                                                                                            method="post"
+                                                                                            enctype="multipart/form-data"
+                                                                                            id="submit-form">
+                                                                                            <input type="text"
+                                                                                                name="name" id=""
+                                                                                                value="banner5" hidden>
+                                                                                            <label for="">URL: </label>
+                                                                                            <div class="mb-3">
+                                                                                                <input type="text"
+                                                                                                    name="url" id=""
+                                                                                                    placeholder="Enter url"
+                                                                                                    required>
+                                                                                                &nbsp;<input type="file"
+                                                                                                    class="form-control-file"
+                                                                                                    name="image"
+                                                                                                    id="image" single
+                                                                                                    accept="image/*"><br>
+                                                                                            </div>
+                                                                                            <div class="text-center">
+                                                                                                <button
+                                                                                                    class="btn btn-success mt-3"
+                                                                                                    type="submit">
+                                                                                                    Add Fifth Banner
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <% } %>
+                                                                                    <% if(banner.length>5) { %>
+                                                                                        <!-- Add Fifth Banner Form -->
+                                                                                        <div
+                                                                                            class="d-flex justify-content-between border-0 mb-4">
+                                                                                            <div class="card p-4 w-100">
+                                                                                                <div
+                                                                                                    class="text-center d-flex justify-content-center align-items-center flex-column">
+                                                                                                    <h4>Sixth Banner
+                                                                                                    </h4>
+                                                                                                    <img src="/assets/banner-images/<%=banner[5].image %>"
+                                                                                                        class="img-fluid"
+                                                                                                        alt=""
+                                                                                                        style="max-width: 60%;">
+                                                                                                </div>
+                                                                                                <form
+                                                                                                    action="/admin/updatebanner"
+                                                                                                    method="post"
+                                                                                                    enctype="multipart/form-data"
+                                                                                                    id="submit-form">
+                                                                                                    <label for="">URL:
+                                                                                                    </label>
+                                                                                                    <input type="text"
+                                                                                                        name="name"
+                                                                                                        value="banner6"
+                                                                                                        hidden>
+                                                                                                    <div
+                                                                                                        class="input-group mb-3">
+                                                                                                        <input
+                                                                                                            type="text"
+                                                                                                            name="url"
+                                                                                                            id="editableInput6"
+                                                                                                            class="form-control"
+                                                                                                            placeholder="Enter URL"
+                                                                                                            value="<%=banner[5].url  %>"
+                                                                                                            required>
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            id="editButton6"
+                                                                                                            class="btn btn-link">
+                                                                                                            <i
+                                                                                                                class="bi bi-pencil-square pe-1 text-dark"></i>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <!-- <input type="file"
+                                                                                                    accept="image/*"
+                                                                                                    name="image"><br> -->
+                                                                                                    <%- include('../partials/imageCropper.ejs')
+                                                                                                        -%>
+                                                                                                        <div
+                                                                                                            class="text-center">
+                                                                                                            <button
+                                                                                                                class="btn btn-success mt-3"
+                                                                                                                type="submit">
+                                                                                                                Update
+                                                                                                                Sixth
+                                                                                                                Banner
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <% } else { %>
+                                                                                            <div
+                                                                                                style="display: grid; place-content: center;">
+                                                                                                <div class="card p-4 ">
+                                                                                                    <div
+                                                                                                        class="text-center">
+                                                                                                        <h4>Sixth Image
+                                                                                                        </h4>
+                                                                                                    </div>
+                                                                                                    <form
+                                                                                                        action="/admin/updatebanner"
+                                                                                                        method="post"
+                                                                                                        enctype="multipart/form-data"
+                                                                                                        id="submit-form">
+                                                                                                        <input
+                                                                                                            type="text"
+                                                                                                            name="name"
+                                                                                                            id=""
+                                                                                                            value="banner6"
+                                                                                                            hidden>
+                                                                                                        <label
+                                                                                                            for="">URL:
+                                                                                                        </label>
+                                                                                                        <div
+                                                                                                            class="mb-3">
+                                                                                                            <input
+                                                                                                                type="text"
+                                                                                                                name="url"
+                                                                                                                id=""
+                                                                                                                placeholder="Enter url"
+                                                                                                                required>
+                                                                                                            &nbsp;<input
+                                                                                                                type="file"
+                                                                                                                class="form-control-file"
+                                                                                                                name="image"
+                                                                                                                id="image"
+                                                                                                                single
+                                                                                                                accept="image/*"><br>
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="text-center">
+                                                                                                            <button
+                                                                                                                class="btn btn-success mt-3"
+                                                                                                                type="submit">
+                                                                                                                Add
+                                                                                                                Sixth
+                                                                                                                Banner
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                    </form>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../layouts/sidebarEnd.ejs') -%>
+            <script src="/static/js/admin js/addBanner.js"> </script>
+            <script>
+                document.getElementById('editButton1').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput1');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <script>
+                document.getElementById('editButton2').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput2');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <script>
+                document.getElementById('editButton3').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput3');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <script>
+                document.getElementById('editButton4').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput4');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <script>
+                document.getElementById('editButton5').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput5');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <script>
+                document.getElementById('editButton6').addEventListener('click', function () {
+                    var inputField = document.getElementById('editableInput6');
+                    inputField.removeAttribute('readonly');
+                    inputField.focus(); // This will automatically focus the cursor in the input field after clicking the "Edit" button.
+                });
+            </script>
+            <%- include('../layouts/generalFooter.ejs') -%>

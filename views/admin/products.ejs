@@ -1,0 +1,261 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+  <!-- Sidebar Start -->
+  <%- include('../layouts/sidebar.ejs') -%>
+    <div class="p-5 w-75 container">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative   z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3 fs-5 fw-bold">Products</h6>
+            <div class="text-end pe-4">
+              <a href="/admin/products/addproduct">
+                <button class="btn btn-dark text-white rounded-0 fw-bold fs-7"><i class="bi bi-plus-lg"></i>
+                  PRODUCT</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0 ">
+            <table class="table align-items-center mb-0">
+              <div class="text-center text-success">
+                <% if(typeof productUpdateMessage !=='undefined' ){ %>
+                  <p class="fw-bold">
+                    <%= productUpdateMessage %>
+                  </p>
+                  <%} %>
+              </div>
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Image</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Product</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sizes
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Offer
+                  </th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(prodsData.length>0){
+                  for(let i=0; i<prodsData.length; i++){ %>
+                    <tr>
+                      <td>
+                        <div class="">
+                          <img src="/assets/product-images/<%= prodsData[i].images[0] %>"
+                            class="avatar-sm border-radius-lg w-100 h-100 border" alt="product-img">
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">
+                          <%= prodsData[i].name %>
+                        </p>
+                        <p class="text-xs text-secondary mb-0">
+                          <%= prodsData[i].brand %>
+                        </p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <%= prodsData[i].category.name %>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <%= prodsData[i].quantity %>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-secondary text-xs font-weight-bold">
+                          <%= prodsData[i].size %>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">&#8377;<%= prodsData[i].price %> </span>
+                      </td>
+                      <td class="text-center align-middle">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <a href="/admin/products/editproduct/<%= prodsData[i]._id %>"
+                            class="text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip"
+                            title="Edit Product">
+                            <i class="bi bi-pencil-square pe-3"></i>
+                          </a>
+                          <% if(prodsData[i].isListed===true){ %>
+                            <button class="justify-content-center btn align-items-center btn-outline-danger m-2 fw-bold"
+                              type="button" onclick="showConfirmationModal('<%= prodsData[i]._id %>')"><i
+                                class="bi bi-x-lg delete-icon text-danger"></i>REMOVE</button>
+                            <% }else{ %>
+                              <button
+                                class="justify-content-center align-items-center btn btn-outline-success m-2 fw-bold"
+                                type="button" onclick="showConfirmationModal('<%= prodsData[i]._id %>')"><i
+                                  class="bi bi-plus-lg text-success fs-5 fw-bold"></i>ADD</button>
+                              <% } %>
+                        </div>
+                      </td>
+                      <%if(offerData && offerData.length>0) { %>
+                        <% if(prodsData[i].offerAppliedBy && prodsData[i].offerAppliedBy=='category' ){ %>
+                          <td class="text-center">
+                            <button
+                              class="offerBtn justify-content-center btn btn-outline-success align-items-center m-2 fw-bold"
+                              id="offerBtn" data-bs-toggle="modal" data-bs-target="#offerModal"
+                              data-id="<%=prodsData[i]._id%>">
+                              Category offer
+                              applied</button>
+                          </td>
+                          <% }else if(prodsData[i].offerAppliedBy && prodsData[i].offerAppliedBy=='product' ){ %>
+                            <td class="text-center">
+                              <form action="/admin/remove-product-offer/<%=prodsData[i]._id%>" method="post"
+                                id="myForm">
+                                <button
+                                  class="justify-content-center btn align-items-center btn-outline-danger m-2 fw-bold"
+                                  type="submit" onclick="alert('Are you to sure to remove offer for this product?')">
+                                  <span class="text-dark">
+                                    <%=prodsData[i].offer.offerName%>
+                                  </span>REMOVE OFFER
+                                  <i class="text-danger bi bi-x-square-fill"></i>
+                                </button>
+                              </form>
+                            </td>
+                            <% } else{%>
+                              <td><button
+                                  class="justify-content-center btn align-items-center btn-outline-success m-2 fw-bold offerProductBtn"
+                                  id="offerProductBtn" data-bs-toggle="modal" data-bs-target="#offerModal"
+                                  data-id="<%=prodsData[i]._id%>">APPLY PRODUCT OFFER</button>
+                              </td>
+                              <%}%>
+                                <% } else{%>
+                                  <td>No offer Available</td>
+                                  <%}%>
+                                    <!-- offerModal -->
+                                    <div class="modal fade" id="offerModal" tabindex="-1"
+                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel"> ADD OFFER</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                              aria-label="Close"></button>
+                                          </div>
+                                          <form action="/admin/apply-product-offer" method="post">
+                                            <div class="modal-body">
+                                              <input type="hidden" name="productId" id="offerProductId">
+                                              <label for="offer">Select an offer to apply: </label>
+                                              <select name="offerId" id="offer" class="form-control">
+                                                <% offerData.forEach((offer)=>
+                                                  {
+                                                  %>
+                                                  <option value="<%=offer._id  %>">
+                                                    <%=offer.offerName %>
+                                                  </option>
+                                                  <% }) %>
+                                              </select>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-danger"
+                                                data-bs-dismiss="modal">Close</button>
+                                              <button type="submit" class="btn btn-success">ADD</button>
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                    </tr>
+                    <% }%>
+                      <%} %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to perform this action?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </button>
+                <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <!-- Pagination and Show upto -->
+        <div class="mx-3 d-flex justify-content-between border-top pt-3">
+          <div class="text-center">
+            <ul class="list-unstyled d-flex justify-content-center mb-4">
+              <li class="mx-1 ps-2 pe-2 rounded-pill show-upto-item">SHOW UPTO:</li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 10 ? 'active' : '' %>">
+                <a href="?limit=10" class="">10</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 25 ? 'active' : '' %>">
+                <a href="?limit=25" class="">25</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 50 ? 'active' : '' %>">
+                <a href="?limit=50" class="">50</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 100 ? 'active' : '' %>">
+                <a href="?limit=100" class="">100</a>
+              </li>
+            </ul>
+          </div>
+          <!-- Pagination  -->
+          <nav aria-label="...">
+            <div class="row">
+              <div class="col-lg-12 d-flex  align-items-center justify-content-center">
+                <div class="product__pagination  d-flex justify-content-end">
+                  <% if(pageNum> 1){
+                    %>
+                    <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum-1 %>&limit=<%= limit %>">Prev
+                    </a>
+                    <% } for(let i=1; i<=pageCount; i++){ %>
+                      <a class="mx-1 btn ps-2 pe-2 rounded-0 pagination-btn" <% if(pageNum===i){ %>
+                        style="color: white; background:black"
+                        <% } %>
+                          href="?pageNum=<%= i %>&limit=<%= limit %>"><%= i %>
+                      </a>
+                      <% } if(pageNum < pageCount){ %>
+                        <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum+1 %>&limit=<%= limit %>">Next
+                        </a>
+                        <% } %>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <%- include('../layouts/sidebarEnd.ejs') -%>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+      <script src="/static/js/admin js/productOffer.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+      <script>
+        $('#sortTable').DataTable({
+          responsive: true
+        });
+      </script>
+      <script>
+        function showConfirmationModal(productId) {
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmationModal")
+          );
+          const confirmationAction = document.getElementById("confirmationAction");
+          confirmationAction.href = `/admin/products/removeproduct/${productId}`;
+          modal.show();
+        }
+      </script>
+      <%- include('../layouts/generalFooter.ejs') -%>

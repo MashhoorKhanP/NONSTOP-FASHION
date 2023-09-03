@@ -1,0 +1,272 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+    <!-- Sidebar Start -->
+    <%- include('../layouts/sidebar.ejs') -%>
+        <!-- Navbar -->
+        <!-- End Navbar -->
+        <div class="p-5 w-75 container">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div
+                        class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+                        <h6 class="text-white text-capitalize ps-3">Add Product</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <!-- Copeid Code Start -->
+                        <form class="p-4 border" id="addProductsubmit-form" action="/admin/products/addproduct" method="post"
+                            enctype="multipart/form-data">
+                            <div class="row input-group input-group-outline mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="brand">Brand</label>
+                                    <input type="brand" class="form-control " name="brand" id="brand"
+                                        placeholder="Brand">
+                                    <small id="brandErr" class="error"></small>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="name">Product Name</label>
+                                    <input type="name" class="form-control" name="productname" id="name"
+                                        placeholder="Product name">
+                                    <small id="nameErr" class="error"></small>
+                                </div>
+                            </div>
+                            <div class="row input-group input-group-outline mb-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="category">Category</label>
+                                        <select id="category" name="category" class="form-control">
+                                            <% if(categories.length>0){
+                                                for(let i=0;i<categories.length;i++){%>
+                                                    <option>
+                                                        <%= categories[i].name %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% }else{ %>
+                                                            <option value="">No categories</option>
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <!-- Sizes as check box code  -->
+                                    <div class="row input-group form-check">
+                                        <label class="form-check-label">Size :&nbsp;</label>
+                                        <div class=" d-flex justify-content-center" id="size-character">
+                                            <label class="form-check-label" for="check1">XS </label>
+                                            <input class="form-check-input" type="checkbox" value="XS" id="check1"
+                                                name="check1" onclick="handleCheckboxChange1()">
+                                            <label class="form-check-label" for="check2">S </label>
+                                            <input class="form-check-input" type="checkbox" value="S" id="check2"
+                                                name="check2" onclick="handleCheckboxChange1()">
+                                            <label class="form-check-label" for="check3">M </label>
+                                            <input class="form-check-input" type="checkbox" value="M" id="check3"
+                                                name="check3" onclick="handleCheckboxChange1()">
+                                            <label class="form-check-label" for="check4">L </label>
+                                            <input class="form-check-input" type="checkbox" value="L" id="check4"
+                                                name="check4" onclick="handleCheckboxChange1()">
+                                            <label class="form-check-label" for="check5">XL </label>
+                                            <input class="form-check-input" type="checkbox" value="XL" id="check5"
+                                                name="check5" onclick="handleCheckboxChange1()">
+                                            <label class="form-check-label" for="check6">XXL </label>
+                                            <input class="form-check-input" type="checkbox" value="XXL" id="check6"
+                                                name="check6" onclick="handleCheckboxChange1()">
+                                        </div>
+                                        <div class="d-flex justify-content-center" id="size-number">
+                                            <label class="form-check-label" for="check1">5</label>
+                                            <input class="form-check-input" type="checkbox" value="5" id="check1"
+                                                name="check1" onclick="handleCheckboxChange()">
+                                            <label class="form-check-label" for="check2">6</label>
+                                            <input class="form-check-input" type="checkbox" value="6" id="check2"
+                                                name="check2" onclick="handleCheckboxChange()">
+                                            <label class="form-check-label" for="check3">7</label>
+                                            <input class="form-check-input" type="checkbox" value="7" id="check3"
+                                                name="check3" onclick="handleCheckboxChange()">
+                                            <label class="form-check-label" for="check4">8</label>
+                                            <input class="form-check-input" type="checkbox" value="8" id="check4"
+                                                name="check4" onclick="handleCheckboxChange()">
+                                            <label class="form-check-label" for="check5">9</label>
+                                            <input class="form-check-input" type="checkbox" value="9" id="check5"
+                                                name="check5" onclick="handleCheckboxChange()">
+                                            <label class="form-check-label" for="check6">10</label>
+                                            <input class="form-check-input" type="checkbox" value="10" id="check6"
+                                                name="check6" onclick="handleCheckboxChange()">
+                                        </div>
+                                    </div>
+                                    <!-- Sizes as check box code end  -->
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="inputAddress">Description</label>
+                                    <textarea type="text" rows="4" class="form-control" name="description"
+                                        id="description" placeholder="Enter Product Description"></textarea>
+                                    <small id="descriptionErr" class="error"></small>
+                                </div>
+                            </div>
+                            <div class="row input-group input-group-outline mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="Number" name="quantity" class="form-control" id="quantity"
+                                        placeholder="Quantity" min="1">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="price">Price</label>
+                                    <input type="number" name="price" id="price" class="form-control"
+                                        placeholder="price">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dprice">Discount Price</label>
+                                    <input type="number" name="dprice" id="dprice" class="form-control"
+                                        placeholder="Discount price">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Choose product images</label>
+                            </div>
+                            <div class="">
+                                <% for(let i=0; i<3; i++){%>
+                                    <!-- First input file -->
+                                    <div class="">
+                                        <main class="page shadow-lg" style="padding: 0px;">
+                                            <div class="box p-3">
+                                                <div class="p-3 d-flex justify-content-between">
+                                                    <input type="file" class="form-control-file image" name="image"
+                                                        id="image" single accept="image/*">
+                                                    <button class="btn delete-image-button fs-5 text-danger delete"
+                                                        type="button"><i class="bi bi-trash"></i></button>
+                                                </div>
+                                                <div class="d-flex column-gap-3">
+                                                    <div class="box-2 w-50">
+                                                        <div class="result"></div>
+                                                    </div>
+                                                    <div class="box-2 img-result hide w-50">
+                                                        <img class="cropped" src="" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="box">
+                                                    <div class="options hide ms-3 mt-3">
+                                                        <label>Width:</label>
+                                                        <input type="number" class="img-w" value="300" min="100"
+                                                            max="1200" />
+                                                        <label>Height:</label>
+                                                        <input type="number" class="img-w" value="350" min="100"
+                                                            max="1200" />
+                                                    </div>
+                                                    <div class="text-center column-gap-1 mt-4">
+                                                        <button class="btn save hide btn-success rounded-0">Save <i
+                                                                class="bi bi-check2-circle"></i></button>
+                                                        <a href="" class="btn download hide btn-dark rounded-0">Download
+                                                            <i class="bi bi-download"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </main>
+                                    </div><br>
+                                    <% } %>
+                                        <small id="image-error" class="error text-danger"></small>
+                            </div>
+                            <br>
+                            <div class="d-flex justify-content-center pt-3 column-gap-1">
+                                <button type="submit" class="btn btn-success" onclick="">Add Product</button>
+                                <a href="/admin/products" class="btn btn-danger">CANCEL</a>
+                            </div>
+                        </form>
+                        <!-- Copeid Code End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../layouts/sidebarEnd.ejs') -%>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+            <script src="/static/js/admin js/addProduct.js"></script>
+            <script>
+                /** Form Validation Start **/
+                const form = document.getElementById('addProductsubmit-form');
+                const brandName = document.getElementById('brand');
+                const pName = document.getElementById('name');
+                const description = document.getElementById('description');
+                const quantity = document.getElementById('quantity');
+                const price = document.getElementById('price');
+                const discountPrice = document.getElementById('dprice');
+                const image = document.getElementById('image');
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    validateInput();
+                });
+                const setError = (element, message) => {
+                    const inputControl = element.parentElement;
+                    element.placeholder = message;
+                    brandName.style.border = '1.5px solid red';
+                    pName.style.border = '1.5px solid red';
+                    description.style.border = '1.5px solid red';
+                    quantity.style.border = '1.5px solid red';
+                    price.style.border = '1.5px solid red';
+                    image.style.border = '1.5px solid red';
+                    discountPrice.style.border = '1.5px solid red';
+                    inputControl.classList.add('error');
+                    inputControl.classList.remove('success');
+                };
+                const setSuccess = element => {
+                    const inputControl = element.parentElement;
+                    // const errorDisplay= inputControl.querySelector('.error');
+                    // errorDisplay.innerText='';
+                    element.placeholder = '';
+                    inputControl.classList.add('success');
+                    inputControl.classList.remove('error');
+                };
+                const validateInput = () => {
+                    console.log("Entered to validate input");
+                    const brandNameValue = brandName.value.trim();
+                    const proNameValue = pName.value.trim();
+                    const descriptionValue = description.value;
+                    const quantityValue = quantity.value.trim();
+                    const priceValue = price.value.trim();
+                    const discountPriceValue = discountPrice.value.trim();
+                    const imageValue = image.files[0];
+                    if (brandNameValue === '') {
+                        setError(brandName, 'Brand Name is required');
+                    } else {
+                        console.log("fName Ok");
+                        setSuccess(brandName);
+                    }
+                    if (proNameValue === '') {
+                        setError(pName, 'Product Name is required');
+                    } else {
+                        console.log("lName Ok");
+                        setSuccess(pName);
+                    }
+                    if (descriptionValue === '') {
+                        setError(description, 'Description is required');
+                    } else {
+                        console.log("email Ok");
+                        setSuccess(description);
+                    }
+                    if (quantityValue === '') {
+                        setError(quantity, 'Quantity is required');
+                    } else {
+                        console.log("Mobile oK")
+                        setSuccess(quantity);
+                    }
+                    if (priceValue === '') {
+                        setError(price, 'Price is required');
+                    } else {
+                        console.log("Password Ok")
+                        setSuccess(price);
+                    }
+                    if (discountPriceValue === '') {
+                        setError(discountPrice, 'Discount Price is required');
+                    } else {
+                        console.log("confirm Password ok");
+                        setSuccess(discountPrice);
+                    }
+                    if (imageValue === '') {
+                        setError(image);
+                        document.getElementById('image-error').innerHTML = 'Upload image';
+                    } else {
+                        setSuccess(image);
+                    }
+                    //FOR SUBMISSION:
+                    const inputs = [brandName, pName, description, quantity, price, discountPrice, image];
+                    if (inputs.every(input => input.parentElement.classList.contains('success'))) {
+                        form.submit();
+                    }
+                };
+                /** Form Validation End **/
+            </script>
+            <%- include('../layouts/generalFooter.ejs') -%>

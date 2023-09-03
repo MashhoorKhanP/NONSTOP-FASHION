@@ -1,0 +1,295 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+  <!-- Sidebar Start -->
+  <%- include('../layouts/sidebar.ejs') -%>
+    <!-- Navbar -->
+    <!-- End Navbar -->
+    <div class="p-5 w-75 container">
+      <div class="">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative  z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3 fs-5 fw-bold">Categories</h6>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0 text-center">
+              <table class="table align-items-center mb-0">
+                <h5 class="text-decoration-underline fw-bold">ADD CATEGORY</h5>
+                <div class="text-center fw-bold text-dark fw-bold">
+                  <% if(typeof CategoryMessage !=='undefined' ){ %>
+                    <p class="">
+                      <%= CategoryMessage %>
+                    </p>
+                    <%} %>
+                </div>
+                <form action="/admin/categories" method="post" id="submit-id" class="text-center"
+                  enctype="multipart/form-data">
+                  <div class="row align-items-center justify-content-center">
+                    <div class="col-md-12">
+                      <!-- <input type="file" class="form-control" name="image" id="image" accept="image/*" required> -->
+                      <div class="mt-2 pe-3 ps-3">
+                        <input id="category-input" class="form-control mb-2" type="text" name="category"
+                          placeholder="Category Name" required>
+                        <div class="">
+                          <!-- First input file -->
+                          <div class="">
+                            <main class="page shadow-lg" style="padding: 0px;">
+                              <div class="box p-3">
+                                <div class="p-3 d-flex justify-content-between">
+                                  <input type="file" class="form-control-file image" name="image" id="image" single
+                                    accept="image/*" required>
+                                  <button class="btn delete-image-button fs-5 text-danger delete" type="button"><i
+                                      class="bi bi-trash"></i></button>
+                                </div>
+                                <div class="d-flex column-gap-3">
+                                  <div class="box-2 w-50">
+                                    <div class="result"></div>
+                                  </div>
+                                  <div class="box-2 img-result hide w-50">
+                                    <img class="cropped" src="" alt="">
+                                  </div>
+                                </div>
+                                <div class="box">
+                                  <div class="options hide ms-3 mt-3">
+                                    <label>Width:</label>
+                                    <input type="number" class="img-w" value="300" min="100" max="1200" />
+                                    <label>Height:</label>
+                                    <input type="number" class="img-w" value="350" min="100" max="1200" />
+                                  </div>
+                                  <div class="text-center column-gap-1 mt-4">
+                                    <button class="btn save hide btn-success rounded-0">Save <i
+                                        class="bi bi-check2-circle"></i></button>
+                                    <a href="" class="btn download hide btn-dark rounded-0">Download <i
+                                        class="bi bi-download"></i></a>
+                                  </div>
+                                </div>
+                              </div>
+                            </main>
+                          </div><br>
+                          <small id="image-error" class="error text-danger"></small>
+                        </div>
+                        <div class="text-danger fw-bold mt-2" id="error-message"></div>
+                      </div>
+                      <button type="submit" class="btn btn-dark text-white fw-bold fs-7 rounded-0">
+                        <i class="bi bi-plus-lg"></i> Category
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <thead class="border-1">
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Image</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Category Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Edit
+                      Category</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Edit
+                      Offers</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      List/Unlist Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(categories.length> 0){
+                    for(let i=0; i<categories.length; i++){ %>
+                      </categories.length>
+                      <tr>
+                        <td>
+                          <div class="px-2 py-1">
+                            <div>
+                              <img src="/assets/product-images/<%= categories[i].image %>"
+                                class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                            </div>
+                          </div>
+                        </td>
+                        <td class="">
+                          <p class="text-xs font-weight-bold mb-0">
+                            <%= categories[i].name %>
+                          </p>
+                        <td class="">
+                          <a class="popupBTN text-dark" title="Edit Category" data-id="<%= categories[i]._id %>"
+                            data-val="<%= categories[i].name %>" data-bs-toggle="modal"
+                            href="#exampleModal_<%= categories[i]._id %>">
+                            <i class="bi bi-pencil-square"></i>
+                          </a>
+                          <!-- Modal Start -->
+                          <div class="modal fade" id="exampleModal_<%= categories[i]._id %>" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Edit Category</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="/admin/categories/editcategory" method="post"
+                                    enctype="multipart/form-data">
+                                    <input id="catID" value="" type="hidden" name="categoryId">
+                                    <div class="mb-3">
+                                      <img src="/assets/product-images/<%= categories[i].image %>"
+                                        style="width: 100px; height: 100px;"><br>
+                                      <label for="image" class="form-label">Category Image</label>
+                                      <input type="file" class="form-control" name="image" id="image" accept="image/*"
+                                        required>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="categoryName" class="form-label">Category Name</label>
+                                      <input id="categoryName" class="form-control" type="text" name="categoryName"
+                                        placeholder="Enter new name" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-danger fw-bold"
+                                        data-bs-dismiss="modal">CANCEL</button>
+                                      <button type="submit" class="btn btn-success fw-bold">UPDATE</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Modal End  -->
+                        </td>
+                        <td>
+                          <% if(offerData && offerData.length>0) {%>
+                            <% if(categories[i].offer && categories[i].offer!='' ) {%>
+                              <form action="/admin/remove-category-offer/<%=categories[i]._id%>" method="post"
+                                id="myForm">
+                                <input type="hidden" name="offerId" value="<%=categories[i].offer._id %>" id="">
+                                <button
+                                  class="justify-content-center btn align-items-center btn-outline-danger m-2 fw-bold"
+                                  type="submit" onclick="alert('Are you to sure to remove offer for this product?')">
+                                  <%= categories[i].offer.offerName %>
+                                    <i class="text-danger bi bi-x-square-fill"></i>
+                                </button>
+                              </form>
+                              <% } else{%>
+                                <button
+                                  class="justify-content-center btn align-items-center btn-outline-success m-2 fw-bold offerBtn"
+                                  data-bs-toggle="modal" data-bs-target="#offerModal"
+                                  data-id="<%=categories[i]._id%>">APPLY</button>
+                                <%} %>
+                                  <%} else{%>
+                                    No Offer available
+                                    <%}%>
+                        </td>
+                        <!--OFFER Modal -->
+                        <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                  ADD
+                                  OFFER</h5>
+                                <button type="button" class="btn btn-success btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <form action="/admin/apply-category-offer" method="post">
+                                <div class="modal-body">
+                                  <input type="hidden" name="categoryId" id="offerCategoryId">
+                                  <label for="offer">Select an offer to apply:
+                                  </label>
+                                  <select name="offerId" id="offer" class="form-control">
+                                    <% offerData.forEach((offer)=>{ %>
+                                      <option value="<%=offer._id  %>">
+                                        <%=offer.offerName %>
+                                      </option>
+                                      <% }) %>
+                                  </select>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-success">ADD</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <td class="align-middle text-center">
+                          <% if (categories[i].isListed===true) { %>
+                            <a href="/admin/categories/status/<%= categories[i]._id %>"><button class="btn btn-success"
+                                onclick="alert('Do you want to Unlist this <%= categories[i].name %> category?')">UNLIST</button></a>
+                            <% } else { %>
+                              <a href="/admin/categories/status/<%= categories[i]._id %>"><button
+                                  class="btn btn-danger">LIST</button></a>
+                              <% } %>
+                        </td>
+                      </tr>
+                      <% } %>
+                        <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Pagination and Show upto -->
+          <div class="mx-3 d-flex justify-content-between border-top pt-3">
+            <div class="text-center">
+              <ul class="list-unstyled d-flex justify-content-center mb-4">
+                <li class="mx-1 ps-2 pe-2 rounded-pill show-upto-item">SHOW UPTO:</li>
+                <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 10 ? 'active' : '' %>">
+                  <a href="?limit=10" class="">10</a>
+                </li>
+                <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 25 ? 'active' : '' %>">
+                  <a href="?limit=25" class="">25</a>
+                </li>
+                <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 50 ? 'active' : '' %>">
+                  <a href="?limit=50" class="">50</a>
+                </li>
+                <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 100 ? 'active' : '' %>">
+                  <a href="?limit=100" class="">100</a>
+                </li>
+              </ul>
+            </div>
+            <!-- Pagination  -->
+            <nav aria-label="...">
+              <div class="row">
+                <div class="col-lg-12 d-flex  align-items-center justify-content-center">
+                  <div class="product__pagination  d-flex justify-content-end">
+                    <% if(pageNum> 1){
+                      %>
+                      <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum-1 %>&limit=<%= limit %>">Prev
+                      </a>
+                      <% } for(let i=1; i<=pageCount; i++){ %>
+                        <a class="mx-1 btn ps-2 pe-2 rounded-0 pagination-btn" <% if(pageNum===i){ %>
+                          style="color: white; background:black"
+                          <% } %>
+                            href="?pageNum=<%= i %>&limit=<%= limit %>"><%= i %>
+                        </a>
+                        <% } if(pageNum < pageCount){ %>
+                          <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum+1 %>&limit=<%= limit %>">Next
+                          </a>
+                          <% } %>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <%- include('../layouts/sidebarEnd.ejs') -%>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="/static/js/admin js/categoryOffer.js"></script>
+        <script src="/static/js/admin js/addCategory.js"></script>
+        <script>
+          const errorMessage = document.getElementById('error-message');
+          const form = document.getElementById('submit-form');
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            validateCategory();
+          });
+          function validateCategory() {
+            function isCategoryExist(category) {
+              return categories.some((categories) => category === categories.name);
+            }
+            const newCategoryName = document.getElementById('category-input').value.trim().toUpperCase();
+            if (newCategoryName === '') {
+              errorMessage.innerHTML = 'Category Name Required';
+              return false;
+            } else if (isCategoryExist(newCategoryName)) {
+              errorMessage.innerHTML = 'Category already exists';
+            }
+            errorMessage.innerHTML = '';
+            form.submit();
+          }
+        </script>
+        <%- include('../layouts/generalFooter.ejs') -%>

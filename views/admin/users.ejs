@@ -1,0 +1,153 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+  <!-- Sidebar Start -->
+  <%- include('../layouts/sidebar.ejs') -%>
+    <div class="card-body px-0 pb-2">
+      <div class="table-responsive text-center">
+        <div class=" align-items-center text-center w-auto mt-5" id="login">
+          <div class="ps-5 pe-5 pb-5">
+            <div class="pt-5">
+              <h4 class="fw-bold text-decoration-underline">Users Details</h4>
+              <%- include('../layouts/navbar.ejs') -%>
+                <table class="w-100 border lh-lg text-nowrap" style="margin: 0 auto;">
+                  <tr>
+                    <th class="border">#</th>
+                    <th class="border">Users</th>
+                    <th class="border">Mobile</th>
+                    <th class="border">Email</th>
+                    <th class="border">Joined On</th>
+                    <th class="border">Action</th>
+                  </tr>
+                  <% if(users.length>0){
+                    for(let i=0;i<users.length;i++){ %>
+                      <tr class="border">
+                        <td class="border p-3 ">
+                          <%= i+1 %>
+                        </td>
+                        <td class="border p-3 ">
+                          <%= users[i].firstName+' '+users[i].lastName %></td>
+                                <td class="border ps-3 pe-3"><%= users[i].mobile %></td>
+                                <td class="border ps-3 pe-3"><%= users[i].email %></td>
+                                <td class="border ps-3 pe-3"><%= users[i].formattedCreatedAt %></td>
+                                  <!-- For Unblock and Block User Start -->
+                                  <td class = "ps-3 pe-3 pt-3">
+                                      <% if (users[i].blocked) { %>
+                                      <button class="btn btn-success" type="button" onclick="showConfirmationModal('<%=users[i]._id %>')">UNBLOCK</button>
+                            <% } else { %>
+                              <button class="btn btn-danger" type="button"
+                                onclick="showConfirmationModal('<%= users[i]._id %>')">BLOCK</button>
+                              <% } %>
+                        </td>
+                        <!-- For Unblock and Block User End -->
+                      </tr>
+                      <% } %>
+                        <% }else{ %>
+                          <tr>
+                            <td colspan="5">User not found</td>
+                          </tr>
+                          <% } %>
+                </table>
+            </div>
+            <br>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to perform this action?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </button>
+                <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <!-- Pagination and Show upto -->
+        <div class="mx-3 d-flex justify-content-between border-top pt-3">
+          <div class="text-center">
+            <ul class="list-unstyled d-flex justify-content-center mb-4">
+              <li class="mx-1 ps-2 pe-2 rounded-pill show-upto-item">SHOW UPTO:</li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 10 ? 'active' : '' %>">
+                <a href="?limit=10" class="">10</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 25 ? 'active' : '' %>">
+                <a href="?limit=25" class="">25</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 50 ? 'active' : '' %>">
+                <a href="?limit=50" class="">50</a>
+              </li>
+              <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 100 ? 'active' : '' %>">
+                <a href="?limit=100" class="">100</a>
+              </li>
+            </ul>
+          </div>
+          <nav aria-label="...">
+            <!-- Pagination  -->
+            <div class="row">
+              <div class="col-lg-12 d-flex  align-items-center justify-content-center">
+                <div class="product__pagination  d-flex justify-content-end">
+                  <% if(pageNum> 1){
+                    %>
+                    <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum-1 %>&limit=<%= limit %>">Prev
+                    </a>
+                    <% } for(let i=1; i<=pageCount; i++){ %>
+                      <a class="mx-1 btn ps-2 pe-2 rounded-0 pagination-btn" <% if(pageNum===i){ %>
+                        style="color: white; background:black"
+                        <% } %>
+                          href="?pageNum=<%= i %>&limit=<%= limit %>"><%= i %>
+                      </a>
+                      <% } if(pageNum < pageCount){ %>
+                        <a class="mx-1 btn pagination-btn" href="?pageNum=<%= pageNum+1 %>&limit=<%= limit %>">Next
+                        </a>
+                        <% } %>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <%- include('../layouts/sidebarEnd.ejs') -%>
+      <!-- Sidebar End -->
+      <script>
+        function showConfirmationModal(userId) {
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmationModal")
+          );
+          const confirmationAction = document.getElementById("confirmationAction");
+          confirmationAction.href = `/admin/users/status/${userId}`;
+          modal.show();
+        }
+      </script>
+      <script>
+        /** Notification Badge Start */
+        let notificationCount = 0;
+        function showNotification() {
+          notificationCount++;
+          const badge = document.getElementById('notification-badge');
+          badge.textContent = notificationCount;
+          badge.classList.remove('d-none');
+        }
+        // Simulate a notification after 3 seconds (you can trigger this function when a real notification comes)
+        setTimeout(showNotification, 2000);
+        /** Notification Badge End */
+        /** Date Time Start */
+        var currentDateTime = new Date();
+        // Format the date and time as a string
+        var formattedDateTime = currentDateTime.toLocaleString();
+        // Update the element's content with the formatted date and time
+        document.getElementById("datetime").textContent = formattedDateTime;
+/** Date Time End */
+      </script>
+      <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+      <%- include('../layouts/generalFooter.ejs') -%>

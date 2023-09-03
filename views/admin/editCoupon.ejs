@@ -1,0 +1,147 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+    <%- include('../layouts/sidebar.ejs') -%>
+        <div class="p-5 w-75 container">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div
+                        class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+                        <h6 class="text-white text-capitalize ps-3">Edit Coupon</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <!-- Copeid Code Start -->
+                        <div class="text-center text-danger fw-bold">
+                            <% if(typeof locals.message !=='undefined' ){ %>
+                                <p class="">
+                                    <%= locals.message %>
+                                </p>
+                                <%} %>
+                        </div>
+                        <form class="p-4 border" id="submit-form" action="/admin/coupons/editcoupon/<%= coupons._id %>"
+                            method="post">
+                            <div class="row input-group input-group-outline mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="brand">Coupon</label>
+                                    <input type="text" class="form-control " name="coupon" id="coupon-input"
+                                        placeholder="Enter Coupon Code" value="<%= coupons.code %>">
+                                    <small id="brandErr" class="error"></small>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="name">Discount</label>
+                                    <input type="text" class="form-control" name="discount" id="discount-input"
+                                        placeholder="Enter Discount" value="<%= coupons.discount %>">
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="name">Min Purchase Amount</label>
+                                    <input type="text" class="form-control" name="minpurchase" id="minpurchase-input"
+                                        placeholder="Enter amount" value="<%= coupons.minPurchase%>">
+                                    <small id="nameErr" class="error"></small>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="name">Expiry Date</label>
+                                    <input type="date" class="form-control" name="expirydate" id="expirydate-input"
+                                        placeholder="Enter Expiry Date" min="<%= getCurrentDate() %>" value="<%= coupons.expiryDate ? coupons.expiryDate.toISOString().substr(0, 10) : '' %>">
+                                </div>
+                                <% function getCurrentDate() { const currentDate=new Date(); const
+                                    year=currentDate.getFullYear(); const month=String(currentDate.getMonth() +
+                                    1).padStart(2, '0' ); const day=String(currentDate.getDate()).padStart(2, '0' );
+                                    return `${year}-${month}-${day}`; } %>
+                                <div class="form-group col-md-8">
+                                    <label for="name">Description</label>
+                                    <input type="text" class="form-control" name="description" id="description-input"
+                                        placeholder="Enter Coupon Description" value="<%= coupons.description %>">
+                                </div>
+                            </div>
+                            <div class="text-danger text-center" id="message-error"></div>
+                            <div class="d-flex justify-content-center pt-3">
+                                <button type="submit" class="btn btn-success">UPDATE</button>
+                            </div>
+                        </form>
+                        <!-- Copeid Code End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../layouts/sidebarEnd.ejs') -%>
+            <script>
+                /** Form Validation Start **/
+                const form = document.getElementById('submit-form');
+                const coupon = document.getElementById('coupon-input');
+                const discount = document.getElementById('discount-input');
+                const minPurchase = document.getElementById('minpurchase-input');
+                const expiryDate = document.getElementById('expirydate-input');
+                const description = document.getElementById('description-input');
+                const messageError = document.getElementById('message-error');
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    console.log('Prevented default validation');
+                    validateInput();
+                });
+                const setError = (element, message) => {
+                    const inputControl = element.parentElement;
+                    element.placeholder = message;
+                    element.classList.add('is-invalid');
+                    coupon.style.border = '1.5px solid red';
+                    discount.style.border = '1.5px solid red';
+                    minPurchase.style.border = '1.5px solid red';
+                    expiryDate.style.border = '1.5px solid red';
+                    description.style.border = '1.5px solid red';
+                    inputControl.classList.add('error');
+                    inputControl.classList.remove('success');
+                };
+                const setSuccess = element => {
+                    const inputControl = element.parentElement;
+                    element.placeholder = '';
+                    element.classList.remove('is-invalid');
+                    inputControl.classList.add('success');
+                    inputControl.classList.remove('error');
+                };
+                const isValidDiscount = discountValue => {
+                    const re = /^(?:[0-9]|[1-9][0-9]|[1-4][0-9]{2}|549)$/;
+                    return re.test(String(discountValue));
+                };
+                const validateInput = () => {
+                    const couponValue = coupon.value.trim();
+                    const discountValue = discount.value.trim();
+                    const minPurchaseValue = minPurchase.value.trim();
+                    const expiryDateValue = expiryDate.value.trim();
+                    const descriptionValue = description.value.trim();
+                    if (couponValue === '') {
+                        setError(coupon, 'Coupon is required');
+                    } else {
+                        setSuccess(coupon);
+                    }
+                    if (discountValue === '') {
+                        setError(discount, 'Discount is required');
+                    } else if (!isValidDiscount(discountValue)) {
+                        messageError.innerHTML = 'Enter a valid discount value (0-100)';
+                        setError(discount, 'Invalid discount value');
+                    } else {
+                        messageError.innerHTML = ''; // Clear error message
+                        setSuccess(discount);
+                    }
+                    if (minPurchaseValue === '') {
+                        setError(minPurchase, 'Min Purchase Amount is required');
+                    } else {
+                        setSuccess(minPurchase);
+                    }
+                    if (expiryDateValue === '') {
+                        setError(expiryDate, 'Expiry Date is required');
+                    } else {
+                        setSuccess(expiryDate);
+                    }
+                    if (descriptionValue === '') {
+                        setError(description, 'Description is required');
+                    } else {
+                        setSuccess(description);
+                    }
+                    const inputs = [coupon, discount, minPurchase, expiryDate, description];
+                    if (inputs.every(input => input.parentElement.classList.contains('success'))) {
+                        form.submit();
+                        console.log('Successfully submitted');
+                    }
+                };
+                /** Form Validation End **/
+            </script>
+            <%- include('../layouts/generalFooter.ejs') -%>

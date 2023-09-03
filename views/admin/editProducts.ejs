@@ -1,0 +1,435 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+    <!-- Sidebar Start -->
+    <%- include('../layouts/sidebar.ejs') -%>
+        <div class="p-5 w-75 container">
+            <div class="">
+                <div class="col-12">
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div
+                                class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+                                <h6 class="text-white text-capitalize ps-3">Edit Product</h6>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <!-- Copeid Code Start -->
+                                <form class="p-4 border" action="/admin/products/editproduct" method="post"
+                                    enctype="multipart/form-data" id="editProductsubmit-form">
+                                    <div class="row input-group input-group-outline mb-3">
+                                        <input type="hidden" name="id" id="" value="<%= prodsData._id %>">
+                                        <div class="form-group col-md-4">
+                                            <label for="brand">Brand</label>
+                                            <input type="brand" class="form-control" name="brand" id="brand"
+                                                value="<%= prodsData.brand %>" placeholder="Brand">
+                                            <small id="brandErr" class="error"></small>
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            <label for="name">Product Name</label>
+                                            <input type="name" class="form-control" name="productName" id="name"
+                                                value="<%= prodsData.name %>" placeholder="Product name">
+                                            <small id="nameErr" class="error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="row input-group input-group-outline mb-3">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="category">Category</label>
+                                                <select id="category" class="form-control" name="category">
+                                                    <option value="<%=prodsData.category.name %>">
+                                                        <%=prodsData.category.name %>
+                                                    </option>
+                                                    <% if(catData.length>0){for(let i=0;i<catData.length;i++) {
+                                                            if(catData[i].name !=prodsData.category.name){%>
+                                                            <option value="<%=catData[i].name %>">
+                                                                <%=catData[i].name %>
+                                                            </option>
+                                                            <% }} }%>
+                                                </select>
+                                            </div>
+                                            <!-- Sizes as check box code  -->
+                                            <div class="row input-group form-check">
+                                                <label class="form-check-label">Size :&nbsp;</label>
+                                                <div class=" d-flex justify-content-center" id="size-character">
+                                                    <input class="form-check-input" type="checkbox" value="XS"
+                                                        id="check1" name="check1" onclick="handleCheckboxChange1()" <%
+                                                        if(prodsData.size.length>0){
+                                                    for(let i=0; i<prodsData.size.length; i++){
+                                                        if(prodsData.size[i]==="XS" ){ %> checked <% } } } %>
+                                                            >
+                                                            <label class="form-check-label" for="check1">XS</label>
+                                                            <input class="form-check-input" type="checkbox" value="S"
+                                                                id="check2" name="check2"
+                                                                onclick="handleCheckboxChange1()" <%
+                                                                if(prodsData.size.length>0){
+                                                            for(let i=0; i<prodsData.size.length; i++){
+                                                                if(prodsData.size[i]==="S" ){ %> checked <% } } } %>
+                                                                    >
+                                                                    <label class="form-check-label"
+                                                                        for="check2">S</label>
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value="M" id="check3" name="check3"
+                                                                        onclick="handleCheckboxChange1()" <%
+                                                                        if(prodsData.size.length>0){
+                                                                    for(let i=0; i<prodsData.size.length; i++){
+                                                                        if(prodsData.size[i]==="M" ){ %> checked <% } }
+                                                                            } %>
+                                                                            >
+                                                                            <label class="form-check-label"
+                                                                                for="check3">M</label>
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" value="L" id="check4"
+                                                                                name="check4"
+                                                                                onclick="handleCheckboxChange1()" <%
+                                                                                if(prodsData.size.length>0){
+                                                                            for(let i=0; i<prodsData.size.length; i++){
+                                                                                if(prodsData.size[i]==="L" ){ %> checked
+                                                                                <% } } } %>
+                                                                                    >
+                                                                                    <label class="form-check-label"
+                                                                                        for="check4">L</label>
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox" value="XL"
+                                                                                        id="check5" name="check5"
+                                                                                        onclick="handleCheckboxChange1()"
+                                                                                        <% if(prodsData.size.length>0){
+                                                                                    for(let i=0; i
+                                                                                    <prodsData.size.length; i++){
+                                                                                        if(prodsData.size[i]==="XL" ){
+                                                                                        %> checked <% } } } %>
+                                                                                            >
+                                                                                            <label
+                                                                                                class="form-check-label"
+                                                                                                for="check5">XL</label>
+                                                                                            <input
+                                                                                                class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                value="XXL" id="check6"
+                                                                                                name="check6"
+                                                                                                onclick="handleCheckboxChange1()"
+                                                                                                <%
+                                                                                                if(prodsData.size.length>0){
+                                                                                            for(let i=0; i
+                                                                                            <prodsData.size.length;
+                                                                                                i++){
+                                                                                                if(prodsData.size[i]==="XXL"
+                                                                                                ){ %> checked <% } } }
+                                                                                                    %>
+                                                                                                    >
+                                                                                                    <label
+                                                                                                        class="form-check-label"
+                                                                                                        for="check6">XXL</label>
+                                                </div>
+                                                <div class="d-flex justify-content-center" id="size-number">
+                                                    <input class="form-check-input" type="checkbox" value="5"
+                                                        id="check1" name="check1" onclick="handleCheckboxChange()" <%
+                                                        if(prodsData.size.length>0){
+                                                    for(let i=0; i<prodsData.size.length; i++){ if(prodsData.size[i]==='5'
+                                                        ){ %> checked <% } } } %>
+                                                            >
+                                                            <label class="form-check-label" for="check1">5</label>
+                                                            <input class="form-check-input" type="checkbox" value="6"
+                                                                id="check2" name="check2"
+                                                                onclick="handleCheckboxChange()" <%
+                                                                if(prodsData.size.length>0){
+                                                            for(let i=0; i<prodsData.size.length; i++){
+                                                                if(prodsData.size[i]==='6' ){ %> checked <% } } } %>
+                                                                    >
+                                                                    <label class="form-check-label"
+                                                                        for="check2">6</label>
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value="7" id="check3" name="check3"
+                                                                        onclick="handleCheckboxChange()" <%
+                                                                        if(prodsData.size.length>0){
+                                                                    for(let i=0; i<prodsData.size.length; i++){
+                                                                        if(prodsData.size[i]==='7' ){ %> checked <% } } }
+                                                                            %>
+                                                                            >
+                                                                            <label class="form-check-label"
+                                                                                for="check3">7</label>
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" value="8" id="check4"
+                                                                                name="check4"
+                                                                                onclick="handleCheckboxChange()" <%
+                                                                                if(prodsData.size.length>0){
+                                                                            for(let i=0; i<prodsData.size.length; i++){
+                                                                                if(prodsData.size[i]==='8' ){ %> checked
+                                                                                <% } } } %>
+                                                                                    >
+                                                                                    <label class="form-check-label"
+                                                                                        for="check4">8</label>
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox" value="9"
+                                                                                        id="check5" name="check5"
+                                                                                        onclick="handleCheckboxChange()"
+                                                                                        <% if(prodsData.size.length>0){
+                                                                                    for(let i=0; i
+                                                                                    <prodsData.size.length; i++){
+                                                                                        if(prodsData.size[i]==='9' ){ %>
+                                                                                        checked <% } } } %>
+                                                                                            >
+                                                                                            <label
+                                                                                                class="form-check-label"
+                                                                                                for="check5">9</label>
+                                                                                            <input
+                                                                                                class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                value="10" id="check6"
+                                                                                                name="check6"
+                                                                                                onclick="handleCheckboxChange()"
+                                                                                                <%
+                                                                                                if(prodsData.size.length>0){
+                                                                                            for(let i=0; i
+                                                                                            <prodsData.size.length;
+                                                                                                i++){
+                                                                                                if(prodsData.size[i]==='10'
+                                                                                                ){ %> checked <% } } }
+                                                                                                    %>
+                                                                                                    >
+                                                                                                    <label
+                                                                                                        class="form-check-label"
+                                                                                                        for="check6">10</label>
+                                                </div>
+                                            </div>
+                                            <!-- Sizes as check box code end  -->
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            <label for="inputAddress">Description</label>
+                                            <textarea type="text" rows="4" class="form-control" name="description"
+                                                id="description"
+                                                placeholder="Enter Product Description"><%= prodsData.description %>" </textarea>
+                                            <small id="descriptionErr" class="error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="row input-group input-group-outline mb-3">
+                                        <div class="form-group col-md-4">
+                                            <label for="quantity">Quantity</label>
+                                            <input type="Number" name="quantity" class="form-control" id="quantity"
+                                                value="<%= prodsData.quantity %>" placeholder="Quantity" min="1">
+                                            <small id="quantityErr" class="error"></small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="price">Price</label>
+                                            <input type="number" name="price" id="price" class="form-control"
+                                                value="<%= prodsData.price %>" placeholder="price">
+                                            <small id="priceErr" class="error"></small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="dprice">Discount Price</label>
+                                            <input type="number" name="dprice" id="dprice" class="form-control"
+                                                value="<%= prodsData.discountPrice %>" placeholder="Discount price">
+                                            <small id="dpriceErr" class="error"></small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Edit product images</label>
+                                    </div>
+                                    <div class="container">
+                                        <div class="d-flex">
+                                    <% for (let i=0; i < prodsData.images.length; i++) { %>
+                                                <% if(i< prodsData.images.length){%>
+                                                <div class="position-relative me-3 mb-3 col" style="width: 200px;">
+                                                    <img src="/assets/product-images/<%= prodsData.images[i] %>" alt="Image <%= i + 1 %>" class="w-100 h-100 border rounded">
+                                                    <a class="" onclick="showConfirmationModal('<%= prodsData._id %>','<%= prodsData.images[i] %>')">
+                                                        <i class="bi bi-trash3-fill delete-icon text-danger position-absolute top-0 end-0 mt-1 me-1"></i>
+                                                    </a>
+                                                </div>
+                                                <% } %>
+                                                <%}%>
+                                            </div>
+                                            </div>
+                                                    <% if(prodsData.images.length<3){%>
+                                                        <% for(let i=0;i<3-prodsData.images.length;i++){%>
+                                                            <div class="">
+                                                                <!-- First input file -->
+                                                                <div class="">
+                                                                    <main class="page shadow-lg" style="padding: 0px;">
+                                                                        <div class="box p-3">
+                                                                            <div
+                                                                                class="p-3 d-flex justify-content-between">
+                                                                                <input type="file"
+                                                                                    class="form-control-file image"
+                                                                                    name="image" id="image" single
+                                                                                    accept="image/*" required>
+                                                                                <button
+                                                                                    class="btn delete-image-button fs-5 text-danger delete"
+                                                                                    type="button"><i
+                                                                                        class="bi bi-trash"></i></button>
+                                                                            </div>
+                                                                            <div class="d-flex column-gap-3">
+                                                                                <div class="box-2 w-50">
+                                                                                    <div class="result"></div>
+                                                                                </div>
+                                                                                <div class="box-2 img-result hide w-50">
+                                                                                    <img class="cropped" src="" alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="box">
+                                                                                <div class="options hide ms-3 mt-3">
+                                                                                    <label>Width:</label>
+                                                                                    <input type="number" class="img-w"
+                                                                                        value="540" min="540"
+                                                                                        max="550" />
+                                                                                    <label>Height:</label>
+                                                                                    <input type="number" class="img-w"
+                                                                                        value="720" min="720"
+                                                                                        max="730" />
+                                                                                </div>
+                                                                                <div
+                                                                                    class="text-center column-gap-1 mt-4">
+                                                                                    <button
+                                                                                        class="btn save hide btn-success rounded-0">Save
+                                                                                        <i
+                                                                                            class="bi bi-check2-circle"></i></button>
+                                                                                    <a href=""
+                                                                                        class="btn download hide btn-dark rounded-0">Download
+                                                                                        <i
+                                                                                            class="bi bi-download"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </main>
+                                                                </div><br>
+                                                                <small id="image-error"
+                                                                    class="error text-danger"></small>
+                                                            </div>
+                                                            <%}%>
+                                                                <%}%>
+                                                                    <br>
+                                                                    <div
+                                                                        class="d-flex justify-content-center column-gap-1">
+                                                                        <button type="submit" class="btn btn-success"
+                                                                            onclick="return validateProduct()">UPDATE</button>
+                                                                        <a href="/admin/products"
+                                                                            class="btn btn-danger">CANCEL</a>
+                                                                    </div>
+                                </form>
+                                <!-- Copeid Code End -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to perform this action?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <%- include('../layouts/sidebarEnd.ejs') -%>
+            <script src="/static/js/admin js/editProduct.js"></script>
+            <script>
+                function showConfirmationModal(productId, imageId) {
+                    const modal = new bootstrap.Modal(
+                        document.getElementById("confirmationModal")
+                    );
+                    const confirmationAction = document.getElementById("confirmationAction");
+                    confirmationAction.href = `/admin/products/editproduct/deleteimage/${productId}?imageURL=${imageId}`;
+                    modal.show();
+                }
+            </script>
+            <script>
+                /** Form Validation Start **/
+                const form = document.getElementById('editProductsubmit-form');
+                const brandName = document.getElementById('brand');
+                const pName = document.getElementById('name');
+                const description = document.getElementById('description');
+                const quantity = document.getElementById('quantity');
+                const price = document.getElementById('price');
+                const discountPrice = document.getElementById('dprice');
+                form.addEventListener('submit', e => {
+                    e.preventDefault();
+                    validateInput();
+                });
+                const setError = (element, message) => {
+                    const inputControl = element.parentElement;
+                    // const errorDisplay = inputControl.querySelector('.error');
+                    // errorDisplay.innerText=message;
+                    element.placeholder = message;
+                    brandName.style.border = '1.5px solid red';
+                    pName.style.border = '1.5px solid red';
+                    description.style.border = '1.5px solid red';
+                    quantity.style.border = '1.5px solid red';
+                    price.style.border = '1.5px solid red';
+                    discountPrice.style.border = '1.5px solid red';
+                    inputControl.classList.add('error');
+                    inputControl.classList.remove('success');
+                };
+                const setSuccess = element => {
+                    const inputControl = element.parentElement;
+                    // const errorDisplay= inputControl.querySelector('.error');
+                    // errorDisplay.innerText='';
+                    element.placeholder = '';
+                    inputControl.classList.add('success');
+                    inputControl.classList.remove('error');
+                };
+                const validateInput = () => {
+                    console.log("Entered to validate input");
+                    const brandNameValue = brandName.value.trim();
+                    const proNameValue = pName.value.trim();
+                    const descriptionValue = description.value;
+                    const quantityValue = quantity.value.trim();
+                    const priceValue = price.value.trim();
+                    const discountPriceValue = discountPrice.value.trim();
+                    if (brandNameValue === '') {
+                        setError(brandName, 'Brand Name is required');
+                    } else {
+                        console.log("fName Ok");
+                        setSuccess(brandName);
+                    }
+                    if (proNameValue === '') {
+                        setError(pName, 'Product Name is required');
+                    } else {
+                        console.log("lName Ok");
+                        setSuccess(pName);
+                    }
+                    if (descriptionValue === '') {
+                        setError(description, 'Description is required');
+                    } else {
+                        console.log("email Ok");
+                        setSuccess(description);
+                    }
+                    if (quantityValue === '') {
+                        setError(quantity, 'Quantity is required');
+                    } else {
+                        console.log("Mobile oK")
+                        setSuccess(quantity);
+                    }
+                    if (priceValue === '') {
+                        setError(price, 'Price is required');
+                    } else {
+                        console.log("Password Ok")
+                        setSuccess(price);
+                    }
+                    if (discountPriceValue === '') {
+                        setError(discountPrice, 'Discount Price is required');
+                    } else {
+                        console.log("confirm Password ok");
+                        setSuccess(discountPrice);
+                    }
+                    //FOR SUBMISSION:
+                    const inputs = [brandName, pName, description, quantity, price, discountPrice];
+                    if (inputs.every(input => input.parentElement.classList.contains('success'))) {
+                        form.submit();
+                    }
+                };
+                /** Form Validation End **/
+            </script>
+            <%- include('../layouts/generalFooter.ejs') -%>

@@ -1,0 +1,53 @@
+<%- include('../layouts/adminHeader.ejs') -%>
+    <!-- Sidebar Start -->
+    <%- include('../layouts/sidebar.ejs') -%>
+        <div class="p-5 w-75 container">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div
+                        class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+                        <h6 class="text-white text-capitalize ps-3">Add Offer</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <!-- Copeid Code Start -->
+                        <form class="p-4 border" id="submit-form" action="/admin/offers/add-offer" method="post">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="typeEmailX-2" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="typeEmailX-2"
+                                        placeholder="Enter name" required>
+                                    <small class="text-danger text-center">
+                                        <%=offerUpdateMessage %>
+                                    </small>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="discount" class="form-label">Discount</label>
+                                    <input type="number" id="discount" class="form-control rounded-0"
+                                        placeholder="Discount percentage" name="discount" min="1" max="99" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="expiryDate" class="form-label">Expiry</label>
+                                    <input type="date" id="expirydate" class="form-control rounded-0" name="expirydate"
+                                        min="<%= getCurrentDate() %>" <% function getCurrentDate() { const
+                                        currentDate=new Date(); const year=currentDate.getFullYear(); const
+                                        month=String(currentDate.getMonth() + 1).padStart(2, '0' ); const
+                                        day=String(currentDate.getDate()).padStart(2, '0' ); return
+                                        `${year}-${month}-${day}`; } %>
+                                    required>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center pt-3 column-gap-1">
+                                <button type="submit" class="btn btn-success">Add Offer</button>
+                                <a href="/admin/offers" class="btn btn-danger">CANCEL</a>
+                            </div>
+                        </form>
+                        <!-- Copeid Code End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../layouts/sidebarEnd.ejs') -%>
+            <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+            <%- include('../layouts/generalFooter.ejs') -%>

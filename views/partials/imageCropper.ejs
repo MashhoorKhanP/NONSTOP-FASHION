@@ -1,0 +1,38 @@
+<div class="">
+    <!-- First input file -->
+    <div class="">
+        <main class="page shadow-lg" style="padding: 0px;">
+            <div class="box p-3">
+                <div class="p-3 d-flex justify-content-between">
+                    <input type="file" class="form-control-file image" name="image" id="image" single accept="image/*">
+                    <button class="btn delete-image-button fs-5 text-danger delete" type="button"><i
+                            class="bi bi-trash"></i></button>
+                </div>
+                <div class="d-flex column-gap-3">
+                    <div class="box-2 w-50">
+                        <div class="result"></div>
+                    </div>
+                    <div class="box-2 img-result hide w-50">
+                        <img class="cropped" src="" alt="">
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="options hide ms-3 mt-3">
+                        <label>Width:</label>
+                        <input type="number" class="img-w" value="1920" min="1920" max="1980" />
+                        <label>Height:</label>
+                        <input type="number" class="img-w" value="1272" min="1272" max="1280" />
+                    </div>
+                    <div class="text-center column-gap-1 mt-4">
+                        <button class="btn save hide btn-success rounded-0">Save <i
+                                class="bi bi-check2-circle"></i></button>
+                        <a href="" class="btn download hide btn-dark rounded-0">Download <i
+                                class="bi bi-download"></i></a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div><br>
+    <small id="image-error" class="error text-danger"></small>
+</div>
+<br>

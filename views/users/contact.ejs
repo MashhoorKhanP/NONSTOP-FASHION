@@ -1,0 +1,165 @@
+<%- include('../layouts/homeHeader.ejs') -%>
+    <section>
+        <div class="container py-5 h-100">
+            <span class="about text-center" style="font-size: 32px;font-style: normal;
+             font-weight: 600;line-height: 24px;">CONTACT US</span>
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card border-0"
+                        style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;">
+                        <div class="card-body p-5 ">
+                            <div class="text-center">
+                                <h3 class="mb-4">Contact Form</h3>
+                            </div>
+                            <form action="/contact" method="post" id="contactForm">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="name">Name *</label>
+                                    <input type="text" id="name" class="form-control form-control-lg rounded-0"
+                                        placeholder="Enter your name" name="name" />
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="typeEmailX-2">Email *</label>
+                                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg rounded-0"
+                                        placeholder="Enter your email" name="email" />
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="subject-2">Subject *</label>
+                                    <input type="text" id="subject-2" class="form-control form-control-lg rounded-0"
+                                        placeholder="Enter your Subject" name="subject" />
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="message">Message *</label>
+                                    <textarea type="message" id="message" class="form-control form-control-lg rounded-0"
+                                        placeholder="Enter your message" name="message"></textarea>
+                                </div>
+                                <div class="text-danger text-center" id="message-error"></div>
+                                <div class="text-center">
+                                    <button class="btn btn-md btn-dark w-50 rounded-0 " type="submit"
+                                        onclick="return validateForm()">SEND</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.17/dist/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('#contactForm').submit((e) => {
+            e.preventDefault()
+            $.ajax({
+                url: '/contact',
+                method: 'post',
+                data: $('#contactForm').serialize(),
+                success: (res) => {
+                    if (res.status == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Your message has been sent!',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // User clicked OK, refresh the page
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while processing your request.',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        const userName = document.getElementById('name');
+        const emailId = document.getElementById('typeEmailX-2');
+        const messagesInbox = document.getElementById('message');
+        const subject = document.getElementById('subject-2');
+        const setError = (element, message) => {
+            const inputControl = element.parentElement;
+            element.placeholder = message;
+            userName.style.border = "1px solid red";
+            emailId.style.border = "1px solid red";
+            messagesInbox.style.border = "1px solid red";
+            subject.style.border = "1px solid red";
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success');
+        }
+        const setSuccess = element => {
+            const inputControl = element.parentElement;
+            element.placeholder = '';
+            inputControl.classList.add('success');
+            inputControl.classList.remove('error');
+        };
+        const isValidName = userName => {
+            const rename = /^[a-zA-Z]/;
+            return rename.test(String(userName));
+        }
+        const isValidEmail = emailId => {
+            const re = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+            return re.test(String(emailId).toLowerCase());
+        }
+        function validateInput() {
+            const userNameValue = userName.value.trim();
+            const emailIdValue = emailId.value.trim();
+            const messagesInboxValue = messagesInbox.value.trim();
+            const subjectValue = subject.value.trim();
+            if (userNameValue === '') {
+                setError(userName, 'Name is required');
+            } else if (!isValidName(userNameValue)) {
+                //setError(userName);
+                document.getElementById('message-error').innerHTML = 'Name should be alphabets';
+            } else {
+                setSuccess(userName);
+            }
+            if (emailIdValue === '') {
+                setError(emailId, 'Email is required');
+            } else if (!isValidEmail(emailIdValue)) {
+                alert('Provide a valid Email address')
+                setError(emailId, 'Provide a valid email address');
+            } else {
+                setSuccess(emailId);
+            }
+            if (subjectValue === '') {
+                setError(subject, 'Subject is required');
+            } else {
+                setSuccess(subject);
+            }
+            if (messagesInboxValue === '') {
+                setError(messagesInbox, 'Message is mandatory');
+            } else if (messagesInboxValue.split(' ').length < 10) {
+                document.getElementById('message-error').innerHTML = 'Messages should be atleast 10 words';
+                // setError(messagesInbox,'Messages should be atleast 10 words')
+            } else {
+                setSuccess(messagesInbox);
+            }
+            const inputs = [userName, emailId, subject, messagesInbox];
+            if (inputs.every(input => input.parentElement.classList.contains('success'))) {
+                return true;
+            }
+        }
+        function validateForm() {
+            if (!validateInput()) {
+                return false;
+            }
+        }
+    </script>
+    <%- include ('../layouts/footer.ejs') -%>

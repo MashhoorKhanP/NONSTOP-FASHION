@@ -184,7 +184,7 @@ const getHome = async (req, res, next) => {
             userData = await User.findOne({ email: user })
             wishlistExist = 0;
             const userWishlistData = await User.findOne({ email: req.session.user.email });
-            console.log(userWishlistData);
+            //console.log(userWishlistData);
 
             if (userWishlistData && userWishlistData.wishlist) {
                 const prodExist = userWishlistData.wishlist.find((data) => data == id);
@@ -236,7 +236,7 @@ const getProductDetails = async (req, res, next) => {
             cartData = await Cart.findOne({ user: user._id }).populate('products.productId');
             userReviewed = 0
             reviewData = await Products.findOne({ _id: id, 'reviews.userId': user._id })
-            console.log(reviewData)
+            //console.log(reviewData)
             if (reviewData) userReviewed = 1
             if (cartData) {
                 cartList = cartData.products.map(({ productId, size, quantity, cartPrice, cartDPrice }) => ({

@@ -33,10 +33,10 @@ const getCategories = async (req, res, next) => {
 /** Post Add Category Start */
 const postAddCategory = async (req, res, next) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const categoryName = req.body.category.toUpperCase();
         const image = req.file.filename;
-        console.log(categoryName);
+        // console.log(categoryName);
 
         if (categoryName) {
             const isExistCategory = await Categories.findOne({ name: categoryName });
@@ -65,9 +65,9 @@ const postEditCategory = async (req, res, next) => {
     try {
         const id = req.body.categoryId;
         const newName = req.body.categoryName.toUpperCase();
-        console.log(newName);
+        // console.log(newName);
         const isCategoryExist = await Categories.findOne({ name: newName });
-        console.log(req);
+        // console.log(req);
         if (req.file.filename) {
             const image = req.file.filename;
             if (!isCategoryExist || isCategoryExist._id == id) {
@@ -117,7 +117,7 @@ const postApplyCategoryOffer = async (req, res, next) => {
         })
         const offerData = await Offer.findOne({ _id: offerId });
         const updatingProducts = await Product.find({ category: categoryId });
-        console.log(updatingProducts);
+        // console.log(updatingProducts);
         for (const product of updatingProducts) {
             var newPrice = product.offerPrice
             const price = product.price + product.discountPrice;

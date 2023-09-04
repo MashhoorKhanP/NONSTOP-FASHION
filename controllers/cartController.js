@@ -23,7 +23,7 @@ const getCart = async (req, res, next) => {
                 cartDPrice,
                 cartSubtotalPrice
             }));
-            console.log(cartList.length);
+            // console.log(cartList.length);
             for (const { productId, quantity } of cartList) {
                 await Cart.updateOne(
                     { user: userData._id, 'products.productId': productId },
@@ -63,7 +63,7 @@ const postAddToCart = async (req, res) => {
         let user = req.session.user.email;
         let userData = await User.findOne({ email: user });
         let id = userData._id;
-        console.log(id);
+        // console.log(id);
         let productId = req.params.id
         let size = req.body.size
 

@@ -20,18 +20,18 @@ const getBanners = async (req, res, next) => {
 const postUpdateBanner = async (req, res, next) => {
     try {
         const { name, url } = req.body;
-        console.log(name, url);
+        //console.log(name, url);
         let image = false;
         if (req.file) {
             image = req.file.filename;
         }
-        console.log(name, url, image);
+        //console.log(name, url, image);
         const bannerExist = await bannerCompare.findOne({ name })
         if (bannerExist && image != false && url != null) {
             await fs.unlink(path.join(__dirname, '../public/assets/banner-images') + name, (error) => {
                 if (error) {
 
-                    console.log(error);
+                    next(error);
                 }
             });
             await Banner.updateOne({ name }, { $set: { image, url } });
@@ -39,7 +39,7 @@ const postUpdateBanner = async (req, res, next) => {
         } else if (bannerExist && image != false) {
             await fs.unlink(path.join(__dirname, '../public/assets/banner-images') + name, (error) => {
                 if (error) {
-                    console.log(error);
+                    next(error);
                 }
             });
             await Banner.updateOne({ name }, { $set: { image } })

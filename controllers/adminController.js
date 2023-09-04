@@ -13,7 +13,7 @@ const securePassword = async (password) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         return hashedPassword;
     } catch (error) {
-        console.log(error.message);
+        next(error.message);
     }
 }
 /**Hashing Function End*/
@@ -69,7 +69,7 @@ const postSendOTP = async (req, res, next) => {
             const OTP = getOTP();
             req.session.OTP = OTP
 
-            console.log(req.session.OTP);
+            //console.log(req.session.OTP);
             req.session.admin = adminData;
             req.session.save();
 
@@ -79,17 +79,17 @@ const postSendOTP = async (req, res, next) => {
             res.render('otpLogin', { email: req.session.admin.email, AdminOTPLoginmessage: 'Please fill the  required fields', title: 'Admin OTP Login' })
         }
     } catch (error) {
-        next.log(error)
+        next(error)
     }
 }
 
 const postOTPLogin = async (req, res, next) => {
     try {
-        console.log(req.session.OTP);
+        //console.log(req.session.OTP);
         const enteredOtp = Number(req.body.otp);
         const sharedOtp = Number(req.session.OTP);
         const email = req.session.admin.email;
-        console.log(email)
+        //console.log(email)
         if (enteredOtp === sharedOtp) {
             res.redirect('/admin/dashboard');
         } else {
@@ -105,19 +105,19 @@ const postOTPLogin = async (req, res, next) => {
 const getResendOTP = async (req, res, next) => {
     try {
         const email = req.query.id;
-        console.log(email)
+        //console.log(email)
         const resendedOTP = getOTP()
         req.session.OTP = resendedOTP
         sendVerifyMail(email, resendedOTP);
-        console.log(resendedOTP);
+        //console.log(resendedOTP);
         res.render('otpVerification', { title: 'Verification Page', email, AdminOTPLoginmessage: 'OTP resended successfully,Please check your email' });
     } catch (error) {
-        next.log(error);
+        next(error);
     }
 }
 /** Get Resend OTP End */
 /** Send Verify OTP Start*/
-const sendVerifyMail = async (email, OTP) => {
+const sendVerifyMail = async (email, OTP, next) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -138,13 +138,13 @@ const sendVerifyMail = async (email, OTP) => {
         }
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
+                next(error);
             } else {
                 console.log("Email sent successfully", info.response);
             }
         })
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 /**Logout Start*/
@@ -152,7 +152,7 @@ const postLogout = async (req, res, next) => {
     try {
         req.session.destroy((err) => {
             if (err) {
-                next.log(err);
+                next(err);
             } else {
                 res.redirect('/admin');
             }

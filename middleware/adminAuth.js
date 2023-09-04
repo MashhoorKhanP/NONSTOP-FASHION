@@ -6,7 +6,7 @@ const loggedIn = (req, res, next) => {
             return res.redirect('/admin');
         }
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 }
 const loggedOut = (req, res, next) => {
@@ -16,7 +16,7 @@ const loggedOut = (req, res, next) => {
         }
         next();
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 module.exports = {

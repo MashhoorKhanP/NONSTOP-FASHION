@@ -29,7 +29,7 @@ const getSignup = async (req, res, next) => {
         req.session.referral = '';
         if (req.query.referral) {
             req.session.referral = req.query.referral;
-            console.log(req.query.referral);
+            //console.log(req.query.referral);
         }
         res.render('signUp', { title: "Sign Up", referral: req.session.referral });
     } catch (error) {
@@ -56,7 +56,7 @@ const postSignup = async (req, res, next) => {
             req.session.mobile = mobno;
             req.session.password = password;
             //req.session.referral = referral;
-            //console.log(OTP);
+            console.log(OTP);
             sendVerifyMail(fname, lname, email, OTP);
             res.render('otpVerification', { title: 'Verification Page', fname, lname, email, mobno, password, signUpErrorMessage: 'Please check your email' });
         } else {
@@ -69,7 +69,7 @@ const postSignup = async (req, res, next) => {
 }
 /** Post SignUp End */
 /** For sending Mail */
-const sendVerifyMail = async (fname, lname, email, OTP) => {
+const sendVerifyMail = async (fname, lname, email, OTP,next) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -89,13 +89,13 @@ const sendVerifyMail = async (fname, lname, email, OTP) => {
         }
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
+                next(error);
             } else {
                 console.log("Email sent successfully", info.response);
             }
         })
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 /** For sending Mail End */
@@ -252,7 +252,7 @@ const postLogout = async (req, res, next) => {
     try {
         req.session.destroy((err) => {
             if (err) {
-                console.log(err);
+                next(err);
             } else {
                 res.redirect('/');
             }
@@ -564,27 +564,6 @@ const getShop = async (req, res, next) => {
     }
 }
 /** Get Shop End */
-/** Check wishlist Exist Start */
-// let productExist = async (email) => {
-//     try {
-//       let products = await Products.find({});
-//       let userData = await User.findOne({ email: email });
-//       let wishlistExist = 0;
-//       if (userData) {
-//         for (const product of products) {
-//           if (userData.wishlist.includes(product._id.toString())) {
-//             wishlistExist = 1;
-//             break; // Exit the loop once a wishlisted product is found
-//           }
-//         }
-//       }
-//       return wishlistExist;
-//     } catch (error) {
-//       console.log(error);
-//       return 0; // Return 0 in case of an error
-//     }
-//   };
-/** Check wishlist Exist End */
 /** Get Wishlist Start */
 const getWishlist = async (req, res, next) => {
     try {
@@ -658,7 +637,7 @@ const getContact = async (req, res, next) => {
         next(error);
     }
 }
-const postContact = async (req, res) => {
+const postContact = async (req, res,next) => {
     try {
         const { name, email, subject, message } = req.body;
         const transporter = nodemailer.createTransport({
@@ -679,7 +658,7 @@ const postContact = async (req, res) => {
         }
         transporter.sendMail(mailDetails, function (error, info) {
             if (error) {
-                console.log(error);
+                next(error);
                 res.json({ status: false })
             } else {
                 console.log("Contact Form Email sent successfully", info.response);
@@ -725,7 +704,7 @@ const postSubscribeNewsletter = async (req, res, next) => {
         }
         transporter.sendMail(mailDetails, function (error, info) {
             if (error) {
-                console.log(error);
+                next(error);
                 res.json({ status: false })
             } else {
                 console.log("Subscription Form Email sent successfully", info.response);

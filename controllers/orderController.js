@@ -23,7 +23,7 @@ const getProceedtoCheckout = async (req, res, next) => {
         let address = [];
         if (userAddress) {
             address = userAddress.addresses;
-            console.log(address);
+            //console.log(address);
         }
         let cart = await Cart.findOne({ user: userData._id }).populate('products.productId');
         if (!cart) {
@@ -53,12 +53,12 @@ const postPlaceOrder = async (req, res, next) => {
         const user = req.session.user
         const userData = await User.findOne({ email: user.email });
         const addressId = req.body.address;
-        console.log(addressId);
+        //console.log(addressId);
         const paymentType = req.body.payment
         const walletSelected = req.body.walletCheckBox;
         const addressData = await Address.findOne({ userId: user._id })
-        console.log(user._id);
-        console.log(addressData)
+        // console.log(user._id);
+        // console.log(addressData)
         const findAddress = addressData.addresses.find(obj => obj._id.toString() === addressId)
         const address = {
             name: findAddress.userName,
@@ -89,7 +89,7 @@ const postPlaceOrder = async (req, res, next) => {
         let minusCouponPrice = 0
         if (req.session.coupon != null) {
             couponName = req.session.coupon.code
-            console.log(couponName);
+            // console.log(couponName);
             couponDiscount = req.session.coupon.discount
             minusCouponPrice = couponDiscount / productList.length
         }
@@ -177,7 +177,7 @@ const postPlaceOrder = async (req, res, next) => {
                 //req.session.onlineTransactionId = order.id;
                 console.log(order);
                 if (error) {
-                    console.log(error);
+                    next(error);
                 } else {  
                     res.json({ status: 'ONLINE', order })
                 }
@@ -192,7 +192,7 @@ const postPlaceOrder = async (req, res, next) => {
 const postVerifyPayment = async (req, res, next) => {
     try {
         const details = req.body
-        console.log(details);
+        //console.log(details);
         const onlineTransactionId = req.session.onlineTransactionId;
         /** Razor Pay Code */
         const crypto = require('crypto');
@@ -204,9 +204,8 @@ const postVerifyPayment = async (req, res, next) => {
         hmac = hmac.digest('hex')
         if (hmac == details.payment.razorpay_signature) {
             const user = req.session.user;
-            console.log(user.firstName);
+            //console.log(user.firstName);
             const cartData = await Cart.findOne({ user: user._id }).populate("products.productId");
-            console.log("first")
             let productList = cartData.products.map(({ productId, size, quantity, cartPrice, cartDPrice, cartSubtotalPrice }) => ({
                 productId,
                 productBrand: productId.brand,
@@ -233,7 +232,6 @@ const postVerifyPayment = async (req, res, next) => {
                 walletMinus = req.session.wallet / productList.length
             }
             const paymentType = 'ONLINE'
-            console.log("second")
             productList.forEach(async (prod) => {
                 await new Order({
                     user: user._id,
@@ -369,7 +367,7 @@ const getOrderDetails = async (req, res, next) => {
         }
         const orders = await Order.find({ user: userData._id }).populate('products.productId');
         const orderDetails = await Order.findOne({ _id: orderId }).populate('products.productId');
-        console.log(orderDetails.deliveryAddress);
+        //console.log(orderDetails.deliveryAddress);
         let status = 0;
         if (orderDetails.status.toString() === 'Order Confirmed') {
             status = 1;
@@ -513,13 +511,13 @@ const postApproveReturn = async (req, res, next) => {
 
     try {
         let orderId = req.params.id;
-        console.log(orderId);
+        //console.log(orderId);
         let orderData = await Order.findOne({ _id: orderId })
         const userId = orderData.user
-        console.log(orderData);
+        //console.log(orderData);
         const userData = await User.findOne({ _id: userId })
         let orderTotal = Math.round(orderData.totalPrice)
-        console.log(orderTotal)
+        // console.log(orderTotal)
         let totalWalletBalance = userData.wallet + orderTotal;
         await User.findByIdAndUpdate({ _id: userId },
             {

@@ -15,26 +15,26 @@
                 color: #ffffff;
             }
         </style>
-        <div class="container mt-5 w-75">
-            <h4 class="header mb-4 fw-bold text-decoration-underline">DASHBOARD</h4>
-            <div class=" container-fluid text-center">
-                <div class="row">
-                    <div class="col-4  ">
-                        <div class="card border-0 mb-5 mt-2 p-3  " style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+        <div class="container-fluid mt-4 ms-3 w-75 me-0 row">
+            <h4 class="header mb-4 d-flex fw-bold text-decoration-underline">DASHBOARD</h4>
+            <div class="">
+                <div class="row text-center">
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 mb-5 mt-2 p-3" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                             <span class="h1"><i class="bi bi-people-fill" style="color: #303030;"></i></span>
                             <span><span>Customers: </span> <span>
                                     <%=userCount?userCount:0 %>
                                 </span> </span>
                         </div>
                     </div>
-                    <div class="col-4 ">
-                        <div class="card border-0  mb-4 mt-2 p-3 " style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0  mb-4 mt-2 p-3" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                             <span class="h1"><i class="bi bi-bank"
                                     style="color: rgb(255, 0, 0);"></i></i></span>Revenue:
                             ₹<%=totalSalesProfit?totalSalesProfit:0 %>
                         </div>
                     </div>
-                    <div class="col-4 ">
+                    <div class="col-12 col-md-4 ">
                         <div class="card border-0 mb-4 mt-2 p-3 " style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                             <span class="h1"><i class="bi bi-graph-up-arrow"
                                     style="color: rgb(0, 247, 255);"></i></span>Sales: <%=orderCount?orderCount:0 %>
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="monthlySales  col-12 col-lg-6">
+                <div class="monthlySales   col-12 col-lg-6">
                     <div class="p-3 card">
                         <span class="h4 text-center">Total Sales
                         </span>
@@ -58,7 +58,7 @@
                         <div class="filerByYear mt-2">
                             <form action="" method="get">
                                 <div class="row mb-3">
-                                    <div class="col-9">
+                                    <div class="w-100">
                                         <div class="d-flex">
                                             <span class="pt-2">Year:</span> <select name="year" id=""
                                                 class="form-control me-2 ms-1">
@@ -94,13 +94,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-3 text-center">
-                                        <div class="mb-2">
+                                    <div class="column-gap-1 mt-3 text-center">
                                             <button class="btn btn-success rounded-0" type="submit">Submit</button>
-                                        </div>
-                                        <div>
                                             <a href="/admin/dashboard" class="btn btn-danger rounded-0">Reset</a>
-                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -115,15 +111,15 @@
                             <%= salesYear %>
                         </span>
                         <!-- chart div -->
-                        <div id="chart">
+                        <div id="chart" class="w-100">
                         </div>
                     </div>
                 </div>
-                <div class=" col-lg-6 col-12 mt-5 mt-lg-0">
+                <div class=" col-12 col-lg-6 mt-5 mt-lg-0">
                     <div class="p-3 card ">
                         <h4 class="text-center">Category Sales</h4>
                         <div class="categoryCard">
-                            <div id="catChart" class="mt-5">
+                            <div id="catChart" class="mt-5 w-100">
                                 <span id="categorySales" hidden>
                                     <%=categorySales %>
                                 </span>

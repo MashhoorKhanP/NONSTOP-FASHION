@@ -174,8 +174,8 @@ const postPlaceOrder = async (req, res, next) => {
                 receipt: ""
             }
             instance.orders.create(options, (error, order) => {
-                req.session.onlineTransactionId = order.id;
-                console.log(order.id);
+                //req.session.onlineTransactionId = order.id;
+                console.log(order);
                 if (error) {
                     console.log(error);
                 } else {  
@@ -383,7 +383,7 @@ const getOrderDetails = async (req, res, next) => {
             status = 5;
         } else if (orderDetails.status.toString() === 'Cancelled by admin') {
             status = 6;
-        } else if (orderDetails.status.toString() === 'Pending return approval') {
+        } else if (orderDetails.status.toString() === 'Pending for return approval') {
             status = 7
         } else if (orderDetails.status.toString() === 'Returned') {
             status = 8;

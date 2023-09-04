@@ -176,6 +176,15 @@ h3,
   font-size: calc(1.3125rem + 0.75vw);
 }
 
+@media(min-width:200px) and (max-width:992px) {
+  h2,
+  .h2 {
+    font-size: 1rem;
+  }
+  .single_catagory_area h2{
+    font-size: 1rem;
+  }
+}
 @media (min-width: 1200px) {
 
   h3,

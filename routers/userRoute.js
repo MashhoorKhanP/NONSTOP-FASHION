@@ -84,7 +84,7 @@ user_route.post('/wishlist/:id', userController.postWishlist);
 user_route.get('/cart', isUser.loggedIn, cartController.getCart);
 user_route.post('/addtocart/:id', cartController.postAddToCart);
 user_route.put('/updatecart', cartController.updateCart);
-user_route.post('/removecartproduct/:id', cartController.postRemoveCartProduct);
+user_route.get('/removecartproduct/:id', cartController.getRemoveCartProduct);
 
 /** Proceed to checkout & Place Order*/
 user_route.get('/proceedtocheckout', isUser.loggedIn, orderController.getProceedtoCheckout);

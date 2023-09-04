@@ -52,7 +52,7 @@
 </style>
 <body>
     <!-- Header Start -->
-    <div class="header-div ps-5 pe-5 d-flex align-items-center">
+    <div class="header-div ps-5 pe-5 d-flex align-items-center w-100">
         <a>
             <div class="headerlogo-div">
                 <h1 class="nonstop-text">NONSTOP</h1>
@@ -64,28 +64,17 @@
                 <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                     id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="header-icons bi bi-person"></i>
-                    <!-- <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> -->
                     <span class="d-none d-sm-inline mx-1 fw-bold">
                         <%= `${admin.firstName}` %>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small text-center shadow">
-                    <!-- <span class="position-relative">
-                        <a class="dropdown-item" href="#">
-                            <li><i class="bi bi-bell"></i></li>
-                            <li>Notification</li>
-                        </a>
-                        <span id="notification-badge"
-                            class="position-fixed top-0 badge rounded-pill bg-danger d-none">3</span>
-                    </span>
-                    <hr class="text-light"> -->
+                    
                     <span class="position-relative">
                         <li class="dropdown-item"><i class="bi bi-clock"></i></li>
                         <li><span id="datetime" class="ps-2 pe-2"></span></li>
                     </span>
-                    <!-- <li>
-                    <a class="dropdown-item" href="#">Profile</a></li>
-                <li> -->
+                    
                     <hr class="text-light">
                     </li>
                     <form method="post" action="/admin/logout">

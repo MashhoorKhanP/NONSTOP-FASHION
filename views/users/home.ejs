@@ -81,32 +81,42 @@
     </section>
     <!-- ****** Welcome Slides Area End ****** -->
     <!-- ****** Top Catagory Area Start ****** -->
-    <section class="top_catagory_area d-md-flex w-100 clearfix">
-        <!-- Single Catagory -->
-        <% if(banner.length>3) {%>
-            <a href="<%=banner[3].url  %>">
-                <div class="single_catagory_area d-flex align-items-center bg-img"
-                    style="background-image: url(./assets/banner-images/<%=banner[3].image%>);">
-                    <div class="catagory-content">
-                        <h6>On Sunglasses</h6>
-                        <h2>upto 15%off</h2>
-                        <a href="/shop" class="btn karl-btn">SHOP NOW</a>
-                    </div>
-                </div>
-                <% } %>
-                    <!-- Single Catagory -->
-                    <% if(banner.length>4) {%>
-                        <a href="<%=banner[4].url  %>">
-                            <div class="single_catagory_area d-flex align-items-center bg-img"
-                                style="background-image: url(./assets/banner-images/<%=banner[4].image%>);">
-                                <div class="catagory-content">
-                                    <h6>in shoes excepting the new collection</h6>
-                                    <h2>STUNNING SHOES</h2>
-                                    <a href="#" class="btn karl-btn">SHOP NOW</a>
-                                </div>
+    <section class="top_catagory_area">
+        <div class="row">
+            <!-- Single Catagory 1 -->
+            <div class="col-md-6 col-12 p-0">
+                <% if(banner.length > 3) { %>
+                    <a href="<%= banner[3].url %>">
+                        <div class="single_catagory_area bg-img"
+                            style="background-image: url('./assets/banner-images/<%= banner[3].image %>'); width: 100%; height:100%;">
+                            <div class="catagory-content">
+                                <h6>On Sunglasses</h6>
+                                <h2>upto 15% off</h2>
+                                <a href="/shop" class="btn karl-btn">SHOP NOW</a>
                             </div>
-                            <% } %>
+                        </div>
+                    </a>
+                <% } %>
+            </div>
+    
+            <!-- Single Catagory 2 -->
+            <div class="col-md-6 col-12 p-0">
+                <% if(banner.length > 4) { %>
+                    <a href="<%= banner[4].url %>">
+                        <div class="single_catagory_area bg-img"
+                            style="background-image: url('./assets/banner-images/<%= banner[4].image %>'); width: 100%; height:100%;">
+                            <div class="catagory-content">
+                                <h6>in shoes excepting the new collection</h6>
+                                <h2>STUNNING SHOES</h2>
+                                <a href="#" class="btn karl-btn">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </a>
+                <% } %>
+            </div>
+        </div>
     </section>
+    
     <!-- ****** Top Catagory Area End ****** -->
     <!-- ****** New Arrivals Area Start ****** -->
     <section class="new_arrivals_area section_padding_100_0 clearfix">

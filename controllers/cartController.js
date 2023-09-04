@@ -121,7 +121,7 @@ const postAddToCart = async (req, res) => {
 }
 /** Post Add to Cart End*/
 /** Post Remove From Cart Start */
-const postRemoveCartProduct = async (req, res, next) => {
+const getRemoveCartProduct = async (req, res, next) => {
     try {
         const user = req.session.user.email;
         const userData = await User.findOne({ email: user });
@@ -184,6 +184,6 @@ const updateCart = async (req, res, next) => {
 module.exports = {
     getCart,
     postAddToCart,
-    postRemoveCartProduct,
+    getRemoveCartProduct,
     updateCart
 }

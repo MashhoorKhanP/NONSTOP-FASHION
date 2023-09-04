@@ -61,11 +61,15 @@
                           <%= prodsData[i].brand %>
                         </p>
                       </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-secondary text-xs font-weight-bold">
-                          <%= prodsData[i].category.name %>
-                        </span>
-                      </td>
+                      <% if(prodsData[i].category){ %>
+                        <td class="align-middle text-center text-sm">
+                          <span class="text-secondary text-xs font-weight-bold">
+                            <%= prodsData[i].category.name %>
+                          </span>
+                        </td>
+                      <%}else{%>
+                      <td></td>
+                      <%}%>
                       <td class="align-middle text-center text-sm">
                         <span class="text-secondary text-xs font-weight-bold">
                           <%= prodsData[i].quantity %>
@@ -167,8 +171,15 @@
                                     </div>
                     </tr>
                     <% }%>
-                      <%} %>
-              </tbody>
+                    <%}else{%>
+                      <tr>
+                        <td>
+                          <h6 class="fw-bold">No product found,please add products</h6>
+
+                        </td>
+                      </tr>
+                    <%} %>
+                  </tbody>
             </table>
           </div>
         </div>

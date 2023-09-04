@@ -56,7 +56,7 @@ const postSignup = async (req, res, next) => {
             req.session.mobile = mobno;
             req.session.password = password;
             //req.session.referral = referral;
-            console.log(OTP);
+            //console.log(OTP);
             sendVerifyMail(fname, lname, email, OTP);
             res.render('otpVerification', { title: 'Verification Page', fname, lname, email, mobno, password, signUpErrorMessage: 'Please check your email' });
         } else {
@@ -105,10 +105,10 @@ const postVerifyOtp = async (req, res, next) => {
         const enteredOtp = Number(req.body.otp);
         const sharedOtp = Number(req.session.OTP);
         const { fname, lname, email, mobile, password, referral } = req.session;
-        console.log(sharedOtp);
-        console.log(enteredOtp);
+        // console.log(sharedOtp);
+        // console.log(enteredOtp);
         if (enteredOtp === sharedOtp) {
-            console.log(typeof (enteredOtp), typeof (sharedOtp));
+            //console.log(typeof (enteredOtp), typeof (sharedOtp));
             const secPassword = await securePassword(password);
             const newReferralCode = await referralCode();
             let newUserData;
@@ -269,7 +269,7 @@ const getProfile = async (req, res, next) => {
         const user = req.session.user
         const userData = await User.findOne({ email: user.email })
         const userAddress = await Address.findOne({ userId: user._id });
-        console.log(userData);
+        //console.log(userData);
         if (userData) {
             req.session.cartCount = 0
             let cartData = await Cart.findOne({ user: user._id })
@@ -370,7 +370,7 @@ const getForgotPassword = async (req, res, next) => {
         const user = req.session.user;
         const userData = await User.findOne({ email: user.email });
         const OTP = req.session.OTP = getOTP();
-        console.log(userData.email, OTP);
+        //console.log(userData.email, OTP);
         sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: user._id })
@@ -702,6 +702,45 @@ const getAboutUs = async (req, res, next) => {
         next(error);
     }
 }
+/** Subscribe Newsletter */
+const postSubscribeNewsletter = async (req, res, next) => {
+    try{
+        console.log('Subscribe');
+        let email = req.body.sbemail;
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: 'mashhoorkhan325pc@gmail.com',
+                pass: process.env.PASSWORD
+            }
+        });
+        const mailDetails = {
+            from: 'mashhoorkhan325pc@gmail.com',
+            to: process.env.EMAIL,
+            subject: 'For Subscription Request',
+            html: `<h1>From, ${email}</h1>\n<h5>Email: ${email}<h5>\nMessage:<br>Subsciption Request`
+        }
+        transporter.sendMail(mailDetails, function (error, info) {
+            if (error) {
+                console.log(error);
+                res.json({ status: false })
+            } else {
+                console.log("Subscription Form Email sent successfully", info.response);
+                //res.json({ status: true })
+                const referringUrl = req.headers.referer;
+                return res.redirect(referringUrl);
+            }
+        });
+
+    }catch(error){
+
+        next(error);
+    }
+
+}
 module.exports = {
     getSignup,
     postSignup,
@@ -725,5 +764,6 @@ module.exports = {
     getWalletHistory,
     getContact,
     postContact,
-    getAboutUs
+    getAboutUs,
+    postSubscribeNewsletter
 }

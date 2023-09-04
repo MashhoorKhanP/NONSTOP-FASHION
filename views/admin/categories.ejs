@@ -207,20 +207,49 @@
                         </div>
                         <td class="align-middle text-center">
                           <% if (categories[i].isListed===true) { %>
-                            <a href="/admin/categories/status/<%= categories[i]._id %>"><button class="btn btn-success"
-                                onclick="alert('Do you want to Unlist this <%= categories[i].name %> category?')">UNLIST</button></a>
+                            <button class="btn btn-success"
+                                onclick="showConfirmationModal('<%= categories[i]._id %>')">UNLIST</button>
                             <% } else { %>
-                              <a href="/admin/categories/status/<%= categories[i]._id %>"><button
-                                  class="btn btn-danger">LIST</button></a>
+                              <button
+                                  class="btn btn-danger" onclick="showConfirmationModal('<%= categories[i]._id %>')">LIST</button>
                               <% } %>
                         </td>
                       </tr>
                       <% } %>
-                        <% } %>
+                        <% }else{%>
+                          <tr>
+                            <td>
+                              <h6 class="fw-bold">No category found,please add categories</h6>
+    
+                            </td>
+                          </tr>
+                        <%} %>
                 </tbody>
               </table>
             </div>
           </div>
+          <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to perform this action?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Confirmation Modal -->
           <!-- Pagination and Show upto -->
           <div class="mx-3 d-flex justify-content-between border-top pt-3">
             <div class="text-center">
@@ -270,6 +299,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
         <script src="/static/js/admin js/categoryOffer.js"></script>
         <script src="/static/js/admin js/addCategory.js"></script>
+        <script>
+          function showConfirmationModal(categoryId) {
+            const modal = new bootstrap.Modal(
+              document.getElementById("confirmationModal")
+            );
+            const confirmationAction = document.getElementById("confirmationAction");
+            confirmationAction.href = `/admin/categories/status/${categoryId}`;
+            modal.show();
+          }
+        </script>
         <script>
           const errorMessage = document.getElementById('error-message');
           const form = document.getElementById('submit-form');

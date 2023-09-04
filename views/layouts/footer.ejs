@@ -28,7 +28,7 @@
       <dl class="">
         <!-- <dt class="footer-title">Company</dt> -->
         <dd class="">
-          <a href="https://www.spotify.com/in-en/about-us/contact/" class="footerlink-text">About</a>
+          <a href="/about-us" class="footerlink-text">About</a>
         </dd>
         <dd class="">
           <a href="https://www.lifeatspotify.com/" class="footerlink-text">FAQ</a>
@@ -37,10 +37,10 @@
           <a href="https://newsroom.spotify.com/" class="footerlink-text">Cancellation & Returns</a>
         </dd>
         <dd class="">
-          <a href="https://www.lifeatspotify.com/" class="footerlink-text">Contact Us</a>
+          <a href="/contact" class="footerlink-text">Contact Us</a>
         </dd>
         <dd class="">
-          <a href="https://www.lifeatspotify.com/" class="footerlink-text">My Account</a>
+          <a href="/login" class="footerlink-text">My Account</a>
         </dd>
       </dl>
     </div>
@@ -88,12 +88,12 @@
       <!-- Email Field -->
       <div class="mb-3 justify-content-center">
         <label for="email-input" class="form-label fw-bold fs-6 pb-2 text-nowrap">Subscribe to our newsletter</label>
-        <form action="" method="" id="subscribe-form">
+        <form action="/subscribe-newsletter" method="post" id="subscribe-form">
           <div class="text-center pt-1">
-            <input type="email" class="rounded-0 form-control me-2" name="sbemail" id="sbemail-input"
+            <input type="text" class="rounded-0 form-control me-2" name="sbemail" id="sbemail-input"
               placeholder="Your email here">
             <br>
-            <div class="text-danger text-center" id="message-error"></div>
+            <div class="text-danger text-center fw-bold" id="message-error" style="font-size: 12px;"></div>
             <button type="submit" class="rounded-0 btn btn-dark fs-7 subscribe-button">Subscribe <i
                 class="bi bi-bell"></i></button>
           </div>
@@ -120,22 +120,9 @@
       </div>
     </div>
   </div>
-  <!-- Social icon End -->
   <hr>
-  <!-- Unwanted If needed uncomment and use Start -->
-  <!-- <div class="country-div w-100 col-12 col-md-12 d-flex justify-content-end">
-          <i class="bi bi-globe-asia-australia"></i><span><a href="" class=""><p class="country-text">India (English)</p></a></span>
-        </div> -->
-  <!-- Footer Copyright Section Start -->
+  
   <div class="footerlastsection-div w-100 col-12 col-md-12">
-    <!-- <ul class="privacy-list d-flex">
-          <a href="" class="privacylink-text"><li class="privacy-text">Legal</li></a>
-          <a href="" class="privacylink-text ps-4"><li class="privacy-text">Privacy Center</li></a>
-          <a href="" class="privacylink-text ps-4"><li class="privacy-text">Privacy Policy</li></a>
-          <a href="" class="privacylink-text ps-4"><li class="privacy-text">Cookies</li></a>
-          <a href="" class="privacylink-text ps-4"><li class="privacy-text">About Ads</li></a>
-        </ul> -->
-    <!--    Unwanted If needed uncomment and use End  -->
     <div class="row text-nowrap">
       <div class="copyright-div d-flex justify-content-center">
         <span><a href="" class="copyright-text text-decoration-none">
@@ -179,7 +166,7 @@
     inputControl.classList.remove('error');
   };
   const isValidEmail = sbEmailId => {
-    const re = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+    const re = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     return re.test(String(sbEmailId).toLowerCase());
   };
   const validateInput = () => {
@@ -197,9 +184,9 @@
     const input = sbEmailId;
     if (input.parentElement.classList.contains('success')) {
       form.submit();
-      console.log("Form submission successful")
-      alert('Subscription successful');
-      window.location.reload();
+      // console.log("Form submission successful")
+      // alert('Subscription successful');
+      // window.location.reload();
     }
   };
 </script>

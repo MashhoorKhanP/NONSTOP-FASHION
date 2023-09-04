@@ -98,7 +98,7 @@ const postEditProduct = async (req, res, next) => {
             check1, check2, check3, check4, check5, check6,
             quantity, price, dprice, description,
         } = req.body
-        console.log(req.files);
+        //console.log(req.files);
         const brand = req.body.brand.toUpperCase();
         let size = [];
         if (check1) size.push(check1)
@@ -248,7 +248,7 @@ const getProductDetails = async (req, res, next) => {
                 }));
             }
             prodsData = await Products.findById({ _id: id }).populate('reviews.userId');
-            console.log(prodsData, "ProdsData");
+            //console.log(prodsData, "ProdsData");
 
             req.session.cartCount = 0
             cartData = await Cart.findOne({ user: user._id })
@@ -257,8 +257,7 @@ const getProductDetails = async (req, res, next) => {
                 req.session.cartCount = cartData.products.length
             }
             let wishlist = userData.wishlist;
-            console.log(wishlist);
-            console.log("this rendering is happening");
+            //console.log(wishlist);
             return res.render('productdetails', { title: 'Product Detais', user: userData, wishlist, userReviewed, prodsData, isLoggedIn, cartData: cartList, cartCount: req.session.cartCount });
         }
         prodsData = await Products.findById({ _id: id });
@@ -272,7 +271,7 @@ const getProductDetails = async (req, res, next) => {
 const getReviewProduct = async (req, res, next) => {
     try {
         const prodId = req.query.prodId;
-        console.log(prodId);
+        //console.log(prodId);
         const user = req.session.user;
         const userData = await User.findOne({ email: user.email });
         let productPurchased = 0

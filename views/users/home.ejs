@@ -1,4 +1,11 @@
 <%- include ('../layouts/homeHeader.ejs') -%>
+<style>
+    .prod-name {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;    /* Hide overflowed text */
+    text-overflow: ellipsis; /* Show an ellipsis (...) for overflowed text */
+  } 
+</style>
     <!-- ****** Welcome Slides Area Start ****** -->
     <section class="welcome_area">
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -131,92 +138,97 @@
         </div>
         <div class="container">
             <div class="row karl-new-arrivals">
-                <% for (let i=0; i<3; i++) { %>
-                    <!-- Single gallery Item Start -->
-                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item women wow fadeInUpBig"
-                        data-wow-delay="0.2s">
-                        <!-- Product Image -->
-                        <div class="product-img">
-                            <img src="/assets/product-images/<%= prodsData[i].images[0] %>" alt="">
-                            <div class="product-quicview">
-                                <a href="/productdetails/<%= prodsData[i]._id %>" data-toggle="modal"
-                                    data-target="#quickview">
-                                    <i class="bi bi-plus-lg text-light"></i>
-                                </a>
+                <% if(prodsData && prodsData.length>0){%>
+
+                    <% for (let i=0; i<4; i++) { %>
+                        <!-- Single gallery Item Start -->
+                        <div class="col-12 col-sm-4 col-md-3 single_gallery_item women wow fadeInUpBig"
+                            data-wow-delay="0.2s">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="/assets/product-images/<%= prodsData[i].images[0] %>" alt="">
+                                <div class="product-quicview">
+                                    <a href="/productdetails/<%= prodsData[i]._id %>" data-toggle="modal"
+                                        data-target="#quickview">
+                                        <i class="bi bi-plus-lg text-light"></i>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Product Description -->
-                        <div class="product-description">
-                            <div class="d-flex justify-content-start align-items-center">
-                                <h4 class="product-price text-dark fw-bold">&#8377;<%= prodsData[i].price%> &nbsp;</h4>
-                                <span>
-                                    <h5 class="text-secondary"><s> &#8377;<%=prodsData[i].price +
-                                                prodsData[i].discountPrice %></s></h5>
-                                </span>
-                                <br>
-                            </div>
-                            <p class="discount">
-                                <% const discountPercentage=((prodsData[i].price - prodsData[i].discountPrice) /
-                                    prodsData[i].price) * 100; %>
-                                    <%= Math.floor(discountPercentage) %>% off
-                            </p>
-                            <p class="pb-3">
-                                <%= prodsData[i].name %>
-                                    <!-- Add to Cart -->
-                            </p>
-                            <% if(locals.user) { %>
-                                                    <div class="">
-                                                        <!-- Add to Cart button -->
-                                                        <% const cartProductIds = cartData.map(item => item.productId._id.toString()); %>
-                                                        <% if (cartProductIds.includes(prodsData[i]._id.toString())) { %>
-                                                            <form action='/removecartproduct/<%= prodsData[i]._id %>' method="post">
-                                                                <button class="btn btn-outline-dark text-center border-1 w-100" type="submit" style="border-width: 4px;">
-                                                                    REMOVE FROM CART <i class="bi bi-bag-check-fill text-danger"></i>
-                                                                </button>                                                                  
-                                                            </form>
-                                                        <% } else { %>
-                                                                <form action='/productdetails/<%= prodsData[i]._id %>' method="get">
-                                                                    <button class="btn btn-outline-dark text-center border-1 w-100" type="submit" style="border-width: 4px;">ADD TO CART <i class="bi bi-cart-plus"></i>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <h4 class="product-price text-dark fw-bold">&#8377;<%= prodsData[i].price%> &nbsp;</h4>
+                                    <span>
+                                        <h5 class="text-secondary"><s> &#8377;<%=prodsData[i].price +
+                                                    prodsData[i].discountPrice %></s></h5>
+                                    </span>
+                                    <br>
+                                </div>
+                                <p class="discount">
+                                    <% const discountPercentage=((prodsData[i].price - prodsData[i].discountPrice) /
+                                        prodsData[i].price) * 100; %>
+                                        <%= Math.floor(discountPercentage) %>% off
+                                </p>
+                                <p class="pb-3 prod-name">
+                                    <%= prodsData[i].name %>
+                                        <!-- Add to Cart -->
+                                </p>
+                                <% if(locals.user) { %>
+                                                        <div class="">
+                                                            <!-- Add to Cart button -->
+                                                            <% const cartProductIds = cartData.map(item => item.productId._id.toString()); %>
+                                                            <% if (cartProductIds.includes(prodsData[i]._id.toString())) { %>
+                                                                <form action='/removecartproduct/<%= prodsData[i]._id %>' method="post">
+                                                                    <button class="btn btn-outline-dark text-center border-1 w-100" type="submit" style="border-width: 4px;">
+                                                                        REMOVE FROM CART <i class="bi bi-bag-check-fill text-danger"></i>
+                                                                    </button>                                                                  
                                                                 </form>
-                                                        <% } %>  
-                                                        <!-- Wishlist button -->
-                                                        <form action="/wishlist/<%= prodsData[i]._id %>" method="post">
-                                                            <% if (wishlist.includes(prodsData[i]._id.toString())) { %>
-                                                                <button
-                                                                    class="btn btn-outline-dark text-center border-1 w-100 mt-2"
-                                                                    type="submit" style="border-width: 4px;">REMOVE FROM WISHLIST
-                                                                    <i class="bi bi-heart-fill text-danger"></i>
-                                                                </button>
-                                                                <% } else { %>
+                                                            <% } else { %>
+                                                                    <form action='/productdetails/<%= prodsData[i]._id %>' method="get">
+                                                                        <button class="btn btn-outline-dark text-center border-1 w-100" type="submit" style="border-width: 4px;">ADD TO CART <i class="bi bi-cart-plus"></i>
+                                                                    </form>
+                                                            <% } %>  
+                                                            <!-- Wishlist button -->
+                                                            <form action="/wishlist/<%= prodsData[i]._id %>" method="post">
+                                                                <% if (wishlist.includes(prodsData[i]._id.toString())) { %>
                                                                     <button
                                                                         class="btn btn-outline-dark text-center border-1 w-100 mt-2"
-                                                                        type="submit" style="border-width: 4px;">ADD TO WISHLIST
-                                                                        <i class="bi bi-heart"></i>
+                                                                        type="submit" style="border-width: 4px;">REMOVE FROM WISHLIST
+                                                                        <i class="bi bi-heart-fill text-danger"></i>
                                                                     </button>
-                                                                    <% } %>
-                                                        </form>
-                                                    </div>
-                                                    <% } else { %>
-                                                        <div class="justify-content-between d-flex column-gap-1">
-                                                            <!-- Cart button for guest users -->
-                                                            <a href="/login"
-                                                                class="btn btn-outline-dark w-50 text-center"><i
-                                                                    class="bi bi-cart-plus"></i></a>
-                                                            <!-- Wishlist button for guest users -->
-                                                            <a href="/login"
-                                                                class="btn btn-outline-dark w-50 text-center"><i
-                                                                    class="bi bi-heart"></i></a>
+                                                                    <% } else { %>
+                                                                        <button
+                                                                            class="btn btn-outline-dark text-center border-1 w-100 mt-2"
+                                                                            type="submit" style="border-width: 4px;">ADD TO WISHLIST
+                                                                            <i class="bi bi-heart"></i>
+                                                                        </button>
+                                                                        <% } %>
+                                                            </form>
                                                         </div>
-                                                        <% } %>
+                                                        <% } else { %>
+                                                            <div class="justify-content-between d-flex column-gap-1">
+                                                                <!-- Cart button for guest users -->
+                                                                <a href="/login"
+                                                                    class="btn btn-outline-dark w-50 text-center"><i
+                                                                        class="bi bi-cart-plus"></i></a>
+                                                                <!-- Wishlist button for guest users -->
+                                                                <a href="/login"
+                                                                    class="btn btn-outline-dark w-50 text-center"><i
+                                                                        class="bi bi-heart"></i></a>
+                                                            </div>
+                                                            <% } %>
+                            </div>
                         </div>
-                    </div>
-                    <% } %>
-            </div>
+                        <% } %>
+                </div>
+                <%}%>
         </div>
     </section>
     <!-- ****** New Arrivals Area End ****** -->
     <!-- ****** Offer Area Start ****** -->
-        <section class="offer_area height-700 section_padding_100 bg-img"
+    <% if(banner.length){%>
+
+        <section class="offer_area w-100 col-md-12 height-700 section_padding_100 bg-img"
             style="background-image: url(./assets/banner-images/<%=banner[5].image%>);">
             <div class="container h-100">
                 <div class="row h-100 align-items-end justify-content-end">
@@ -234,6 +246,7 @@
             </div>
         </section>
     <!-- ****** Offer Area End ****** -->
+    <%}%>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

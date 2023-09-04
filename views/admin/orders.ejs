@@ -101,45 +101,10 @@
                                             <td class="text-xs font-weight-bold mb-0 text-center"><a
                                                     href="/admin/orders/singleorder-details?id=<%=order._id %>"
                                                     class="btn btn-outline-dark">DETAILS</a></td>
-                                            <!-- modal -->
-                                            <!-- <div class="modal fade " id="exampleModal" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Change
-                                                            Status
-                                                        </h1>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="/admin/order-status" method="post">
-                                                        <div class="modal-body">
-                                                            <input type="hidden" name="orderId" id="orderId"
-                                                                value="">
-                                                            <label for="status">Select delivery
-                                                                status</label><br><br>
-                                                            <select name="status" class="form-control" id="status">
-                                                                <option value="Shipped">Shipped</option>
-                                                                <option value="Out for delivery">Out for delivery
-                                                                </option>
-                                                                <option value="Delivered">Delivered</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Change
-                                                                Status</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                            <!-- modal -->
+                                            
                                     </tr>
                                     <% })}else{ %>
-                                        <td>No data</td>
+                                        <td  class="fw-bold">No data found</td>
                                         <% } %>
                             </tbody>
                         </table>

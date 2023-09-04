@@ -1,8 +1,8 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/nonstop_fashion');
+mongoose.connect(process.env.COLLECTION);
 const path = require('path');
 
-require('dotenv').config();
 
 const nocache = require('nocache');
 
@@ -17,13 +17,13 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, '/public/assets')));
 
 const userRoute = require('./routers/userRoute');
-app.use('/', userRoute);
+app.use('/', userRoute); 
 app.use(express.json());
 
 app.set('view engine', 'ejs');
 
 /** For Admin Route */
-const adminRoute = require('./routers/adminRoute');
+const adminRoute = require('./routers/adminRoute'); 
 app.use('/admin', adminRoute);
 
 const errorHandler = require('./middleware/errorHandler');

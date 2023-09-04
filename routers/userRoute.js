@@ -120,6 +120,7 @@ user_route.get('/more-reviews', productController.getMoreReviews);
 user_route.get('/contact', userController.getContact);
 user_route.post('/contact', userController.postContact);
 user_route.get('/about-us', userController.getAboutUs);
+user_route.post('/subscribe-newsletter',userController.postSubscribeNewsletter);
 
 
 module.exports = user_route;

@@ -41,10 +41,10 @@ admin_route.post('/login', adminController.postLogin);
 
 admin_route.get('/dashboard', loggedIn, adminController.getDashboard);
 
-admin_route.get('/otplogin', loggedOut, adminController.getOTPLogin);
+admin_route.get('/otplogin',loggedOut, adminController.getOTPLogin);
 admin_route.post('/sendotp', adminController.postSendOTP);
 
-admin_route.post('/otplogin', adminController.postOTPLogin);
+admin_route.post('/otplogin',adminController.postOTPLogin);
 admin_route.post('/logout', adminController.postLogout);
 
 admin_route.get('/resend-otp-admin', adminController.getResendOTP);

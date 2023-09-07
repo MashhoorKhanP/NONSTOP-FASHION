@@ -180,14 +180,14 @@
                                         <hr>
                                         <div class="mb-2 mt-3">
                                             <h5>Choose Payment Method</h5>
-                                            <div id="walletPaymentCheckBoxDiv" <% if(walletBalance>=
-                                                discountPrice) {%>hidden<% } %> >
+                                            <!-- <div id="walletPaymentCheckBoxDiv" <% //if(walletBalance>=
+                                                //discountPrice) {%>hidden<% //} %> >
                                                     <input type="checkbox" name="walletCheckBox" id="walletCheckBox"
                                                         class="me-2"><label for="walletCheckBox"><strong>Use Wallet
                                                             Balance</strong> <i class="bi bi-wallet2"></i> ( <span id="walletBalance" class="">
-                                                                ₹<%=walletBalance %>
+                                                                ₹<%//=walletBalance %>
                                                         </span> )</label>
-                                            </div>
+                                            </div> -->
                                             <div id="paymentOptions">
                                                 <div id="paymentCod">
                                                     <input type="radio" name="payment" id="COD" class="me-2" value="COD"
@@ -198,12 +198,13 @@
                                                     <input type="radio" name="payment" id="ONLINE" class="me-2"
                                                         value="ONLINE"><label for="ONLINE"><strong>Online
                                                             payment</strong></label><br>
-                                                    <div id="walletPaymentDiv" <% if(walletBalance<discountPrice) {%>
-                                                        hidden<% } %>
-                                                            >
+                                                    <div id="walletPaymentDiv">
                                                             <input type="radio" name="payment" id="WALLET" class="me-2"
                                                                 value="WALLET"><label for="WALLET"><strong>Use Wallet
                                                                     Balance</strong> <i class="bi bi-wallet2"></i> ( ₹<%=walletBalance %> )</label>
+                                                                    <div class="text-center text-danger">
+                                                                        <%=locals.paymentErrorMessage?paymentErrorMessage:''%> 
+                                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -296,6 +297,10 @@
                             razorpayPayment(res.order); //razorPayment() called here for online payment
                         } else if (res.status === 'WALLET') {
                             location.href = '/ordersuccess'
+                        }else if(res.status === 'WALLET BALANCE LOW'){
+                            console.log('wallet balance low');
+                            alert('Low wallet balance,Choose another payment method')
+                            location.href = '/proceedtocheckout'
                         }
                     }
                 })

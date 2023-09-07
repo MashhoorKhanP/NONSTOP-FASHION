@@ -21,15 +21,9 @@ const securePassword = async (password) => {
 /**Login Start*/
 const getLogin = async (req, res, next) => {
     try {
-        res.render('login', { title: 'Admin Login' });
-    } catch (error) {
-        next(error);
-    }
-}
-
-const getOTPLogin = async (req, res, next) => {
-    try {
-        res.render('otpLogin', { title: 'Admin OTP Login' });
+        var adminLoginMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
+        res.render('login', { title: 'Admin Login',adminLoginMessage });
     } catch (error) {
         next(error);
     }
@@ -45,14 +39,15 @@ const postLogin = async (req, res, next) => {
             const passwordMatch = await bcrypt.compare(password, adminData.password);
             if (passwordMatch) {
                 req.session.admin = adminData;
-                res.redirect('/admin/dashboard');
+                return res.redirect('/admin/dashboard');
                 //res.render('dashboard', { admin: adminData, title: 'Admin Dashboard', page: 'Dashboard' });
             } else {
-                req.app.locals.message = 'Invalid Email or Password';
-                res.redirect('/admin');
+                req.app.locals.specialContext = 'Invalid Password';
+                return res.redirect('/admin');
             }
         } else {
-            res.render('login', { message: 'Invalid Email or Password' });
+            req.app.locals.specialContext = 'Invalid Email or Password';
+            return res.redirect('/admin');
         }
     } catch (error) {
         next(error);
@@ -60,23 +55,33 @@ const postLogin = async (req, res, next) => {
 
 }
 
+const getOTPLogin = async (req, res, next) => {
+    try {
+        var adminLoginMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
+        res.render('otpLogin', { title: 'Admin OTP Login', adminLoginMessage});
+    } catch (error) {
+        next(error);
+    }
+}
+
 const postSendOTP = async (req, res, next) => {
     try {
+        var adminLoginMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
         const email = req.body.email;
+        console.log(email);
         // const secPassword= await securePassword(password);
         const adminData = await Admin.findOne({ email: email });
         if (adminData) {
             const OTP = getOTP();
             req.session.OTP = OTP
-
-            //console.log(req.session.OTP);
-            req.session.admin = adminData;
-            req.session.save();
-
+            //console.log(req.session.OTP)
             sendVerifyMail(email, OTP);
-            res.render('otpVerification', { title: 'Admin Verification Login', email: req.session.admin.email, AdminOTPLoginmessage: 'OTP Sended Successfully' })
+            res.render('otpVerification', { title: 'Admin Verification Login', email: adminData.email, AdminOTPLoginmessage: 'OTP Sended Successfully',adminLoginMessage})
         } else {
-            res.render('otpLogin', { email: req.session.admin.email, AdminOTPLoginmessage: 'Please fill the  required fields', title: 'Admin OTP Login' })
+            req.app.locals.specialContext='Email not found';
+            res.redirect('/admin/otplogin');
         }
     } catch (error) {
         next(error)
@@ -85,16 +90,18 @@ const postSendOTP = async (req, res, next) => {
 
 const postOTPLogin = async (req, res, next) => {
     try {
-        //console.log(req.session.OTP);
+        console.log(req.session.OTP);
         const enteredOtp = Number(req.body.otp);
         const sharedOtp = Number(req.session.OTP);
-        const email = req.session.admin.email;
+        const email = req.body.email;
+        const adminData = await Admin.findOne({email:email});
         //console.log(email)
         if (enteredOtp === sharedOtp) {
-            res.redirect('/admin/dashboard');
+            req.session.admin = adminData;
+            return res.redirect('/admin/dashboard');
         } else {
             console.log('Incorrect OTP');
-            req.app.locals.message = 'Invalid OTP';
+            req.app.locals.specialContext = 'Invalid OTP, Retry again';
             res.redirect('/admin/otplogin');
         }
     } catch (error) {

@@ -26,12 +26,14 @@ const securePassword = async (password) => {
 /** Get SignUp Start */
 const getSignup = async (req, res, next) => {
     try {
+        var emailExistMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         req.session.referral = '';
         if (req.query.referral) {
             req.session.referral = req.query.referral;
             //console.log(req.query.referral);
         }
-        res.render('signUp', { title: "Sign Up", referral: req.session.referral });
+        res.render('signUp', { title: "Sign Up", referral: req.session.referral,emailExistMessage });
     } catch (error) {
         next(error.message);
     }
@@ -46,7 +48,7 @@ const postSignup = async (req, res, next) => {
         if (password === confirmPassword) {
             const userData = await User.findOne({ email })
             if (userData) {
-                req.app.locals.signUpErrorMessage = 'User already exists'
+                req.app.locals.specialContext = 'Email already exists'
                 return res.redirect('/signup');
             }
             const OTP = req.session.OTP = getOTP(); /** For assigning to two variables */
@@ -58,9 +60,9 @@ const postSignup = async (req, res, next) => {
             //req.session.referral = referral;
             console.log(OTP);
             sendVerifyMail(fname, lname, email, OTP);
-            res.render('otpVerification', { title: 'Verification Page', fname, lname, email, mobno, password, signUpErrorMessage: 'Please check your email' });
+            res.render('otpVerification', { title: 'Verification Page', fname, lname, email, mobno, password, emailMessage: 'Please check your email' });
         } else {
-            req.app.locals.signUpErrorMessage = "Sign Up Failed"
+            req.app.locals.specialContext = "Sign Up Failed"
             return res.redirect('/signup')
         }
     } catch (error) {
@@ -186,10 +188,12 @@ const getResendOTP = async (req, res, next) => {
 /** Get Login Start */
 const getLogin = async (req, res, next) => {
     try {
+        var loginErrorMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         if (req.session.user) {
             res.redirect('/');
         } else {
-            res.render('login', { title: "Login" });
+            res.render('login', { title: "Login",loginErrorMessage });
         }
     } catch (error) {
         next(error);
@@ -204,6 +208,7 @@ const postLogin = async (req, res, next) => {
         const secPassword = await securePassword(password);
         const prodsData = await Products.find({ isListed: true });
         const userData = await User.findOne({ email: email });
+        if (userData) {
         let cartList = [];
         let cartData = await Cart.findOne({ user: userData._id }).populate('products.productId');
         if (cartData) {
@@ -217,7 +222,6 @@ const postLogin = async (req, res, next) => {
         }
         const banner = await Banner.find({});
         let wishlist = userData.wishlist;
-        if (userData) {
             if (userData.blocked === false) {
                 const passwordMatch = await bcrypt.compare(password, userData.password);
                 let cartData;
@@ -231,15 +235,15 @@ const postLogin = async (req, res, next) => {
                     req.session.user = userData;
                     res.render('home', { user: userData, prodsData, title: 'Home', banner, wishlist, cartData: cartList, cartCount: req.session.cartCount });
                 } else {
-                    req.app.locals.message = 'Password not matching'
-                    return res.redirect('/login'); //Make to redirect albrin
+                    req.app.locals.specialContext = 'Password not matching'
+                    return res.redirect('/login');
                 }
             } else {
-                req.app.locals.message = 'Your account is blocked temporarily'
+                req.app.locals.specialContext = 'Your account is blocked temporarily'
                 return res.redirect('/login');
             }
         } else {
-            req.app.locals.message = 'Invalid Email or Password'
+            req.app.locals.specialContext = 'Invalid Email, Please re-check your email'
             return res.redirect('/login');
         }
     } catch (error) {
@@ -321,13 +325,15 @@ const postEditProfile = async (req, res, next) => {
 /** Get ChangePassword Start */
 const getManagePassword = async (req, res, next) => {
     try {
+        var changePasswordMessage =  req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
         const userData = await User.findOne({ email: req.session.user.email });
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: userData._id })
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('managePassword', { title: 'Change Password', user: userData, cartCount: req.session.cartCount })
+        res.render('managePassword', { title: 'Change Password', user: userData, cartCount: req.session.cartCount,changePasswordMessage })
     } catch (error) {
         next(error);
     }
@@ -356,7 +362,7 @@ const postManagePassword = async (req, res, next) => {
             console.log('password updated');
             return res.redirect(`/profile/${userId}`);
         } else {
-            req.app.locals.managePasswordErrorMessage = 'Old password not match';
+            req.app.locals.specialContext = 'Old password not match';
             return res.redirect(`/profile/${userId}/managepassword`);
         }
     } catch (error) {
@@ -367,6 +373,8 @@ const postManagePassword = async (req, res, next) => {
 /** Get Forgot Password Start */
 const getForgotPassword = async (req, res, next) => {
     try {
+        var otpErrorMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
         const user = req.session.user;
         const userData = await User.findOne({ email: user.email });
         const OTP = req.session.OTP = getOTP();
@@ -377,7 +385,7 @@ const getForgotPassword = async (req, res, next) => {
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('forgotPasswordVerification', { title: 'Forgot Password', user: userData, message: 'An OTP has been sent to your email,please verify your OTP', cartCount: req.session.cartCount });
+        res.render('forgotPasswordVerification', { title: 'Forgot Password', user: userData,email:userData.email, message: 'An OTP has been sent to your email,please verify your OTP', cartCount: req.session.cartCount,otpErrorMessage });
     } catch (error) {
         next(error);
     }
@@ -394,7 +402,8 @@ const postForgotPassword = async (req, res, next) => {
             res.render('resetPassword', { title: 'Reset Password', user: userData,cartCount:req.session.cartCount });
         } else {
             console.log('OTP NOT MATCHING');
-            res.redirect(`/profile/${userId}/managepassword`)
+            req.app.locals.specialContext = "Entered OTP is wrong, A new OTP has been sent to your email"
+            res.redirect(`/profile/${userId}/forgotpassword`);
         }
     } catch (error) {
         next(error);
@@ -448,7 +457,7 @@ const getShop = async (req, res, next) => {
         if (req.query.page) {
             page = req.query.page;
         }
-        let limit = 12
+        let limit = 16
         let sortValue = -1
         if (req.query.sortValue) {
             if (req.query.sortValue == 2) {

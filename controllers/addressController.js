@@ -4,6 +4,7 @@ const Cart = require('../models/cartModel');
 
 const getAddAddress = async (req, res, next) => {
     try {
+        
         let user = req.session.user;
         let userData = await User.findOne({ email: user.email });
         let id = req.params.id;
@@ -15,12 +16,12 @@ const getAddAddress = async (req, res, next) => {
         }
         if (!user) {
 
-            req.app.locals.addressErrorMessage = 'User can only add upto 6 address'
+            req.app.locals.specialContext = 'User can only add upto 6 address'
             res.redirect('/profile/manageaddress');
 
         } else {
 
-            res.render('addAddress', { title: 'Add Address', user: userData, cartCount: req.session.cartCount });
+            res.render('addAddress', { title: 'Add Address', user: userData, cartCount: req.session.cartCount});
         }
     } catch (error) {
         next(error);
@@ -70,7 +71,6 @@ const getManageAddress = async (req, res, next) => {
         if (userAddress) {
             return res.render('manageAddress', { title: 'Manage Address', userAddress, user: userData, cartCount: req.session.cartCount });
         } else {
-            req.app.locals.addressErrorMessage = 'Please add atleast one address'
             return res.redirect(`/profile/${userId}`);
         }
     } catch (error) {

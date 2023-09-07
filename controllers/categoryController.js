@@ -8,6 +8,8 @@ const schedule = require('node-schedule');
 /** Get Category Start */
 const getCategories = async (req, res, next) => {
     try {
+        var categoryMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
         let pageNum = 1;
         if (req.query.pageNum) {
             pageNum = parseInt(req.query.pageNum)
@@ -23,7 +25,7 @@ const getCategories = async (req, res, next) => {
         const currentDate = new Date();
         const offerData = await Offer.find({ $and: [{ status: true }, { expiryDate: { $gt: currentDate } }] })
         const adminData = await Admin.findOne({ email: req.session.admin.email });
-        res.render('categories', { categories, admin: adminData, offerData, pageCount, pageNum, limit, title: 'Catergories', page: 'Categories' });
+        res.render('categories', { categories, admin: adminData, offerData, pageCount, pageNum, limit, title: 'Catergories', page: 'Categories' ,categoryMessage});
     } catch (error) {
         next(error);
     }
@@ -42,15 +44,15 @@ const postAddCategory = async (req, res, next) => {
             const isExistCategory = await Categories.findOne({ name: categoryName });
             if (isExistCategory) {
                 console.log('Category already exist');
-                req.app.locals.CategoryMessage = 'Category already exists';
+                req.app.locals.specialContext = 'Category already exists';
                 return res.redirect('/admin/categories');
             } else {
                 await new Categories({ name: categoryName, image: image }).save();
-                req.app.locals.CategoryMessage = 'Category added successfully'
+                req.app.locals.specialContext = 'Category added successfully'
                 res.redirect('/admin/categories');
             }
         } else {
-            req.app.locals.CategoryMessage = 'Not Entered Category Name'
+            req.app.locals.specialContext = 'Not Entered Category Name'
             console.log('Not Entered Category Name');
             res.redirect('/admin/categories');
         }
@@ -71,15 +73,16 @@ const postEditCategory = async (req, res, next) => {
         if (req.file.filename) {
             const image = req.file.filename;
             if (!isCategoryExist || isCategoryExist._id == id) {
-                console.log('Category name and image changed');
+                //console.log('Category name and image changed');
                 await Categories.findByIdAndUpdate({ _id: id }, { $set: { name: newName, image: image } });
             }
         } else {
             if (!isCategoryExist) {
-                console.log('Category name changed successfully');
+                //console.log('Category name changed successfully');
                 await Categories.findByIdAndUpdate({ _id: id }, { $set: { name: newName } });
             }
         }
+        req.app.locals.specialContext = 'Category updated successfully';
         res.redirect('/admin/categories');
     } catch (error) {
         next(error);

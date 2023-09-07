@@ -11,12 +11,8 @@
                 <div class="card-body px-0 pb-2">
                     <div class="table-responsive p-0">
                         <!-- Copeid Code Start -->
-                        <div class="text-center text-danger fw-bold">
-                            <% if(typeof locals.message !=='undefined' ){ %>
-                                <p class="">
-                                    <%= locals.message %>
-                                </p>
-                                <%} %>
+                        <div class="text-center text-danger">
+                            <%=locals.couponMessage?couponMessage:''%> 
                         </div>
                         <form class="p-4 border" id="submit-form" action="/admin/coupons/addcoupon" method="post">
                             <div class="row input-group input-group-outline mb-3">
@@ -97,7 +93,7 @@
                     inputControl.classList.remove('error');
                 };
                 const isValidDiscount = discountValue => {
-                    const re = /^(?:100|\d{1,2})$/;
+                    const re = /^(?:[0-9]|[1-9][0-9]|[1-4][0-9]{2}|549)$/;
                     return re.test(String(discountValue));
                 };
                 const validateInput = () => {

@@ -19,11 +19,9 @@
     <div class="center-div py-5 col-md-12 col-12">
         <div class="container w- pt-5 text-center pb-5 border w-50 border-dark">
             <h1 class="fs-3 text-black text-center pb-4">Verify OTP</h1>
-            <% if(typeof message !=='undefined' ){ %>
-                <p class="text-dark">
-                    <%= message %>
-                </p>
-                <%} %>
+            <div class="text-center text-success">
+                <%=locals.emailMessage?emailMessage:''%> 
+            </div>
                     <form action="/verifyotp" method="post" id="submit-form">
                         <div class="row justify-content-center ps-4 pe-4">
                             <div class="col-md-6 col-12">

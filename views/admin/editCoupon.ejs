@@ -11,12 +11,8 @@
                 <div class="card-body px-0 pb-2">
                     <div class="table-responsive p-0">
                         <!-- Copeid Code Start -->
-                        <div class="text-center text-danger fw-bold">
-                            <% if(typeof locals.message !=='undefined' ){ %>
-                                <p class="">
-                                    <%= locals.message %>
-                                </p>
-                                <%} %>
+                        <div class="text-center text-danger">
+                            <%=locals.couponMessage?couponMessage:''%> 
                         </div>
                         <form class="p-4 border" id="submit-form" action="/admin/coupons/editcoupon/<%= coupons._id %>"
                             method="post">

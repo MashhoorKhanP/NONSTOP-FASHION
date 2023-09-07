@@ -8,6 +8,7 @@ const Admin = require('../models/adminModel');
 
 require('dotenv').config();
 const Razorpay = require('razorpay');
+const { response } = require('express');
 var instance = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET
@@ -15,6 +16,8 @@ var instance = new Razorpay({
 
 const getProceedtoCheckout = async (req, res, next) => {
     try {
+        var paymentErrorMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         const user = req.session.user;
         req.session.coupon = null;
         const userAddress = await Address.findOne({ userId: user._id });
@@ -41,7 +44,7 @@ const getProceedtoCheckout = async (req, res, next) => {
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('proceedToCheckOut', { user: userData, title: 'Check Out', address, cart, totalPrice, discountPrice, subTotal, couponData, walletBalance, cartCount: req.session.cartCount })
+        res.render('proceedToCheckOut', { user: userData, title: 'Check Out', address, cart, totalPrice, discountPrice, subTotal, couponData, walletBalance, cartCount: req.session.cartCount,paymentErrorMessage })
     } catch (error) {
         next(error);
     }
@@ -119,47 +122,53 @@ const postPlaceOrder = async (req, res, next) => {
             }
             req.session.cartCount = 0
             res.json({ status: 'COD' })
+            
         } else if (paymentType === 'WALLET') {
-            productList.forEach(async (prod) => {
-                await new Order({
-                    user: userData._id,
-                    deliveryAddress: address,
-                    products: prod,
-                    totalPrice: prod.totalProductPrice - minusCouponPrice,
-                    paymentMethod: paymentType,
-                    onlineTransactionId:'WALLET',
-                    status: 'Order Confirmed',
-                    date: new Date(),
-                    couponName,
-                    couponDiscount: minusCouponPrice
-                }).save();
-            })
-            for (const { productId, quantity } of productList) {
-                await Products.updateOne(
-                    { _id: productId._id },
-                    { $inc: { quantity: -quantity } }
-                );
-            }
-            await Cart.deleteOne({ user: userData._id });
-            if (req.session.coupon != null) {
-                await Coupon.findByIdAndUpdate({ _id: req.session.coupon._id }, { $push: { usedUsers: user._id } })
-            }
-            req.session.cartCount = 0;
-            let walletBalanceTotal = userData.wallet - totalPrice
-            await User.findByIdAndUpdate({ _id: user._id }, {
-                $inc: { wallet: -totalPrice },
-                $push: {
-                    walletHistory: {
-                        transactionDate: new Date(),
-                        transactionDetails: 'Product Purchase',
-                        transactionType: 'Debit',
-                        transactionAmount: totalPrice,
-                        currentBalance: walletBalanceTotal
-                    }
+            if(userData.wallet>totalPrice - minusCouponPrice){
+
+                productList.forEach(async (prod) => {
+                    await new Order({
+                        user: userData._id,
+                        deliveryAddress: address,
+                        products: prod,
+                        totalPrice: prod.totalProductPrice - minusCouponPrice,
+                        paymentMethod: paymentType,
+                        onlineTransactionId:'WALLET',
+                        status: 'Order Confirmed',
+                        date: new Date(),
+                        couponName,
+                        couponDiscount: minusCouponPrice
+                    }).save();
+                })
+                for (const { productId, quantity } of productList) {
+                    await Products.updateOne(
+                        { _id: productId._id },
+                        { $inc: { quantity: -quantity } }
+                    );
                 }
-            })
-            res.json({ status: 'WALLET' })
-        } else if (paymentType === 'ONLINE') {
+                await Cart.deleteOne({ user: userData._id });
+                if (req.session.coupon != null) {
+                    await Coupon.findByIdAndUpdate({ _id: req.session.coupon._id }, { $push: { usedUsers: user._id } })
+                }
+                req.session.cartCount = 0;
+                let walletBalanceTotal = userData.wallet - totalPrice
+                await User.findByIdAndUpdate({ _id: user._id }, {
+                    $inc: { wallet: -totalPrice },
+                    $push: {
+                        walletHistory: {
+                            transactionDate: new Date(),
+                            transactionDetails: 'Product Purchase',
+                            transactionType: 'Debit',
+                            transactionAmount: totalPrice,
+                            currentBalance: walletBalanceTotal
+                        }
+                    }
+                })
+                res.json({ status: 'WALLET' })
+            }else{
+                res.json({status:'WALLET BALANCE LOW' });
+            }
+        }else if (paymentType === 'ONLINE') {
             if (walletSelected) {
                 let userData = await User.findOne({ _id: user.id });
                 let walletBalance = parseInt(userData.wallet)

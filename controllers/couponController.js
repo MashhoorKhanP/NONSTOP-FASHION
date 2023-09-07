@@ -8,6 +8,8 @@ const Admin = require('../models/adminModel');
 /** Get Coupons Start */
 const getCoupons = async (req, res, next) => {
     try {
+        var couponMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         let pageNum = 1;
         if (req.query.pageNum) {
             pageNum = parseInt(req.query.pageNum)
@@ -20,7 +22,7 @@ const getCoupons = async (req, res, next) => {
         const totalcouponsCount = await Coupons.find({}).count()
         let pageCount = Math.ceil(totalcouponsCount / limit);
         const coupons = await Coupons.find({});
-        res.render('coupons', { title: 'Coupons', admin: adminData, pageCount, pageNum, limit, coupons, page: 'Coupons' });
+        res.render('coupons', { title: 'Coupons', admin: adminData, pageCount, pageNum, limit, coupons, page: 'Coupons' ,couponMessage});
     } catch (error) {
         next(error);
     }
@@ -30,8 +32,10 @@ const getCoupons = async (req, res, next) => {
 /** Get Add Coupon Start */
 const getAddCoupon = async (req, res, next) => {
     try {
+        var couponMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         const adminData = await Admin.findOne({ email: req.session.admin.email });
-        res.render('addCoupon', { title: 'Add Coupon', admin: adminData, page: 'Coupons' });
+        res.render('addCoupon', { title: 'Add Coupon', admin: adminData, page: 'Coupons',couponMessage });
 
     } catch (error) {
         next(error);
@@ -53,9 +57,10 @@ const postAddCoupon = async (req, res, next) => {
                 code, discount, minPurchase: minpurchase, expiryDate: expirydate, description
             }).save()
         } else {
-            req.app.locals.message = 'Code already exists'
+            req.app.locals.specialContext = 'Code already exists'
             return res.redirect(`/admin/coupons/addcoupon`)
         }
+        req.app.locals.specialContext ='Coupon added successfully'
         res.redirect(`/admin/coupons`);
     } catch (error) {
         next(error);
@@ -66,10 +71,13 @@ const postAddCoupon = async (req, res, next) => {
 /** Get Edit Coupon Start */
 const getEditCoupon = async (req, res, next) => {
     try {
+
+        var couponMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext=null;
         const adminData = await Admin.findOne({ email: req.session.admin.email });
         const couponId = req.params.id;
         const couponData = await Coupons.findById({ _id: couponId })
-        res.render('editCoupon', { coupons: couponData, page: 'Coupons', title: 'Edit Coupon', admin: adminData });
+        res.render('editCoupon', { coupons: couponData, page: 'Coupons', title: 'Edit Coupon', admin: adminData,couponMessage });
     } catch (error) {
         next(error);
     }
@@ -85,7 +93,7 @@ const postEditCoupon = async (req, res, next) => {
         const isCodeExist = await Coupons.findOne({ code });
 
         if (isCodeExist && isCodeExist._id != couponId) {
-            req.app.locals.message = 'Coupon already exists';
+            req.app.locals.specialContext = 'Coupon already exists';
             return res.redirect(`/admin/coupons/editcoupon/${couponId}`);
         } else {
             const couponData = await Coupons.findByIdAndUpdate({ _id: couponId },
@@ -95,6 +103,7 @@ const postEditCoupon = async (req, res, next) => {
                     }
                 });
         }
+        req.app.locals.specialContext = 'Coupon updated successfully';
         res.redirect('/admin/coupons');
     } catch (error) {
         next(error);
@@ -115,7 +124,6 @@ const getCancelCoupon = async (req, res, next) => {
                     }
                 }
             );
-            req.app.locals.message = 'Coupon added'
         } else {
             await Coupons.findByIdAndUpdate({ _id: couponId },
                 {
@@ -124,7 +132,6 @@ const getCancelCoupon = async (req, res, next) => {
                     }
                 }
             );
-            req.app.locals.message = 'Coupon has been Cancelled'
         }
         res.redirect('/admin/coupons');
     } catch (error) {

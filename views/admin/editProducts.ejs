@@ -13,6 +13,9 @@
                         </div>
                         <div class="card-body px-0 pb-2">
                             <div class="table-responsive p-0">
+                                <div class="text-center text-danger">
+                                    <%= locals.editProductMessage?editProductMessage:'' %> 
+                                </div>
                                 <!-- Copeid Code Start -->
                                 <form class="p-4 border" action="/admin/products/editproduct" method="post"
                                     enctype="multipart/form-data" id="editProductsubmit-form">

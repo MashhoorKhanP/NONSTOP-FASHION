@@ -11,11 +11,16 @@
                     </p>
                     <% } %>
             </div>
+            <div class="text-center text-danger">
+                <%= locals.adminLoginMessage?adminLoginMessage:'' %> 
+            </div>
             <% if(email){ %>
                 <form action="/admin/otplogin" method="post" id="submit-formtwo">
                     <!-- OTP Field -->
+
                     <div class="mb-3 position-relative align-items-center">
                         <label for="otp-input" class="form-label">Enter OTP *</label>
+                        <input type="text" value="<%=email%>" name="email" hidden>
                         <input type="otp" class="rounded-0 form-control" name="otp" id="otp-input">
                         <i class="bi bi-eye-slash-fill position-absolute end-0 translate-middle-y end-0 pe-3 eye-icon"
                             id="otp-toggle"></i>
@@ -115,8 +120,6 @@
             const inputs = [otp];
             if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                 formTwo.submit();
-                console.log("Form submission successful")
-                alert('Login Successful');
             }
         };
         /** Form Validation End */

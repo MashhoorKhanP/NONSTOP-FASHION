@@ -5,11 +5,7 @@
         <div class="container w-50 pt-5 pb-5 border border-dark">
             <h1 class="fs-3 text-black text-center">Admin Login</h1>
             <div class="text-center text-danger">
-                <% if(typeof message !=='undefined' ){ %>
-                    <p class="">
-                        <%= message %>
-                    </p>
-                    <%} %>
+                <%= locals.adminLoginMessage?adminLoginMessage:'' %> 
             </div>
             <form action="/admin/login" method="post" id="submit-form">
                 <div class="row justify-content-center py-4 ps-4 pe-4">

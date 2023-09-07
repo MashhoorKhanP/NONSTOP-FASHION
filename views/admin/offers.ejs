@@ -62,13 +62,12 @@
                         </td>
                         <td class="text-xs font-weight-bold mb-0 text-center">
                           <%if(offer.status===true){%>
-                            <a class="justify-content-center align-items-center btn btn-outline-success m-2 fw-bold list-btn"
-                              onclick="showConfirmationModal('<%=offer._id%>')">LISTED</a>
-                            <%}else{%>
-                              <a class="justify-content-center align-items-center btn btn-outline-danger m-2 fw-bold  unList-btn"
-                                onclick="showConfirmationModal('<%=offer._id%>')">UNLISTED</a>
-                              <%}%>
-                                </button>
+                            <a class="justify-content-center align-items-center btn btn-outline-danger m-2 fw-bold  unList-btn"
+                                onclick="showConfirmationModal('<%=offer._id%>')">UNLIST</a>
+                              <%}else{%>
+                                <a class="justify-content-center align-items-center btn btn-outline-success m-2 fw-bold list-btn"
+                                  onclick="showConfirmationModal('<%=offer._id%>')">LIST</a>
+                                  <%}%>
                         </td>
                     </tr>
                     <% })}else{%>

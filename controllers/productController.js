@@ -14,6 +14,8 @@ const upload = require('../config/multer');
 /** Get Products Start */
 const getProducts = async (req, res, next) => {
     try {
+        var editProductMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
         let pageNum = 1;
         if (req.query.pageNum) {
             pageNum = parseInt(req.query.pageNum)
@@ -29,7 +31,7 @@ const getProducts = async (req, res, next) => {
         const totalProductsCount = await Products.find({}).count()
         let pageCount = Math.ceil(totalProductsCount / limit);
         const adminData = await Admin.findOne({ email: admin.email });
-        res.render('products', { admin: adminData, pageCount, pageNum, limit, prodsData, offerData, title: 'Products', page: 'Products' });
+        res.render('products', { admin: adminData, pageCount, pageNum, limit, prodsData, offerData, title: 'Products', page: 'Products', editProductMessage});
     } catch (error) {
         next(error);
     }
@@ -41,7 +43,7 @@ const getAddProduct = async (req, res, next) => {
     try {
         const adminData = await Admin.findOne({ email: req.session.admin.email });
         const categories = await Categories.find({});
-        res.render('addProducts', { admin: adminData, title: 'Products', categories, page: 'Products' });
+        res.render('addProducts', { admin: adminData, title: 'Products', categories, page: 'Products'});
 
     } catch (error) {
 
@@ -71,7 +73,8 @@ const postAddProduct = async (req, res, next) => {
         const productData = await new Products({
             brand, name: productname, description, category: categoryData[0]._id, size, price, discountPrice: dprice, quantity, images, createdAt: new Date()
         }).save();
-        res.redirect('/admin/products');
+        req.app.locals.specialContext = 'Product added successfully'
+        return res.redirect('/admin/products');
     } catch (error) {
         next(error);
     }
@@ -84,7 +87,7 @@ const getEditProduct = async (req, res, next) => {
         const prodsData = await Products.findById({ _id: id }).populate('category');
         const catData = await Categories.find({});
         const adminData = await Admin.findOne({ email: req.session.admin.email });
-        res.render('editProducts', { admin: adminData, title: 'Edit Products', prodsData, catData, page: 'Products' })
+        res.render('editProducts', { admin: adminData, title: 'Edit Products', prodsData, catData, page: 'Products'})
     } catch (error) {
         next(error);
     }
@@ -121,8 +124,8 @@ const postEditProduct = async (req, res, next) => {
                 }
             }
         )
-        req.app.locals.productUpdateMessage = 'Product updated successfully'
-        res.redirect(`/admin/products`);
+        req.app.locals.specialContext = 'Product updated successfully'
+        return res.redirect(`/admin/products`);
     } catch (error) {
         next(error);
     }

@@ -1,10 +1,10 @@
 <%- include ('../layouts/shopHeader.ejs') -%>
+<style>
+    
+</style>
     <div class="container">
-        <div>
-            <h1>ALL PRODUCTS</h1>
-        </div>
         <div class="row ">
-            <div class="col-md-3 col-lg-2 mb-4 mb-md-0 filter-bar" style="height: fit-content;">
+            <div id="sidebar" class="col-md-3 col-lg-2 mb-4 mb-md-0 filter-bar" style="height: fit-content;">
                 <div class="pt-2" style="height: 100%;">
                     <h4 class="text-center">ADD FILTER<i class="bi bi-funnel"></i></h4>
                     <% if(removeFilter==='true' ) { %>
@@ -107,41 +107,37 @@
             </div>
             <div class="col-md-9 col-lg-10">
                 <div class="row">
-                    <div class="col me-3 text-end">
+                    <div class="col-d-none col-md-12">
+                        <h1 class="text-start">ALL PRODUCTS</h1>
+                    </div>
+                    <div class="col-md-12 text-end pb-2">
                         <label for="" class="fw-bold">Sort:</label>
                         <% if(sortValue&&sortValue==3) {%>
-                            <a href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
-                                style="color:#f44072;">&nbsp;Latest<i class="bi bi-arrow-repeat"></i>&nbsp;|</a>
-                            <% } else{%>
-                                <a
-                                    href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Latest<i
-                                        class="bi bi-arrow-repeat"></i>&nbsp;|</a>
-                                <% } %>
-                                    <% if(sortValue&&sortValue==2) {%>
-                                        <a href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
-                                            style="color:#f44072;">&nbsp;Price Low to
-                                            High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
-                                        <% } else{%>
-                                            <a
-                                                href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
-                                                Low to High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
-                                            <% } %>
-                                                <% if(sortValue&&sortValue==1) {%>
-                                                    <a href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
-                                                        style="color:#f44072;">&nbsp;Price High
-                                                        to Low<i class="bi bi-sort-numeric-up"></i></a>
-                                                    <% } else{%>
-                                                        <a
-                                                            href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
-                                                            High to Low<i class="bi bi-sort-numeric-up"></i></a>
-                                                        <% } %>
-                                                            <!-- <a href="?sortValue=1">&nbsp;Price High to Low</a> -->
-                                                            <!-- <select class="border-0" id="sortSelect">
-                                    <option value="low">Price low to high</option>
-                                    <option value="high">Price high to low</option>
-                                </select> -->
+                        <a href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                            style="color:#f44072;">&nbsp;Latest<i class="bi bi-arrow-repeat"></i>&nbsp;|</a>
+                        <% } else{%>
+                        <a href="?sortValue=3&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Latest<i
+                                class="bi bi-arrow-repeat"></i>&nbsp;|</a>
+                        <% } %>
+                        <% if(sortValue&&sortValue==2) {%>
+                        <a href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                            style="color:#f44072;">&nbsp;Price Low to
+                            High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
+                        <% } else{%>
+                        <a href="?sortValue=2&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
+                            Low to High<i class="bi bi-sort-numeric-down"></i>&nbsp;|</a>
+                        <% } %>
+                        <% if(sortValue&&sortValue==1) {%>
+                        <a href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>"
+                            style="color:#f44072;">&nbsp;Price High
+                            to Low<i class="bi bi-sort-numeric-up"></i></a>
+                        <% } else{%>
+                        <a href="?sortValue=1&category=<%=category%>&brand=<%=brand%>&minPrice=<%=minPrice%>&maxPrice=<%=maxPrice%>&search=<%=search%>">&nbsp;Price
+                            High to Low<i class="bi bi-sort-numeric-up"></i></a>
+                        <% } %>
                     </div>
                 </div>
+                
                 <div class="row mt-3">
                     <% if (prodsData.length> 0) { %>
                         <% prodsData.forEach((prod)=> { %>

@@ -170,10 +170,9 @@ const postPlaceOrder = async (req, res, next) => {
             }
         }else if (paymentType === 'ONLINE') {
             if (walletSelected) {
-                let userData = await User.findOne({ _id: user.id });
+                let userData = await User.findOne({email:user.email });
                 let walletBalance = parseInt(userData.wallet)
                 totalPrice = parseInt(totalPrice - walletBalance)
-                console.log(totalPrice);
                 req.session.wallet = walletBalance
             }
             totalPrice = parseInt(totalPrice - minusCouponPrice);

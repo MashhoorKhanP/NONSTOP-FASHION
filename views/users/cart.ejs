@@ -169,6 +169,8 @@
       let parsedQuantity = parseInt(quantity.innerText)
       let minQuantity = 1;
       let maxQuantity = parseInt(quantity.dataset.maxQuantity);
+      let messageElement = document.getElementById(`${spanID}-msg`);
+
       maxQuantity = Math.min(maxQuantity, 10);
       if (operation == 1 && parsedQuantity < maxQuantity) {
         parsedQuantity++
@@ -185,7 +187,9 @@
       if (parsedQuantity === 1) {
           console.log('- Btn disabled'); // Change the text color
           minusBtn.style.border = '3px solid red';
-          minusBtn.style.display = 'none' // Change the border color
+          minusBtn.style.display = 'none'
+          messageElement.innerText = "Max quantity reached";
+           // Change the border color
           minusBtn.disabled = true;
       } else {
           console.log('minus Btn disabled');// Reset the text color (empty string to remove inline style)
@@ -201,13 +205,16 @@
         plusBtn.disabled = false;
       }
       //making error msg
-      let messageElement = document.getElementById(`${spanID}-msg`);
       if (parsedQuantity == 10) {
         messageElement.innerText = "Max quantity reached";
       } else if (parsedQuantity == maxQuantity) {
         messageElement.innerText = "Stock limit reached"; // Clear the message if not at the limit
+        plusBtn.style.display = 'none'
+        plusBtn.disabled= true;
       } else {
         messageElement.innerText = ""
+        plusBtn.style.display = 'inline'
+        plusBtn.disabled = false;
       }
     }
     //ajax

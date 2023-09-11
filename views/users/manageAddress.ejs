@@ -18,8 +18,8 @@
                                     <a href="/manageaddress/editaddress/<%= address._id %>" title="Edit Address">
                                         <i class="bi bi-pencil-square text-dark edit-icon"></i>
                                     </a>
-                                    <a href="/manageaddress/deleteaddress/<%= address._id %>" class="ms-2"
-                                        title="Delete Address" onclick="confirm('You want to delete this address?')">
+                                    <a class="ms-2"
+                                        title="Delete Address" type="button" onclick="showConfirmationModal('<%= address._id %>')">
                                         <i class="bi bi-trash3-fill delete-icon text-danger delete-icon"></i>
                                     </a>
                                 </div>
@@ -64,6 +64,28 @@
             </div>
         </div>
     </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to perform this action?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Confirmation Modal -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -77,4 +99,14 @@
         // Update the element's content with the formatted date and time
         document.getElementById("datetime").textContent = formattedDateTime;
     </script>
+    <script>
+        function showConfirmationModal(addressId) {
+          const modal = new bootstrap.Modal(
+            document.getElementById("confirmationModal")
+          );
+          const confirmationAction = document.getElementById("confirmationAction");
+          confirmationAction.href = `/manageaddress/deleteaddress/${addressId}`;
+          modal.show();
+        }
+      </script>
     <%- include ('../layouts/footer.ejs') -%>

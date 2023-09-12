@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 mongoose.connect(process.env.COLLECTION);
 const path = require('path');
-
+const morgan = require('morgan');
 
 const nocache = require('nocache');
 
@@ -21,7 +21,7 @@ app.use('/', userRoute);
 app.use(express.json());
 
 app.set('view engine', 'ejs');
-
+app.use(morgan('dev'));
 /** For Admin Route */
 const adminRoute = require('./routers/adminRoute'); 
 app.use('/admin', adminRoute);

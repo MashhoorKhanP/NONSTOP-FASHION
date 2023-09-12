@@ -414,7 +414,7 @@ const postCancelOrder = async (req, res, next) => {
         const orderData = await Order.findOne({ _id: orderId });
         const userId = orderData.user
         const userData = await User.findOne({ _id: userId })
-        if ((orderData.paymentMethod === 'ONLINE') || (orderData.paymentMethod === 'WALLET') || (orderData.paymentMethod === 'COD')) {
+        if ((orderData.paymentMethod === 'ONLINE') || (orderData.paymentMethod === 'WALLET')) {
             let purchaseAmount = Math.round(orderData.totalPrice)
             let totalWalletAmount = userData.wallet + purchaseAmount
             await User.findByIdAndUpdate({ _id: userId },

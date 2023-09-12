@@ -58,7 +58,6 @@ const postSignup = async (req, res, next) => {
             req.session.mobile = mobno;
             req.session.password = password;
             //req.session.referral = referral;
-            console.log(OTP);
             sendVerifyMail(fname, lname, email, OTP);
             res.render('otpVerification', { title: 'Verification Page', fname, lname, email, mobno, password, emailMessage: 'Please check your email' });
         } else {

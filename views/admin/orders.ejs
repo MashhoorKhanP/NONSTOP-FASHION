@@ -40,7 +40,7 @@
                                                 <%=formattedDate %>
                                             </td>
                                             <td class="text-xs font-weight-bold mb-0 text-center">
-                                                <%=order.deliveryAddress.name%>
+                                                <%=order.user.firstName +' '+order.user.lastName%>
                                             </td>
                                             <td class="">
                                                 <% order.products.forEach((prod)=>{ %>

@@ -182,7 +182,7 @@ const postPlaceOrder = async (req, res, next) => {
                 receipt: ""
             }
             instance.orders.create(options, (error, order) => {
-                //req.session.onlineTransactionId = order.id;
+                req.session.onlineTransactionId = order.id;
                 console.log(order);
                 if (error) {
                     next(error);

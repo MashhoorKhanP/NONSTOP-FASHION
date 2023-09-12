@@ -145,7 +145,7 @@
                                     <!-- Cart Button -->
                                     <% const cartProductIds = cartData.map(item => item.productId._id.toString()); %>
                                                         <% if (cartProductIds.includes(prodsData._id.toString())) { %>
-                                                            <form action='/removecartproduct/<%= prodsData._id %>' method="post">
+                                                            <form action='/removecartproduct/<%= prodsData._id %>' method="get">
                                                                 <button
                                                                 class="btn btn-outline-dark text-center border-1 w-100 h-100"
                                                                 type="submit" style="border-width: 4px;">REMOVE FROM CART

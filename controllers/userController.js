@@ -135,6 +135,7 @@ const postVerifyOtp = async (req, res, next) => {
                 }).save();
             }
             req.session.userId = newUserData._id;
+            req.app.locals.specialContext = 'Registration Successfull, Please Login.';
             return res.redirect('/login');
         } else {
             console.log('Incorrect OTP');

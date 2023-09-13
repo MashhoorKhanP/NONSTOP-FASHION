@@ -169,9 +169,8 @@
     // :: 10.0 ScrollUp Active Code
     if ($.fn.scrollUp) {
         $.scrollUp({
-            scrollSpeed: 1000,
-            easingType: 'easeInOutQuart',
-            scrollText: '<i class="ti-angle-up" aria-hidden="true"></i>'
+            scrollSpeed: 500,
+            scrollText: '<i class="bi bi-arrow-up" aria-hidden="true"></i>'
         });
     }
 

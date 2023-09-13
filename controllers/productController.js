@@ -10,7 +10,6 @@ const schedule = require('node-schedule');
 const fs = require('fs');
 const path = require('path');
 const upload = require('../config/multer');
-
 /** Get Products Start */
 const getProducts = async (req, res, next) => {
     try {
@@ -35,7 +34,6 @@ const getProducts = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 }
 /** Get Products End */
 /** Get Add Products Start */
@@ -44,9 +42,7 @@ const getAddProduct = async (req, res, next) => {
         const adminData = await Admin.findOne({ email: req.session.admin.email });
         const categories = await Categories.find({});
         res.render('addProducts', { admin: adminData, title: 'Products', categories, page: 'Products'});
-
     } catch (error) {
-
         next(error);
     }
 }
@@ -58,7 +54,6 @@ const postAddProduct = async (req, res, next) => {
         const {
             productname, category, check1, check2, check3, check4, check5, check6,
             quantity, price, dprice, description
-
         } = req.body
         const brand = req.body.brand.toUpperCase();
         let images = req.files ? req.files.map((file) => file.filename) : [];
@@ -157,7 +152,6 @@ const getDeleteImage = async (req, res, next) => {
         const files = fs.readdirSync(imageFolder);
         for (const file of files) {
             if (file === imageURL) {
-
                 const filePath = path.join(imageFolder, file);
                 fs.unlinkSync(filePath);
                 break;
@@ -188,7 +182,6 @@ const getHome = async (req, res, next) => {
             wishlistExist = 0;
             const userWishlistData = await User.findOne({ email: req.session.user.email });
             //console.log(userWishlistData);
-
             if (userWishlistData && userWishlistData.wishlist) {
                 const prodExist = userWishlistData.wishlist.find((data) => data == id);
                 if (prodExist) {
@@ -252,11 +245,9 @@ const getProductDetails = async (req, res, next) => {
             }
             prodsData = await Products.findById({ _id: id }).populate('reviews.userId');
             //console.log(prodsData, "ProdsData");
-
             req.session.cartCount = 0
             cartData = await Cart.findOne({ user: user._id })
             if (cartData && cartData.products) {
-
                 req.session.cartCount = cartData.products.length
             }
             let wishlist = userData.wishlist;
@@ -285,7 +276,6 @@ const getReviewProduct = async (req, res, next) => {
         next(error);
     }
 }
-
 const postReviewProduct = async (req, res, next) => {
     try {
         const prodId = req.params.prodId
@@ -309,7 +299,6 @@ const postReviewProduct = async (req, res, next) => {
         next(error);
     }
 }
-
 const getEditReview = async (req, res, next) => {
     try {
         const prodId = req.query.prodId;
@@ -322,7 +311,6 @@ const getEditReview = async (req, res, next) => {
         next(error);
     }
 }
-
 const postEditReview = async (req, res, next) => {
     try {
         const prodId = req.params.prodId;
@@ -346,7 +334,6 @@ const postEditReview = async (req, res, next) => {
         next(error);
     }
 }
-
 const getMoreReviews = async (req, res, next) => {
     try {
         const user = req.session.user;
@@ -401,12 +388,10 @@ const postApplyProductOffer = async (req, res, next) => {
             })
         })
         res.redirect('/admin/products');
-
     } catch (error) {
         next(error);
     }
 }
-
 const postRemoveOffer = async (req, res, next) => {
     try {
         const prodId = req.params.id;
@@ -425,7 +410,6 @@ const postRemoveOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 module.exports = {
     getProducts,
     getAddProduct,

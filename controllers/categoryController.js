@@ -1,10 +1,8 @@
-
 const Admin = require('../models/adminModel');
 const Categories = require('../models/categoryModel');
 const Offer = require('../models/offerModel');
 const Product = require('../models/productModel');
 const schedule = require('node-schedule');
-
 /** Get Category Start */
 const getCategories = async (req, res, next) => {
     try {
@@ -31,7 +29,6 @@ const getCategories = async (req, res, next) => {
     }
 }
 /** Get Category End */
-
 /** Post Add Category Start */
 const postAddCategory = async (req, res, next) => {
     try {
@@ -39,7 +36,6 @@ const postAddCategory = async (req, res, next) => {
         const categoryName = req.body.category.toUpperCase();
         const image = req.file.filename;
         // console.log(categoryName);
-
         if (categoryName) {
             const isExistCategory = await Categories.findOne({ name: categoryName });
             if (isExistCategory) {
@@ -61,7 +57,6 @@ const postAddCategory = async (req, res, next) => {
     }
 }
 /** Post Add Category End */
-
 /** Post Edit Category Start */
 const postEditCategory = async (req, res, next) => {
     try {
@@ -89,13 +84,11 @@ const postEditCategory = async (req, res, next) => {
     }
 }
 /** Post Edit Category End */
-
 /** Get Category Status Start */
 const getCategoryStatus = async (req, res, next) => {
     try {
         const id = req.params.id;
         const categoryData = await Categories.findById({ _id: id });
-
         if (categoryData) {
             if (categoryData.isListed === true) {
                 await Categories.findByIdAndUpdate({ _id: id }, { $set: { isListed: false } });
@@ -159,7 +152,6 @@ const postApplyCategoryOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 const postRemoveCategoryOffer = async (req, res, next) => {
     try {
         let categoryId = req.params.id;
@@ -171,7 +163,6 @@ const postRemoveCategoryOffer = async (req, res, next) => {
         await Product.updateMany({ category: categoryId, offerAppliedBy: 'category' },
             [{
                 $set: {
-
                     price: '$offerPrice'
                 }
             }])
@@ -185,7 +176,6 @@ const postRemoveCategoryOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 module.exports = {
     getCategories,
     postAddCategory,

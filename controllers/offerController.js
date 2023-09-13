@@ -1,7 +1,6 @@
 const Offer = require('../models/offerModel');
 const Admin = require('../models/adminModel');
 //const { request } = require('../routers/adminRoute');
-
 const getOffers = async (req, res, next) => {
     try {
         let pageNum = 1;
@@ -22,7 +21,6 @@ const getOffers = async (req, res, next) => {
         next(error);
     }
 }
-
 const getAddOffer = async (req, res, next) => {
     try {
         const admin = req.session.admin
@@ -34,7 +32,6 @@ const getAddOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 const postAddOffer = async (req, res, next) => {
     try {
         let { name, discount, expirydate } = req.body
@@ -50,7 +47,6 @@ const postAddOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 const getEditOffer = async (req, res, next) => {
     try {
         const offerId = req.query.id;
@@ -64,14 +60,12 @@ const getEditOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 const postEditOffer = async (req, res, next) => {
     try {
         const id = req.params.id;
         let name = req.body.name;
         name = name.toUpperCase();
         let discount = req.body.discount
-
         const offerExists = await Offer.findOne({ offerName: name })
         if (offerExists && offerExists._id != id) {
             req.app.locals.offerUpdateMessage = 'Offer already exists'
@@ -92,7 +86,6 @@ const postEditOffer = async (req, res, next) => {
         next(error);
     }
 }
-
 const getOfferStatus = async (req, res, next) => {
     try {
         const offerId = req.params.id;
@@ -107,7 +100,6 @@ const getOfferStatus = async (req, res, next) => {
         next(error);
     }
 }
-
 module.exports = {
     getOffers,
     getAddOffer,
@@ -116,4 +108,3 @@ module.exports = {
     postEditOffer,
     getOfferStatus
 }
-

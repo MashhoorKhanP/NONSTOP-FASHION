@@ -1,9 +1,7 @@
-
 const Coupons = require('../models/couponModel');
 const User = require('../models/userModel');
 const Cart = require('../models/cartModel');
 const Admin = require('../models/adminModel');
-
 //** Admin */
 /** Get Coupons Start */
 const getCoupons = async (req, res, next) => {
@@ -28,7 +26,6 @@ const getCoupons = async (req, res, next) => {
     }
 }
 /** Get Coupons End */
-
 /** Get Add Coupon Start */
 const getAddCoupon = async (req, res, next) => {
     try {
@@ -36,13 +33,11 @@ const getAddCoupon = async (req, res, next) => {
         req.app.locals.specialContext=null;
         const adminData = await Admin.findOne({ email: req.session.admin.email });
         res.render('addCoupon', { title: 'Add Coupon', admin: adminData, page: 'Coupons',couponMessage });
-
     } catch (error) {
         next(error);
     }
 }
 /** Get Add Coupon End */
-
 /** Post Add Coupon Start */
 const postAddCoupon = async (req, res, next) => {
     try {
@@ -67,11 +62,9 @@ const postAddCoupon = async (req, res, next) => {
     }
 }
 /** Post Add Coupon Start */
-
 /** Get Edit Coupon Start */
 const getEditCoupon = async (req, res, next) => {
     try {
-
         var couponMessage = req.app.locals.specialContext;
         req.app.locals.specialContext=null;
         const adminData = await Admin.findOne({ email: req.session.admin.email });
@@ -83,7 +76,6 @@ const getEditCoupon = async (req, res, next) => {
     }
 }
 /** Get Edit Coupon End */
-
 /** Post Edit Coupon Start */
 const postEditCoupon = async (req, res, next) => {
     try {
@@ -91,7 +83,6 @@ const postEditCoupon = async (req, res, next) => {
         const { discount, minpurchase, expirydate, description } = req.body;
         const code = req.body.coupon.toUpperCase();
         const isCodeExist = await Coupons.findOne({ code });
-
         if (isCodeExist && isCodeExist._id != couponId) {
             req.app.locals.specialContext = 'Coupon already exists';
             return res.redirect(`/admin/coupons/editcoupon/${couponId}`);
@@ -110,7 +101,6 @@ const postEditCoupon = async (req, res, next) => {
     }
 }
 /** Post Edit Coupon End*/
-
 /** Get Remove Coupon Start */
 const getCancelCoupon = async (req, res, next) => {
     try {
@@ -139,7 +129,6 @@ const getCancelCoupon = async (req, res, next) => {
     }
 }
 /** Get Remove Coupon End */
-
 /** User */
 /** Post Apply Coupon Start*/
 const postApplyCoupon = async (req, res, next) => {
@@ -149,7 +138,6 @@ const postApplyCoupon = async (req, res, next) => {
         const userData = await User.findOne({ email: user });
         const couponFound = await Coupons.findOne({ code: coupon })
         const cartData = await Cart.findOne({ user: userData._id })
-
         if (couponFound && couponFound.isCancelled === false) {
             // console.log(cartData.totalPrice);
             if (cartData.totalPrice >= couponFound.minPurchase) {
@@ -161,7 +149,6 @@ const postApplyCoupon = async (req, res, next) => {
                         const totalPrice = req.session.totalPrice
                         const couponDiscountTotal = totalPrice - couponFound.discount
                         let walletActive = false
-
                         if (userData.wallet >= couponDiscountTotal) {
                             walletActive = true;
                         }
@@ -193,7 +180,6 @@ const getRemoveCoupon = async (req, res, next) => {
     }
 }
 /** Remove Coupon End */
-
 module.exports = {
     getCoupons,
     getAddCoupon,

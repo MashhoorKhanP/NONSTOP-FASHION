@@ -4,7 +4,6 @@ const Admin = require('../models/adminModel');
 const path = require('path');
 const fs = require('fs');
 const { nextTick } = require('process');
-
 /** Get Banner Start */
 const getBanners = async (req, res, next) => {
     try {
@@ -30,12 +29,10 @@ const postUpdateBanner = async (req, res, next) => {
         if (bannerExist && image != false && url != null) {
             await fs.unlink(path.join(__dirname, '../public/assets/banner-images') + name, (error) => {
                 if (error) {
-
                     next(error);
                 }
             });
             await Banner.updateOne({ name }, { $set: { image, url } });
-
         } else if (bannerExist && image != false) {
             await fs.unlink(path.join(__dirname, '../public/assets/banner-images') + name, (error) => {
                 if (error) {

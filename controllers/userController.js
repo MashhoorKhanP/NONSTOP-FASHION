@@ -7,12 +7,9 @@ const Cart = require('../models/cartModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { response } = require('../routers/adminRoute');
-const userModel = require('../models/userModel');
 require('dotenv').config();
 const referralCode = require('../utils/referral');
-
 const getOTP = () => Math.floor(Math.random() * 900000) + 100000;
-
 /** Secure Password Start */
 const securePassword = async (password) => {
     try {
@@ -250,6 +247,72 @@ const postLogin = async (req, res, next) => {
     }
 }
 /** Post Login End */
+/** Forgot Password */
+const getLoginForgotPassword = async (req,res,next)=>{
+    try{
+        var passwordErrorMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext = null;
+        res.render('loginForgotPassword',{title: 'Forgot Password',passwordErrorMessage});
+    }catch(error){
+        next(error);
+    }
+}
+const postLoginResetPassword = async(req,res,next)=>{
+    try {
+        const { newpassword, confirmpassword,email } = req.body;
+        const userData = await User.findOne({ email: email });
+        req.session.user = userData;
+        req.session.newPassword = newpassword;
+        req.session.confirmPassword = confirmpassword;
+        var otpErrorMessage = req.app.locals.specialContext;
+        req.app.locals.specialContext= null;
+        res.render('resetOtpVerification',{title:'Reset Password OTP Verification',email,otpErrorMessage})
+        const OTP = getOTP();
+        req.session.otp = OTP;
+        req.session.save();
+        console.log(req.session.otp);
+        sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
+    } catch (error) {
+        next(error);
+    }
+}
+const postResetPasswordVerifyOTP = async(req,res,next)=>{
+    try{
+        console.log('Entered to post reset password VerifyOTP')
+        const otp = Number(req.body.otp);
+        const userData = req.session.user;
+        const OTP = Number(req.session.otp);
+        const newpassword = req.session.newPassword;
+        const confirmpassword = req.session.confirmPassword;
+        if(OTP === otp){
+            if (newpassword !== confirmpassword) {
+                console.log('not match')
+                req.app.locals.specialContext = 'Both passwords are not matching'
+                return res.redirect(`/forgotpassword`);
+            } else {
+                console.log('enteree secpass')
+                const secPassword = await securePassword(newpassword)
+                await User.findByIdAndUpdate(
+                    { _id: userData._id },
+                    {
+                        $set: {
+                            password: secPassword
+                        }
+                    }
+                );
+                req.app.locals.specialContext = 'Password changed successfully';
+                req.session.destroy();
+                return res.redirect('/login'); 
+            }
+        }else{
+            req.app.locals.specialContext = 'Invalid OTP entered';
+            req.session.destroy();
+            return res.redirect('/login');
+        }
+    }catch(error){
+        next(error);
+    }
+}
 /** Post Logout Start */
 const postLogout = async (req, res, next) => {
     try {
@@ -721,12 +784,9 @@ const postSubscribeNewsletter = async (req, res, next) => {
                 return res.redirect(referringUrl);
             }
         });
-
     }catch(error){
-
         next(error);
     }
-
 }
 module.exports = {
     getSignup,
@@ -735,6 +795,9 @@ module.exports = {
     getResendOTP,
     getLogin,
     postLogin,
+    getLoginForgotPassword,
+    postLoginResetPassword,
+    postResetPasswordVerifyOTP,
     postLogout,
     getProfile,
     getEditProfile,

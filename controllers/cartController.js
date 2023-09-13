@@ -1,7 +1,6 @@
 const Cart = require('../models/cartModel');
 const Products = require('../models/productModel');
 const User = require('../models/userModel');
-
 /** Get Cart Start */
 const getCart = async (req, res, next) => {
     try {
@@ -66,13 +65,11 @@ const postAddToCart = async (req, res) => {
         // console.log(id);
         let productId = req.params.id
         let size = req.body.size
-
         const product = await Products.findById({ _id: productId })
         const price = product.price
         const dPrice = product.discountPrice
         const subtotalPrice = product.price + product.discountPrice;
         let userExist = await Cart.findOne({ user: id })
-
         if (userExist) {
             let productExists = await Cart.findOne({ user: id, products: { $elemMatch: { productId: productId } } });
             if (productExists) {
@@ -80,7 +77,6 @@ const postAddToCart = async (req, res) => {
                 return res.redirect(referringUrl);
             } else {
                 await Cart.updateOne({ user: id }, {
-
                     $addToSet: {
                         products: {
                             productId,
@@ -157,7 +153,6 @@ const updateCart = async (req, res, next) => {
         const price = quantity * productData.price;
         const dPrice = quantity * productData.discountPrice;
         const subtotalPrice = (productData.price + productData.discountPrice) * quantity;
-
         if (stock >= quantity) {
             await Cart.updateOne({ user: userData._id, 'products.productId': productId },
                 {
@@ -180,7 +175,6 @@ const updateCart = async (req, res, next) => {
     }
 }
 /** Update Cart End */
-
 module.exports = {
     getCart,
     postAddToCart,

@@ -5,7 +5,6 @@ const Products = require('../models/productModel');
 const Coupon = require('../models/couponModel');
 const User = require('../models/userModel');
 const Admin = require('../models/adminModel');
-
 require('dotenv').config();
 const Razorpay = require('razorpay');
 const { response } = require('express');
@@ -13,7 +12,6 @@ var instance = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET
 })
-
 const getProceedtoCheckout = async (req, res, next) => {
     try {
         var paymentErrorMessage = req.app.locals.specialContext;
@@ -122,10 +120,8 @@ const postPlaceOrder = async (req, res, next) => {
             }
             req.session.cartCount = 0
             res.json({ status: 'COD' })
-            
         } else if (paymentType === 'WALLET') {
             if(userData.wallet>totalPrice - minusCouponPrice){
-
                 productList.forEach(async (prod) => {
                     await new Order({
                         user: userData._id,
@@ -251,7 +247,6 @@ const postVerifyPayment = async (req, res, next) => {
                     date: new Date(),
                     couponName,
                     couponDiscount: minusCouponPrice
-
                 }).save()
             })
             for (const { productId, quantity } of productList) {
@@ -307,7 +302,6 @@ const getMyOrders = async (req, res, next) => {
         let pageCount = Math.ceil(totalOrdersCount / limit);
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: userData._id })
-
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
@@ -452,7 +446,6 @@ const getInvoice = async (req, res, next) => {
     }
 }
 /** Invoice End */
-
 //** Admin */
 /** Get Orders Start */
 const getOrders = async (req, res, next) => {
@@ -515,7 +508,6 @@ const postReturnOrder = async (req, res, next) => {
 /** Post Return End */
 /** Post Approve Return Start */
 const postApproveReturn = async (req, res, next) => {
-
     try {
         let orderId = req.params.id;
         //console.log(orderId);
@@ -547,7 +539,6 @@ const postApproveReturn = async (req, res, next) => {
     }
 }
 /** Post Approve Return End */
-
 module.exports = {
     getProceedtoCheckout,
     postPlaceOrder,

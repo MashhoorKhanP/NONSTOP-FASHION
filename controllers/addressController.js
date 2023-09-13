@@ -1,33 +1,26 @@
 const Address = require('../models/addressModel');
 const User = require('../models/userModel');
 const Cart = require('../models/cartModel');
-
 const getAddAddress = async (req, res, next) => {
     try {
-        
         let user = req.session.user;
         let userData = await User.findOne({ email: user.email });
         let id = req.params.id;
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: userData._id })
         if (cartData && cartData.products) {
-
             req.session.cartCount = cartData.products.length
         }
         if (!user) {
-
             req.app.locals.specialContext = 'User can only add upto 6 address'
             res.redirect('/profile/manageaddress');
-
         } else {
-
             res.render('addAddress', { title: 'Add Address', user: userData, cartCount: req.session.cartCount});
         }
     } catch (error) {
         next(error);
     }
 }
-
 const postAddAddress = async (req, res, next) => {
     try {
         const userId = req.session.user._id;
@@ -38,7 +31,6 @@ const postAddAddress = async (req, res, next) => {
             await Address.updateOne({ userId: userId },
                 {
                     $addToSet: {
-
                         addresses: newAddress
                     }
                 }
@@ -56,7 +48,6 @@ const postAddAddress = async (req, res, next) => {
         next(error);
     }
 }
-
 const getManageAddress = async (req, res, next) => {
     try {
         const userId = req.params.id;
@@ -77,7 +68,6 @@ const getManageAddress = async (req, res, next) => {
         next(error);
     }
 }
-
 const getEditAddress = async (req, res, next) => {
     try {
         const addressId = req.params.id;
@@ -95,7 +85,6 @@ const getEditAddress = async (req, res, next) => {
         next(err);
     }
 }
-
 const postEditAddress = async (req, res, next) => {
     try {
         const addressId = req.params.id;
@@ -121,15 +110,12 @@ const postEditAddress = async (req, res, next) => {
         next(error);
     }
 };
-
 const getDeleteAddress = async (req, res, next) => {
     try {
         const addressId = req.params.id;
         const userId = req.session.user._id;
-
         await Address.updateOne(
             { userId, 'addresses._id': addressId },
-
             {
                 $pull: {
                     addresses: { _id: addressId }
@@ -141,9 +127,7 @@ const getDeleteAddress = async (req, res, next) => {
         next(error);
     }
 }
-
 module.exports = {
-
     getAddAddress,
     postAddAddress,
     getManageAddress,

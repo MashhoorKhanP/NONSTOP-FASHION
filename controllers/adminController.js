@@ -4,9 +4,7 @@ const Orders = require('../models/orderModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
-
 const getOTP = () => Math.floor(Math.random() * 900000) + 100000;
-
 /**Hashing Function Start*/
 const securePassword = async (password) => {
     try {
@@ -17,7 +15,6 @@ const securePassword = async (password) => {
     }
 }
 /**Hashing Function End*/
-
 /**Login Start*/
 const getLogin = async (req, res, next) => {
     try {
@@ -28,7 +25,6 @@ const getLogin = async (req, res, next) => {
         next(error);
     }
 }
-
 const postLogin = async (req, res, next) => {
     try {
         const email = req.body.email;
@@ -52,9 +48,7 @@ const postLogin = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 }
-
 const getOTPLogin = async (req, res, next) => {
     try {
         var adminLoginMessage = req.app.locals.specialContext;
@@ -64,7 +58,6 @@ const getOTPLogin = async (req, res, next) => {
         next(error);
     }
 }
-
 const postSendOTP = async (req, res, next) => {
     try {
         var adminLoginMessage = req.app.locals.specialContext;
@@ -87,7 +80,6 @@ const postSendOTP = async (req, res, next) => {
         next(error)
     }
 }
-
 const postOTPLogin = async (req, res, next) => {
     try {
         console.log(req.session.OTP);
@@ -108,7 +100,6 @@ const postOTPLogin = async (req, res, next) => {
         next(error);
     }
 }
-
 const getResendOTP = async (req, res, next) => {
     try {
         const email = req.query.id;
@@ -136,7 +127,6 @@ const sendVerifyMail = async (email, OTP, next) => {
                 pass: process.env.PASSWORD
             }
         });
-
         const mailOptions = {
             from: 'mashhoorkhan325pc@gmail.com',
             to: email,
@@ -209,11 +199,9 @@ const getDashboardUsers = async (req, res, next) => {
                 { email: { $regex: '.*' + search + '.*', $options: 'i' } },
             ],
         }).sort({ createdAt: -1 }).skip((pageNum - 1) * limit).limit(limit);;
-
         userData.forEach(user => {
             user.formattedCreatedAt = formattedDate(user.createdAt);
         });
-
         if (req.session.admin) {
             res.render('users', { users: userData, admin: adminData, pageCount, pageNum, limit, title: 'Admin Users Page', page: 'Users' });
         } else {
@@ -393,7 +381,6 @@ const getDashboard = async (req, res, next) => {
                 paymentCount.push(data.count)
         })
         let orderDataDownload = await Orders.find({ status: 'Delivered' }).sort({ date: 1 })
-
         if (req.query.sDate) {
             let sDate = req.query.sDate //Start Date
             let eDate = req.query.eDate //End Date
@@ -409,7 +396,6 @@ const getDashboard = async (req, res, next) => {
         if (salesCount && salesCount.length > 0) totalSalesProfit = salesCount[0].total
         const admin = req.session.admin;
         const adminData = await Admin.findOne({ email: admin.email });
-
         if (adminData) {
             res.render('dashboard', {
                 admin: adminData, userCount, orderCount, totalSalesProfit, displayValue, xDisplayValue,
@@ -424,7 +410,6 @@ const getDashboard = async (req, res, next) => {
         next(error);
     }
 }
-
 const postUsersStatus = async (req, res, next) => {
     try {
         const userId = req.params.id;
@@ -442,7 +427,6 @@ const postUsersStatus = async (req, res, next) => {
     }
 }
 /** Post User Unblock/block End */
-
 module.exports = {
     getLogin,
     getOTPLogin,

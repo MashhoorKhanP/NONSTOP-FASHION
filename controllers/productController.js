@@ -339,7 +339,10 @@ const getMoreReviews = async (req, res, next) => {
         const user = req.session.user;
         const prodId = req.query.prodId;
         const prodsData = await Products.findOne({ _id: prodId })
-        res.render('moreReviews', { prod: prodsData, wishlist: user.wishlist, cartCount: req.session.cartCount, user: user, title: 'All Reviews' });
+        if(req.session.user){
+            res.render('moreReviews', { prod: prodsData, wishlist: user.wishlist, cartCount: req.session.cartCount, user: user, title: 'All Reviews' });
+        }
+        res.render('moreReviews', { prod: prodsData, title: 'All Reviews' });
     } catch (error) {
         next(error);
     }

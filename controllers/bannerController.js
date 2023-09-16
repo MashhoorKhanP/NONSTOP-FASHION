@@ -45,9 +45,9 @@ const postUpdateBanner = async (req, res, next) => {
         } else {
             await new Banner({ name, image, url }).save();
         }
-        res.redirect('/admin/banners');
+        return res.redirect('/admin/banners');
     } catch (error) {
-        next(error);
+        console.log(error);
     }
 }
 /** Post Banner End */

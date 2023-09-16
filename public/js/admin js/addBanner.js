@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             mainElement.parentNode.insertBefore(newMainElement, mainElement.nextSibling);
         });
     });
-    const productForm = document.getElementById("submit-form"); // Assuming your form has the id "productForm"
+    const productForm = document.getElementById("addBannerSubmit-form"); // Assuming your form has the id "productForm"
     let imageFiles = []; // Array to store the saved image files
     const fileInputs = document.querySelectorAll(".image");
     fileInputs.forEach((upload, index) => {

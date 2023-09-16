@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-mongoose.connect(process.env.COLLECTION);
+mongoose.connect(process.env.MONGO_CONNECT);
 const path = require('path');
 const morgan = require('morgan');
 

@@ -1,124 +1,68 @@
 <%- include ('../layouts/homeHeader.ejs') -%>
-<section class="mt-5">
-    <div class="container">
-        <h1 class="text-decoration-underline">WALLET HISTORY</h1>
-        <% if(user.walletHistory && user.walletHistory.length>0) {%>
-            <div class="mt-5">
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center align-middle" width="100%"
-                        id="sortTable">
-                        <col style="width:10%">
-                        <col style="width:15%">
-                        <col style="width:25%">
-                        <col style="width:20%">
-                        <col style="width:15%">
-                        <col style="width:25%">
-                        <thead class="text-nowrap">
-                            <tr >
-                                <th scope="col" class="text-center" >#</th>
-                                <th scope="col" class="text-center">Date</th>
-                                <th scope="col" class="text-center">Details</th>
-                                <th scope="col" class="text-center">Type</th>
-                                <th scope="col" class="text-center">Amount</th>
-                                <th scope="col" class="text-center">Current Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>                 <!-- .reverse for showing the data from latest transaction-->
-                            <% user.walletHistory.reverse().forEach((data)=>{ %>
+    <section class="mt-5">
+        <div class="container">
+            <h1 class="text-decoration-underline">WALLET HISTORY</h1>
+            <% if(user.walletHistory && user.walletHistory.length>0) {%>
+                <div class="mt-5">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center align-middle" width="100%" id="sortTable">
+                            <col style="width:10%">
+                            <col style="width:15%">
+                            <col style="width:25%">
+                            <col style="width:20%">
+                            <col style="width:15%">
+                            <col style="width:25%">
+                            <thead class="text-nowrap thead-light">
                                 <tr>
-                                    <th scope="row">
-                                        <%=user.walletHistory.indexOf(data) +1%>
-                                    </th>
-                                    <% const dd=data.transactionDate.getDate(); const
-                                        mm=data.transactionDate.getMonth() + 1; const
-                                        yyyy=data.transactionDate.getFullYear(); const
-                                        formattedDate=`${dd}-${mm}-${yyyy}`; %>
-                                        <td>
-                                            <%=formattedDate %>
-                                        </td>
-                                        <td>
-                                            <%=data.transactionDetails %>
-                                        </td>
-                                        <% if(data.transactionType=='Credit' ) {%>
-                                            <td class="">
-                                                <%=data.transactionType %>
+                                    <th scope="col" class="text-center border">#</th>
+                                    <th scope="col" class="text-center border">Date</th>
+                                    <th scope="col" class="text-center border">Details</th>
+                                    <th scope="col" class="text-center border">Type</th>
+                                    <th scope="col" class="text-center border">Amount</th>
+                                    <th scope="col" class="text-center border">Current Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody> <!-- .reverse for showing the data from latest transaction-->
+                                <% user.walletHistory.reverse().forEach((data)=>{ %>
+                                    <tr>
+                                        <th scope="row" class="border">
+                                            <%=user.walletHistory.indexOf(data) +1%>
+                                        </th>
+                                        <% const dd=data.transactionDate.getDate(); const
+                                            mm=data.transactionDate.getMonth() + 1; const
+                                            yyyy=data.transactionDate.getFullYear(); const
+                                            formattedDate=`${dd}-${mm}-${yyyy}`; %>
+                                            <td class="border">
+                                                <%=formattedDate %>
                                             </td>
-                                            <td class="text-success">
-                                                +<%=data.transactionAmount %>
+                                            <td class="border">
+                                                <%=data.transactionDetails %>
                                             </td>
-                                            <% }else{ %>
-                                                <td class="">
+                                            <% if(data.transactionType=='Credit' ) {%>
+                                                <td class="border">
                                                     <%=data.transactionType %>
                                                 </td>
-                                                <td class="text-danger">
-                                                    -<%=data.transactionAmount %>
+                                                <td class="text-success border">
+                                                    +<%=data.transactionAmount %>
                                                 </td>
-                                                <% } %>
-                                                    <td>
-                                                        ₹<%=data.currentBalance %>
+                                                <% }else{ %>
+                                                    <td class="border">
+                                                        <%=data.transactionType %>
                                                     </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                    <!-- Pagination and Show upto -->
-        <div class="mx-3 d-flex justify-content-between border-top pt-3">
-            <div class="text-center">
-              <ul class="list-unstyled d-flex justify-content-center mb-4">
-                  <li class="mx-1 ps-2 pe-2 rounded-pill show-upto-item">SHOW UPTO:</li>
-                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 10 ? 'active' : '' %>">
-                      <a href="?limit=10" class="">10</a>
-                  </li>
-                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 25 ? 'active' : '' %>">
-                      <a href="?limit=25" class="">25</a>
-                  </li>
-                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 50 ? 'active' : '' %>">
-                      <a href="?limit=50" class="">50</a>
-                  </li>
-                  <li class="mx-1 ps-2 pe-2 limit-text rounded-0 <%= limit === 100 ? 'active' : '' %>">
-                      <a href="?limit=100" class="">100</a>
-                  </li>
-              </ul>
-          </div>
-          <!-- Pagination  -->
-          <nav aria-label="...">
-            <div class="row">
-               <div class="col-lg-12 d-flex  align-items-center justify-content-center">
-                   <div class="product__pagination  d-flex justify-content-end">
-                       <% 
-                       if(pageNum > 1){
-                         %>
-                         <a class="mx-1 btn pagination-btn" 
-                           href="?pageNum=<%= pageNum-1 %>&limit=<%= limit %>">Prev
-                         </a>
-                         <% 
-                       }
-                       for(let i=1; i<= pageCount; i++){
-                           %>
-                           <a class="mx-1 btn ps-2 pe-2 rounded-0 pagination-btn" 
-                           <% if(pageNum === i){ %> 
-                             style="color: white; background:black"
-                           <% } %>
-                             href="?pageNum=<%= i %>&limit=<%= limit %>"><%= i %>
-                           </a>
-                           <%  
-                       }
-                       if(pageNum < pageCount){
-                         %>
-                         <a class="mx-1 btn pagination-btn" 
-                           href="?pageNum=<%= pageNum+1 %>&limit=<%= limit %>">Next
-                         </a>
-                         <% 
-                       }
-                       %>
-                   </div>
-               </div>
-           </div>
-       </nav>
-          </div>
+                                                    <td class="text-danger border">
+                                                        -<%=data.transactionAmount %>
+                                                    </td>
+                                                    <% } %>
+                                                        <td class="border">
+                                                            ₹<%=data.currentBalance %>
+                                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <% }else{ %>
+                <% }else{ %>
                     <div class="mainDiv text-center container">
                         <h1>No wallet transactions!</h1>
                         <img src="/assets/extra-images/source.gif" width="300rem" class="img-fluid rounded-5" alt="">
@@ -126,18 +70,23 @@
                             <a href="/shop" class="rounded-0 btn btn-white border-1 border-dark">GO SHOPPING</a>
                         </div>
                     </div>
-                <% } %>
-    </div>
-</section>
-<script>
-    $('#sortTable').DataTable({
-        responsive: true
-    });
+                    <% } %>
+        </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+    <script>
+        $('#sortTable').DataTable({
+            responsive: true
+        });
     </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
-    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
-    crossorigin="anonymous"></script>
-<%- include ('../layouts/footer.ejs') -%>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+    <%- include ('../layouts/footer.ejs') -%>

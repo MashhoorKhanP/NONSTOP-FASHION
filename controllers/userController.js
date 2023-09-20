@@ -24,13 +24,13 @@ const securePassword = async (password) => {
 const getSignup = async (req, res, next) => {
     try {
         var emailExistMessage = req.app.locals.specialContext;
-        req.app.locals.specialContext=null;
+        req.app.locals.specialContext = null;
         req.session.referral = '';
         if (req.query.referral) {
             req.session.referral = req.query.referral;
             //console.log(req.query.referral);
         }
-        res.render('signUp', { title: "Sign Up", referral: req.session.referral,emailExistMessage });
+        res.render('signUp', { title: "Sign Up", referral: req.session.referral, emailExistMessage });
     } catch (error) {
         next(error.message);
     }
@@ -67,7 +67,7 @@ const postSignup = async (req, res, next) => {
 }
 /** Post SignUp End */
 /** For sending Mail */
-const sendVerifyMail = async (fname, lname, email, OTP,next) => {
+const sendVerifyMail = async (fname, lname, email, OTP, next) => {
     try {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -186,11 +186,11 @@ const getResendOTP = async (req, res, next) => {
 const getLogin = async (req, res, next) => {
     try {
         var loginErrorMessage = req.app.locals.specialContext;
-        req.app.locals.specialContext=null;
+        req.app.locals.specialContext = null;
         if (req.session.user) {
             res.redirect('/');
         } else {
-            res.render('login', { title: "Login",loginErrorMessage });
+            res.render('login', { title: "Login", loginErrorMessage });
         }
     } catch (error) {
         next(error);
@@ -206,19 +206,19 @@ const postLogin = async (req, res, next) => {
         const prodsData = await Products.find({ isListed: true });
         const userData = await User.findOne({ email: email });
         if (userData) {
-        let cartList = [];
-        let cartData = await Cart.findOne({ user: userData._id }).populate('products.productId');
-        if (cartData) {
-            cartList = cartData.products.map(({ productId, size, quantity, cartPrice, cartDPrice }) => ({
-                productId,
-                size,
-                quantity,
-                cartPrice,
-                cartDPrice
-            }));
-        }
-        const banner = await Banner.find({});
-        let wishlist = userData.wishlist;
+            let cartList = [];
+            let cartData = await Cart.findOne({ user: userData._id }).populate('products.productId');
+            if (cartData) {
+                cartList = cartData.products.map(({ productId, size, quantity, cartPrice, cartDPrice }) => ({
+                    productId,
+                    size,
+                    quantity,
+                    cartPrice,
+                    cartDPrice
+                }));
+            }
+            const banner = await Banner.find({});
+            let wishlist = userData.wishlist;
             if (userData.blocked === false) {
                 const passwordMatch = await bcrypt.compare(password, userData.password);
                 let cartData;
@@ -249,25 +249,25 @@ const postLogin = async (req, res, next) => {
 }
 /** Post Login End */
 /** Forgot Password */
-const getLoginForgotPassword = async (req,res,next)=>{
-    try{
+const getLoginForgotPassword = async (req, res, next) => {
+    try {
         var passwordErrorMessage = req.app.locals.specialContext;
         req.app.locals.specialContext = null;
-        res.render('loginForgotPassword',{title: 'Forgot Password',passwordErrorMessage});
-    }catch(error){
+        res.render('loginForgotPassword', { title: 'Forgot Password', passwordErrorMessage });
+    } catch (error) {
         next(error);
     }
 }
-const postLoginResetPassword = async(req,res,next)=>{
+const postLoginResetPassword = async (req, res, next) => {
     try {
-        const { newpassword, confirmpassword,email } = req.body;
+        const { newpassword, confirmpassword, email } = req.body;
         const userData = await User.findOne({ email: email });
         req.session.user = userData;
         req.session.newPassword = newpassword;
         req.session.confirmPassword = confirmpassword;
         var otpErrorMessage = req.app.locals.specialContext;
-        req.app.locals.specialContext= null;
-        res.render('resetOtpVerification',{title:'Reset Password OTP Verification',email,otpErrorMessage})
+        req.app.locals.specialContext = null;
+        res.render('resetOtpVerification', { title: 'Reset Password OTP Verification', email, otpErrorMessage })
         const OTP = getOTP();
         req.session.otp = OTP;
         req.session.save();
@@ -277,15 +277,15 @@ const postLoginResetPassword = async(req,res,next)=>{
         next(error);
     }
 }
-const postResetPasswordVerifyOTP = async(req,res,next)=>{
-    try{
+const postResetPasswordVerifyOTP = async (req, res, next) => {
+    try {
         console.log('Entered to post reset password VerifyOTP')
         const otp = Number(req.body.otp);
         const userData = req.session.user;
         const OTP = Number(req.session.otp);
         const newpassword = req.session.newPassword;
         const confirmpassword = req.session.confirmPassword;
-        if(OTP === otp){
+        if (OTP === otp) {
             if (newpassword !== confirmpassword) {
                 console.log('not match')
                 req.app.locals.specialContext = 'Both passwords are not matching'
@@ -303,14 +303,14 @@ const postResetPasswordVerifyOTP = async(req,res,next)=>{
                 );
                 req.app.locals.specialContext = 'Password changed successfully';
                 req.session.destroy();
-                return res.redirect('/login'); 
+                return res.redirect('/login');
             }
-        }else{
+        } else {
             req.app.locals.specialContext = 'Invalid OTP entered';
             req.session.destroy();
             return res.redirect('/login');
         }
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }
@@ -388,7 +388,7 @@ const postEditProfile = async (req, res, next) => {
 /** Get ChangePassword Start */
 const getManagePassword = async (req, res, next) => {
     try {
-        var changePasswordMessage =  req.app.locals.specialContext;
+        var changePasswordMessage = req.app.locals.specialContext;
         req.app.locals.specialContext = null;
         const userData = await User.findOne({ email: req.session.user.email });
         req.session.cartCount = 0
@@ -396,7 +396,7 @@ const getManagePassword = async (req, res, next) => {
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('managePassword', { title: 'Change Password', user: userData, cartCount: req.session.cartCount,changePasswordMessage })
+        res.render('managePassword', { title: 'Change Password', user: userData, cartCount: req.session.cartCount, changePasswordMessage })
     } catch (error) {
         next(error);
     }
@@ -448,7 +448,7 @@ const getForgotPassword = async (req, res, next) => {
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('forgotPasswordVerification', { title: 'Forgot Password', user: userData,email:userData.email, message: 'An OTP has been sent to your email,please verify your OTP', cartCount: req.session.cartCount,otpErrorMessage });
+        res.render('forgotPasswordVerification', { title: 'Forgot Password', user: userData, email: userData.email, message: 'An OTP has been sent to your email,please verify your OTP', cartCount: req.session.cartCount, otpErrorMessage });
     } catch (error) {
         next(error);
     }
@@ -462,7 +462,7 @@ const postForgotPassword = async (req, res, next) => {
         const userData = await User.findOne({ email: req.session.user.email });
         const userId = userData._id;
         if (userOTP == sharedOTP) {
-            res.render('resetPassword', { title: 'Reset Password', user: userData,cartCount:req.session.cartCount });
+            res.render('resetPassword', { title: 'Reset Password', user: userData, cartCount: req.session.cartCount });
         } else {
             console.log('OTP NOT MATCHING');
             req.app.locals.specialContext = "Entered OTP is wrong, A new OTP has been sent to your email"
@@ -674,24 +674,14 @@ const postWishlist = async (req, res, next) => {
 /** Get Wallet History Start */
 const getWalletHistory = async (req, res, next) => {
     try {
-        let pageNum = 1;
-        if (req.query.pageNum) {
-            pageNum = parseInt(req.query.pageNum)
-        }
-        let limit = 8;
-        if (req.query.limit) {
-            limit = parseInt(req.query.limit);
-        }
         const user = req.session.user.email;
         const userData = await User.findOne({ email: user });
-        const totalWalletHistoryCount = userData.walletHistory.length;
-        let pageCount = Math.ceil(totalWalletHistoryCount / limit);
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: userData._id })
         if (cartData && cartData.products) {
             req.session.cartCount = cartData.products.length
         }
-        res.render('walletHistory', { title: 'Wallet History', user: userData, pageCount, pageNum, limit, cartCount: req.session.cartCount })
+        res.render('walletHistory', { title: 'Wallet History', user: userData, cartCount: req.session.cartCount })
     } catch (error) {
         next(error);
     }
@@ -709,7 +699,7 @@ const getContact = async (req, res, next) => {
         next(error);
     }
 }
-const postContact = async (req, res,next) => {
+const postContact = async (req, res, next) => {
     try {
         const { name, email, subject, message } = req.body;
         const transporter = nodemailer.createTransport({
@@ -755,7 +745,7 @@ const getAboutUs = async (req, res, next) => {
 }
 /** Subscribe Newsletter */
 const postSubscribeNewsletter = async (req, res, next) => {
-    try{
+    try {
         console.log('Subscribe');
         let email = req.body.sbemail;
         const transporter = nodemailer.createTransport({
@@ -785,7 +775,7 @@ const postSubscribeNewsletter = async (req, res, next) => {
                 return res.redirect(referringUrl);
             }
         });
-    }catch(error){
+    } catch (error) {
         next(error);
     }
 }

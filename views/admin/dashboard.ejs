@@ -4,6 +4,7 @@
         .categoryCard {
             min-height: 29.49rem;
         }
+
         .salesReportCard {
             min-height: 22.55rem;
         }
@@ -95,8 +96,8 @@
                                         </div>
                                     </div>
                                     <div class="column-gap-1 mt-3 text-center">
-                                            <button class="btn btn-success rounded-0" type="submit">Submit</button>
-                                            <a href="/admin/dashboard" class="btn btn-danger rounded-0">Reset</a>
+                                        <button class="btn btn-success rounded-0" type="submit">Submit</button>
+                                        <a href="/admin/dashboard" class="btn btn-danger rounded-0">Reset</a>
                                     </div>
                                 </div>
                             </form>
@@ -196,40 +197,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%if(orderDataDownload && orderDataDownload.length>0) {%>
-                                <% orderDataDownload.forEach((order)=>{ %>
-                                    <tr>
-                                        <th scope="row">
-                                            <%=orderDataDownload.indexOf(order)+1 %>
-                                        </th>
-                                        <% const dd=order.date.getDate(); const mm=order.date.getMonth() + 1; const
-                                            yyyy=order.date.getFullYear(); const formattedDate=`${dd}-${mm}-${yyyy}`; %>
-                                            <td class="border">
-                                                <%=formattedDate %>
-                                            </td>
-                                            <td class="border">
-                                                <%=order.deliveryAddress.name %>
-                                            </td>
-                                            <td class="border">
-                                                <%=order._id%>
-                                            </td>
-                                            <td class="border">
-                                                <%=order.products.length %>
-                                            </td>
-                                            <td class="border">
-                                                <%=order.paymentMethod %>
-                                            </td>
-                                            <td class="border">
-                                                <%=order.totalPrice %>
-                                            </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% }else{ %>
-                                            <tr class="text-center">
-                                                <td colspan="7" class="text-center">No data available</td>
+                            <% let grandTotal=0;%>
+                                <%if(orderDataDownload && orderDataDownload.length>0) {%>
+
+                                    <% orderDataDownload.forEach((order)=>{ %>
+                                        <% grandTotal +=order.totalPrice %>
+                                            <tr>
+                                                <th scope="row">
+                                                    <%=orderDataDownload.indexOf(order)+1 %>
+                                                </th>
+                                                <% const dd=order.date.getDate(); const mm=order.date.getMonth() + 1;
+                                                    const yyyy=order.date.getFullYear(); const
+                                                    formattedDate=`${dd}-${mm}-${yyyy}`; %>
+                                                    <td class="border">
+                                                        <%=formattedDate %>
+                                                    </td>
+                                                    <td class="border">
+                                                        <%=order.deliveryAddress.name %>
+                                                    </td>
+                                                    <td class="border">
+                                                        <%=order._id%>
+                                                    </td>
+                                                    <td class="border">
+                                                        <%=order.products.length %>
+                                                    </td>
+                                                    <td class="border">
+                                                        <%=order.paymentMethod %>
+                                                    </td>
+                                                    <td class="border">
+                                                        <%=order.totalPrice %>
+                                                    </td>
                                             </tr>
-                                            <% } %>
+                                            <% }) %>
+                                                <% }else{ %>
+                                                    <tr class="text-center">
+                                                        <td colspan="7" class="text-center">No data available</td>
+                                                    </tr>
+                                                    <% } %>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class=" text-end fw-bold">
+                                    Grand Total:
+                                </td>
+                                <td colspan="6" class="fw-bold">
+                                    <%=grandTotal%>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div id="salesReportDownloadableTable" hidden>
                         <table class="table text-center w-100" id="downloadTable">
@@ -283,6 +298,16 @@
                                                 </tr>
                                                 <% } %>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6" style="text-align: end;">
+                                        Grand Total:
+                                    </td>
+                                    <td>
+                                        <%=grandTotal%>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

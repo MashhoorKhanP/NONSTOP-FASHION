@@ -262,17 +262,21 @@ const postLoginResetPassword = async (req, res, next) => {
     try {
         const { newpassword, confirmpassword, email } = req.body;
         const userData = await User.findOne({ email: email });
-        req.session.user = userData;
-        req.session.newPassword = newpassword;
-        req.session.confirmPassword = confirmpassword;
-        var otpErrorMessage = req.app.locals.specialContext;
-        req.app.locals.specialContext = null;
-        res.render('resetOtpVerification', { title: 'Reset Password OTP Verification', email, otpErrorMessage })
-        const OTP = getOTP();
-        req.session.otp = OTP;
-        req.session.save();
-        console.log(req.session.otp);
-        sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
+        if(userData){
+            req.session.user = userData;
+            req.session.newPassword = newpassword;
+            req.session.confirmPassword = confirmpassword;
+            var otpErrorMessage = req.app.locals.specialContext;
+            req.app.locals.specialContext = null;
+            res.render('resetOtpVerification', { title: 'Reset Password OTP Verification', email, otpErrorMessage })
+            const OTP = getOTP();
+            req.session.otp = OTP;
+            req.session.save();
+            sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
+        }else{
+            req.app.locals.specialContext = 'Email not found';
+            return res.redirect('/forgotpassword');
+        }
     } catch (error) {
         next(error);
     }
@@ -287,7 +291,6 @@ const postResetPasswordVerifyOTP = async (req, res, next) => {
         const confirmpassword = req.session.confirmPassword;
         if (OTP === otp) {
             if (newpassword !== confirmpassword) {
-                console.log('not match')
                 req.app.locals.specialContext = 'Both passwords are not matching'
                 return res.redirect(`/forgotpassword`);
             } else {

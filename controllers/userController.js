@@ -8,7 +8,15 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { response } = require('../routers/adminRoute');
 require('dotenv').config();
+const crypto = require('crypto');
+const Razorpay = require('razorpay');
 const referralCode = require('../utils/referral');
+
+var instance = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET
+})
+
 const getOTP = () => Math.floor(Math.random() * 900000) + 100000;
 /** Secure Password Start */
 const securePassword = async (password) => {
@@ -674,6 +682,75 @@ const postWishlist = async (req, res, next) => {
     }
 }
 /** Post Wishlist End */
+/** Wallet */
+const postAddMoneyToWallet = async(req,res,next) =>{
+    try {
+    const { amount } = req.body
+        const  id = crypto.randomBytes(8).toString('hex')
+
+        var options = {
+            amount: amount*100,
+            currency:'INR',
+            receipt: "hello"+id
+        }
+
+        instance.orders.create(options, (err, order) => {
+            if(err){
+                res.json({status: false})
+            }else{
+                res.json({ status: true, payment:order })
+            }
+
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const postVerifyWalletPayment = async(req,res,next) =>{
+    try {
+        
+        const user = req.session.user
+        const userId = user._id;
+        const details = req.body;
+        const amount = parseInt(details.order.amount)/100
+        let hmac = crypto.createHmac('sha256',process.env.KEY_SECRET)
+        
+        hmac.update(
+            // details['payment[razorpay_order_id]']+ '|' +details['payment[razorpay_payment_id]']
+            details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id
+        )
+        hmac = hmac.digest('hex')
+        if(hmac == details.payment.razorpay_signature){
+            
+            const walletHistory = {
+                transactionDate: new Date(),
+                transactionDetails: 'Deposited via Razorpay',
+                transactionType: 'Credit',
+                transactionAmount:amount,
+                currentBalance: user.wallet+amount
+            }
+            await User.findByIdAndUpdate(
+                {_id: userId},
+                {
+                    $inc:{
+                        wallet: amount
+                    },
+                    $push:{
+                        walletHistory
+                    }
+                }
+            );
+            console.log('udddd')
+            res.json({status: true})
+        }else{
+            res.json({status: false})
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
 /** Get Wallet History Start */
 const getWalletHistory = async (req, res, next) => {
     try {
@@ -805,6 +882,8 @@ module.exports = {
     getShop,
     getWishlist,
     postWishlist,
+    postAddMoneyToWallet,
+    postVerifyWalletPayment,
     getWalletHistory,
     getContact,
     postContact,

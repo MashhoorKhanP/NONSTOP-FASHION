@@ -1,9 +1,9 @@
 <%- include ('../layouts/homeHeader.ejs') -%>
-<style>
-  .wallet-history:hover{
-            text-decoration: underline;
-          }
-</style>
+  <style>
+    .wallet-history:hover {
+      text-decoration: underline;
+    }
+  </style>
   <div class="container align-items-center w-100 d-flex justify-content-center">
     <div class="center-div w-75 m-5" id="login">
       <div class="border pe-3 ps-3">
@@ -14,20 +14,31 @@
         </div>
         <div class="text-center text-danger">
           <% if(typeof addressErrorMessage!=='undefined' ){ %>
-              <p class="text-danger">
-                  <%= addressErrorMessage %>
-              </p>
-              <%} %>
-      </div>
+            <p class="text-danger">
+              <%= addressErrorMessage %>
+            </p>
+            <%} %>
+        </div>
         <br>
         <div class="text-end">
-          <input type="hidden" id="referralCode" name="referral" value="http://localhost:<%=3000%>/signup?referral=<%=user.referralCode %>" readonly>
-                                          <button onclick="copyReferralCode()" class="btn btn-dark rounded-0 my-1" title="Copy referral code">REFERRAL CODE <i class="bi bi-clipboard"></i></button>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-dark rounded-0 my-1" data-bs-toggle="modal" data-bs-target="#form">
+              ADD TO WALLET <i class="bi bi-plus-lg"></i>
+            </button>
+            <input type="hidden" id="referralCode" name="referral"
+              value="http://localhost:<%=3000%>/signup?referral=<%=user.referralCode %>" readonly>
+            <button onclick="copyReferralCode()" class="btn btn-dark rounded-0 my-1" title="Copy referral code">REFERRAL
+              LINK <i class="bi bi-clipboard"></i></button>
+          </div>
         </div>
         <div class="text-start flex-grow-1">
-          <p><strong>Wallet Balance <i class="bi bi-wallet2"></i></strong><br>&nbsp;&#8377;<%=user.wallet%></p>
-          <span><p class="wallet-history"><a href="/wallet-history">Wallet History&nbsp;<i class="bi bi-arrow-down-up"></i></a></p></span>
-      </div>
+          <p><strong>Wallet Balance <i class="bi bi-wallet2"></i></strong><br>&nbsp;&#8377;<%=user.wallet%>
+          </p>
+          <span>
+            <p class="wallet-history"><a href="/wallet-history">Wallet History&nbsp;<i
+                  class="bi bi-arrow-down-up"></i></a></p>
+          </span>
+        </div>
         <% if (user) { %>
           <ul class="list-group">
             <li class="list-group-item">
@@ -111,26 +122,137 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add amount to wallet</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="wallet-form">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="email1">Enter Amount</label>
+                <input type="Number" class="form-control" id="amount" aria-describedby="emailHelp" placeholder="eg:1000" required>
+                <p id="err" class="text-danger"></p>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button> -->
+          <button type="submit" class="btn btn-primary">ADD</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
     integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
     crossorigin="anonymous"></script>
-    <script>
-      // Function to copy the referral code to clipboard
-      function copyReferralCode() {
-          const referralCodeValue = document.getElementById('referralCode').value;
-          const tempInput = document.createElement('input');
-          document.body.appendChild(tempInput);
-          tempInput.value = referralCodeValue;
-          tempInput.select();
-          document.execCommand('copy');
-          document.body.removeChild(tempInput);
-          // Optionally, you can show a notification to indicate the code has been copied
-          alert('Referral code copied to clipboard!');
-      }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+    const err = document.getElementById('err')
+    document.getElementById('wallet-form').addEventListener('submit',(e) =>{
+        e.preventDefault()
+
+        const amount = document.getElementById('amount').value.trim()
+        if( !amount ) {
+            e.preventDefault()
+        }
+        if( amount < 0 ) {
+            e.preventDefault()
+            err.innerHTML = 'Amount cannot be negative!'
+        }
+
+        $.ajax({
+            url: '/profile/addMoneyToWallet',
+            method: 'post',
+            data: { amount },
+            success: (res) => {
+                if(res.status){
+                    console.log('opening razorpay');
+                    razorpayPayment(res.payment)
+                }else{
+                    console.log('status false redirecting to walletHistory');
+                    location.href = '/wallet-history'
+                }
+            }
+        });
+
+    });
+    function razorpayPayment(order) {
+            var options = {
+                "key": "rzp_test_H8SzSqSf4KgwJK", // Enter the Key ID generated from the Dashboard
+                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "NONSTOP-FASHION",
+                "description": "Test Transaction",
+                "image": "/assets/logo-images/e2938d67761f2fca54c4c8da54bc2793.jpg",
+                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    verifyPayment(response, order)
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+        function verifyPayment(payment, order) {
+                console.log(payment,order);
+                $.ajax({
+                    url: '/verifyWalletpayment',
+                    method: 'post',
+                    data: {
+                        payment,
+                        order
+                    },
+                    success: (res) => {
+                        if (res.status) {
+                            location.href = '/wallet-history'
+                        } else{
+                            location.href = '/wallet-history'
+                            alert('Payment Failed');
+                        }
+                    }
+                })
+            }
+  </script>
+  <script>
+    // Function to copy the referral code to clipboard
+    function copyReferralCode() {
+      const referralCodeValue = document.getElementById('referralCode').value;
+      const tempInput = document.createElement('input');
+      document.body.appendChild(tempInput);
+      tempInput.value = referralCodeValue;
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      // Optionally, you can show a notification to indicate the code has been copied
+      alert('Referral code copied to clipboard!');
+    }
+  </script>
   <script>
     var currentDateTime = new Date();
     // Format the date and time as a string

@@ -55,6 +55,7 @@ user_route.post('/logout', userController.postLogout);
 //Get Profile
 user_route.get('/profile/:id', isUser.loggedIn, userController.getProfile);
 
+
 //Edit Profile
 user_route.get('/editprofile', isUser.loggedIn, userController.getEditProfile);
 user_route.post('/editprofile', userController.postEditProfile);
@@ -110,6 +111,8 @@ user_route.post('/applycoupon', couponController.postApplyCoupon);
 user_route.get('/removecoupon',isUser.loggedIn, couponController.getRemoveCoupon);
 
 /**Wallet*/
+user_route.post('/profile/addMoneyToWallet',isUser.loggedIn,userController.postAddMoneyToWallet);
+user_route.post('/verifyWalletpayment',userController.postVerifyWalletPayment);
 user_route.get('/wallet-history', isUser.loggedIn, userController.getWalletHistory);
 
 /**Reviews*/

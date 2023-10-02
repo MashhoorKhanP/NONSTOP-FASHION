@@ -121,9 +121,11 @@
                                   <form action="/admin/categories/editcategory" method="post"
                                     enctype="multipart/form-data">
                                     <input id="catID" value="" type="hidden" name="categoryId">
-                                    <div class="mb-3">
+                                    <div class="mb-3" style="text-align: center;">
                                       <img src="/assets/product-images/<%= categories[i].image %>"
-                                        style="width: 100px; height: 100px;"><br>
+                                          style="display: block; margin: 0 auto; width: 100px; height: 100px;">
+                                  </div>                                  
+                                    <div class="mb-3">
                                       <label for="image" class="form-label">Category Image</label>
                                       <input type="file" class="form-control" name="image" id="image" accept="image/*"
                                         required>

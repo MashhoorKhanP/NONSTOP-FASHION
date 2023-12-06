@@ -225,7 +225,7 @@ const postLogin = async (req, res, next) => {
                     cartDPrice
                 }));
             }
-            const banner = await Banner.find({});
+            const banner = await Banner.find({}).sort({name:1});
             let wishlist = userData.wishlist;
             if (userData.blocked === false) {
                 const passwordMatch = await bcrypt.compare(password, userData.password);

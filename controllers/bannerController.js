@@ -7,7 +7,7 @@ const { nextTick } = require('process');
 const getBanners = async (req, res, next) => {
     try {
         const adminData = await Admin.findOne({ email: req.session.admin.email });
-        const banner = await Banner.find();
+        const banner = await Banner.find().sort({name:1});
         res.render('banners', { title: 'Banners', page: 'Banners', admin: adminData, banner })
     } catch (error) {
         next(error);

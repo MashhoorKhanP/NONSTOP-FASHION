@@ -172,7 +172,7 @@ const getHome = async (req, res, next) => {
             return categories.map(category => category._id);
         }
         let userData;
-        const banner = await Banner.find({});
+        const banner = await Banner.find({}).sort({name:1});
         const id = req.query.id;
         let wishlistExist;
         const prodsData = await Products.find({ isListed: true });

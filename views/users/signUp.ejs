@@ -179,7 +179,7 @@
             if (confirmPasswordValue === '') {
                 setError(confirmPassword, 'Confirm Password is required');
             } else if (confirmPasswordValue !== passwordValue) {
-                document.getElementById('message-error').innerHTML = 'Passwords do not match';
+                document.getElementById('message-error').innerHTML = 'Provide a good password (4 alphabets ,character(@,%),numbers(123)';
             } else {
                 console.log("confirm Password ok");
                 setSuccess(confirmPassword);

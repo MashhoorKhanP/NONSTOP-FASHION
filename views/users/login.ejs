@@ -65,7 +65,7 @@
             return re.test(String(emailId).toLowerCase());
         };
         const isValidPassword = password => {
-            const re = /^[a-zA-Z\d_-]{8,}$/;
+            const re = /^[a-zA-Z\d_@-]{8,}$/;
             return re.test(password);
         }
         const validateInput = () => {

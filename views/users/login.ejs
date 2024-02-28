@@ -5,7 +5,7 @@
         <div class="container w-50 pt-5 pb-5 border border-dark">
             <h1 class="fs-3 text-black text-center">Sign In</h1>
             <div class="text-center text-danger">
-                <%=locals.loginErrorMessage?loginErrorMessage:''%> 
+                <%=locals.loginErrorMessage?loginErrorMessage:''%>
             </div>
             <form action="/login" method="post" id="submit-form">
                 <div class="row justify-content-center py-4 ps-4 pe-4">
@@ -29,8 +29,7 @@
                     <button type="submit" class="rounded-0 btn btn-dark w-50">Log In</button>
                     <br>
                     <span class="login-text">Not a member yet? </span><a href="/signup" class="login-text">Sign Up</a>
-                    <br><span class="login-text">Forgot your Password? </span><a
-                        href="/forgotpassword"
+                    <br><span class="login-text">Forgot your Password? </span><a href="/forgotpassword"
                         class="login-text text-decoration-underline text-primary">Click here</a>
                 </div>
             </form>
@@ -43,7 +42,6 @@
         const password = document.getElementById('password-input');
         form.addEventListener('submit', e => {
             e.preventDefault();
-            console.log("prevented")
             validateInput();
         });
         const setError = (element, message) => {
@@ -69,7 +67,7 @@
             return re.test(password);
         }
         const validateInput = () => {
-            console.log("Entered Validate input");
+
             const emailIdValue = emailId.value.trim();
             const passwordValue = password.value.trim();
             if (emailIdValue === '') {
@@ -78,7 +76,7 @@
                 //alert('Provide a valid Email address')
                 document.getElementById('message-error').innerHTML = 'Provide a valid email address';
             } else {
-                console.log("email Ok");
+
                 setSuccess(emailId);
             }
             if (passwordValue === '') {
@@ -88,13 +86,13 @@
                 document.getElementById('message-error').innerHTML = 'Provide a valid password';
                 //setError(password,'Provide a strong password');
             } else {
-                console.log("Password Ok")
+
                 setSuccess(password);
             }
             const inputs = [emailId, password];
             if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                 form.submit();
-                console.log("Form submission successful")
+
             }
         };
         /** Form Validation End */
@@ -116,4 +114,5 @@
         integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
         crossorigin="anonymous"></script>
     </body>
+
     </html>

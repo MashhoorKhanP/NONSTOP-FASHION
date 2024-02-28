@@ -37,28 +37,26 @@
                                     </div>
                                     <div class="mb-2">
                                         <span>OrderId: <%=order._id %></span><br>
-                                        <% const dd = String(order.date.getDate()).padStart(2, '0');
-                                        const mm = String(order.date.getMonth() + 1).padStart(2, '0');
-                                        const yyyy = order.date.getFullYear();
-                                        const formattedDate = `${dd}-${mm}-${yyyy}`;
-                                        %>
-                                        <span>Date: <%= formattedDate %></span><br>
+                                        <% const dd=String(order.date.getDate()).padStart(2, '0' ); const
+                                            mm=String(order.date.getMonth() + 1).padStart(2, '0' ); const
+                                            yyyy=order.date.getFullYear(); const formattedDate=`${dd}-${mm}-${yyyy}`; %>
+                                            <span>Date: <%= formattedDate %></span><br>
                                     </div>
                                     <div class="mb-2 ">
                                         <span>Payment Method: <%=order.paymentMethod %></span><br>
-                                        <% if(order.paymentMethod ==='ONLINE'){ %>
+                                        <% if(order.paymentMethod==='ONLINE' ){ %>
                                             <span>Transaction Id: <%=order.onlineTransactionId %></span><br>
-                                        <%}%>
-                                        <span>Total Amount: ₹<%=order.totalPrice %></span>
+                                            <%}%>
+                                                <span>Total Amount: ₹<%=order.totalPrice %></span>
                                     </div>
                                     <div class="mb-2">
                                         <% if (order.couponName) { %>
-                                          <span>Coupon Name: <%= order.couponName %></span><br>
-                                        <% } else { %>
-                                          <span>Coupon Name: No coupon used</span><br>
-                                        <% } %>
-                                        <span>Coupon Discount: ₹<%= order.couponDiscount %></span>
-                                      </div>
+                                            <span>Coupon Name: <%= order.couponName %></span><br>
+                                            <% } else { %>
+                                                <span>Coupon Name: No coupon used</span><br>
+                                                <% } %>
+                                                    <span>Coupon Discount: ₹<%= order.couponDiscount %></span>
+                                    </div>
                                     <div>
                                         <strong>Status:</strong>
                                         <%=order.status %>
@@ -226,7 +224,7 @@
             <script>
                 $(document).on("click", ".popupBTN", function () {
                     var cId = $(this).data('id');
-                    console.log(cId);
+
                     $(".modal-body #orderId").val(cId);
                 });
             </script>

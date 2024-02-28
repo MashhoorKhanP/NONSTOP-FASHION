@@ -143,7 +143,7 @@
             return rename.test(String(zipCode));
         };
         const validateInput = () => {
-            console.log("Entered to validate input");
+            
             const userNameValue = userName.value.trim();
             const countryValue = country.value.trim();
             const emailIdValue = emailId.value.trim();
@@ -158,7 +158,7 @@
                 //setError(username);
                 document.getElementById('message-error').innerHTML = 'Names should be alphabets';
             } else {
-                console.log("fName Ok");
+                
                 setSuccess(userName);
             }
             if (countryValue === '') {
@@ -167,7 +167,7 @@
                 //setError(username);
                 document.getElementById('message-error').innerHTML = 'Enter a valid country';
             } else {
-                console.log("lName Ok");
+                
                 setSuccess(country);
             }
             if (emailIdValue === '') {
@@ -176,7 +176,7 @@
                 //alert('Provide a valid Email address')
                 document.getElementById('message-error').innerHTML = 'Provide a valid email address';
             } else {
-                console.log("email Ok");
+                
                 setSuccess(emailId);
             }
             if (mobNoValue === '') {
@@ -185,7 +185,7 @@
                 //alert('Provide a valid Email address')
                 document.getElementById('message-error').innerHTML = 'Provide a valid mobile number';
             } else {
-                console.log("Mobile oK")
+                
                 setSuccess(mobNo);
             }
             if (townValue === '') {
@@ -195,7 +195,7 @@
                 document.getElementById('message-error').innerHTML = 'Provide a correct town name';
                 //setError(password,'Provide a strong password');
             } else {
-                console.log("Town Ok")
+                
                 setSuccess(town);
             }
             if (addressValue === '') {
@@ -203,7 +203,7 @@
             } else if (!isValidAddress(addressValue)) {
                 document.getElementById('message-error').innerHTML = 'Enter a valid Address';
             } else {
-                console.log("Address ok");
+                
                 setSuccess(address);
             }
             if (stateValue === '') {
@@ -211,7 +211,7 @@
             } else if (!isValidState(stateValue)) {
                 document.getElementById('message-error').innerHTML = 'Enter a valid State';
             } else {
-                console.log("State ok");
+                
                 setSuccess(state);
             }
             if (zipCodeValue === '') {
@@ -219,7 +219,7 @@
             } else if (!isValidZip(zipCodeValue)) {
                 document.getElementById('zip-error').innerHTML = 'Enter a valid zip code';
             } else {
-                console.log("Zip ok");
+                
                 setSuccess(zipCode);
             }
             // if(messagesInboxValue===''){
@@ -235,7 +235,7 @@
             if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                 alert('Addresses added successfully');
                 form.submit();
-                console.log("Form submission successful")
+                
             }
         };
         /** Form Validation End **/ 

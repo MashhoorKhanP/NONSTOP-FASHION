@@ -456,7 +456,6 @@
                 var paymentCountData = document.getElementById('paymentCount').innerHTML;
                 var paymentCount = paymentCountData.split(',').map(item => Number(item.trim()));
                 paymentCount.map((data) => parseInt(data))
-                // console.log(paymentCount);
                 var options = {
                     series: paymentCount,
                     chart: {

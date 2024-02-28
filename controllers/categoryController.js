@@ -23,7 +23,7 @@ const getCategories = async (req, res, next) => {
         const currentDate = new Date();
         const offerData = await Offer.find({ $and: [{ status: true }, { expiryDate: { $gt: currentDate } }] })
         const adminData = await Admin.findOne({ email: req.session.admin.email });
-        res.render('categories', { categories, admin: adminData, offerData, pageCount, pageNum, limit, title: 'Catergories', page: 'Categories' ,categoryMessage});
+        res.render('categories', { categories, admin: adminData, offerData, pageCount, pageNum, limit, title: 'Catergories', page: 'Categories', categoryMessage });
     } catch (error) {
         next(error);
     }
@@ -32,14 +32,14 @@ const getCategories = async (req, res, next) => {
 /** Post Add Category Start */
 const postAddCategory = async (req, res, next) => {
     try {
-        // console.log(req.body);
+        // 
         const categoryName = req.body.category.toUpperCase();
         const image = req.file.filename;
-        // console.log(categoryName);
+        // 
         if (categoryName) {
             const isExistCategory = await Categories.findOne({ name: categoryName });
             if (isExistCategory) {
-                console.log('Category already exist');
+
                 req.app.locals.specialContext = 'Category already exists';
                 return res.redirect('/admin/categories');
             } else {
@@ -49,7 +49,7 @@ const postAddCategory = async (req, res, next) => {
             }
         } else {
             req.app.locals.specialContext = 'Not Entered Category Name'
-            console.log('Not Entered Category Name');
+
             res.redirect('/admin/categories');
         }
     } catch (error) {
@@ -62,18 +62,16 @@ const postEditCategory = async (req, res, next) => {
     try {
         const id = req.body.categoryId;
         const newName = req.body.categoryName.toUpperCase();
-        // console.log(newName);
+        // 
         const isCategoryExist = await Categories.findOne({ name: newName });
-        // console.log(req);
+        // 
         if (req.file.filename) {
             const image = req.file.filename;
             if (!isCategoryExist || isCategoryExist._id == id) {
-                //console.log('Category name and image changed');
                 await Categories.findByIdAndUpdate({ _id: id }, { $set: { name: newName, image: image } });
             }
         } else {
             if (!isCategoryExist) {
-                //console.log('Category name changed successfully');
                 await Categories.findByIdAndUpdate({ _id: id }, { $set: { name: newName } });
             }
         }
@@ -113,7 +111,7 @@ const postApplyCategoryOffer = async (req, res, next) => {
         })
         const offerData = await Offer.findOne({ _id: offerId });
         const updatingProducts = await Product.find({ category: categoryId });
-        // console.log(updatingProducts);
+        // 
         for (const product of updatingProducts) {
             var newPrice = product.offerPrice
             const price = product.price + product.discountPrice;

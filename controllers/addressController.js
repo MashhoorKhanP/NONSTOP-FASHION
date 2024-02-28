@@ -35,7 +35,6 @@ const postAddAddress = async (req, res, next) => {
                     }
                 }
             );
-            console.log('Address added successfully');
             res.redirect('/profile/:id');
         } else {
             await new Address({

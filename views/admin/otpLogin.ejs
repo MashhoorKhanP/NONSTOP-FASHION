@@ -39,7 +39,6 @@
         const emailId = document.getElementById('email-input');
         formOne.addEventListener('submit', e => {
             e.preventDefault();
-            console.log("prevented")
             validateInput();
         });
         const setError = (element, message) => {
@@ -61,7 +60,6 @@
             return re.test(String(emailId).toLowerCase());
         };
         const validateInput = () => {
-            console.log("Entered Validate input");
             const emailIdValue = emailId.value.trim();
             if (emailIdValue === '') {
                 setError(emailId, 'Email is required');
@@ -69,7 +67,6 @@
                 //alert('Provide a valid Email address')
                 document.getElementById('message-error').innerHTML = 'Provide a valid email address';
             } else {
-                console.log("email Ok");
                 setSuccess(emailId);
             }
             const inputs = [emailId];

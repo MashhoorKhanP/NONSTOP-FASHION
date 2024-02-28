@@ -49,11 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Append the saved images to the form data
         fileInputs.forEach((fileInput, index) => {
             const croppedImage = document.querySelectorAll('.cropped')[index];
-            console.log(croppedImage);
             const blob = dataURItoBlob(croppedImage.src);
             formData.append(`image_${index}`, new File([blob], `image_${index}.png`, fileInput));
         });
-        console.log("Form Data Before Submit:", formData);
         try {
             const response = await fetch("/admin/products/editproduct", {
                 method: "POST",
@@ -189,7 +187,6 @@ function handleSubmit(event) {
 }
  // Function to handle form submission
  function handleSubmit(e) {
-    console.log("Entered to handle submit");
     if (!isSizeChecked()) {
         e.preventDefault(); // Prevent form submission
         alert("Please select at least one size.");

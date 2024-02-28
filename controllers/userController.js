@@ -24,7 +24,7 @@ const securePassword = async (password) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         return hashedPassword;
     } catch (error) {
-        console.log(error.message);
+
     }
 };
 /** Secure Password End */
@@ -36,7 +36,6 @@ const getSignup = async (req, res, next) => {
         req.session.referral = '';
         if (req.query.referral) {
             req.session.referral = req.query.referral;
-            //console.log(req.query.referral);
         }
         res.render('signUp', { title: "Sign Up", referral: req.session.referral, emailExistMessage });
     } catch (error) {
@@ -47,9 +46,7 @@ const getSignup = async (req, res, next) => {
 /** Post SignUp Start */
 const postSignup = async (req, res, next) => {
     try {
-        const { fname, lname, email, mobno, password, confirmPassword,/**referral*/ } = req.body;
-        // console.log(password);
-        // console.log(confirmPassword);
+        const { fname, lname, email, mobno, password, confirmPassword } = req.body;
         if (password === confirmPassword) {
             const userData = await User.findOne({ email })
             if (userData) {
@@ -97,7 +94,7 @@ const sendVerifyMail = async (fname, lname, email, OTP, next) => {
             if (error) {
                 next(error);
             } else {
-                console.log("Email sent successfully", info.response);
+
             }
         })
     } catch (error) {
@@ -111,10 +108,7 @@ const postVerifyOtp = async (req, res, next) => {
         const enteredOtp = Number(req.body.otp);
         const sharedOtp = Number(req.session.OTP);
         const { fname, lname, email, mobile, password, referral } = req.session;
-        // console.log(sharedOtp);
-        // console.log(enteredOtp);
         if (enteredOtp === sharedOtp) {
-            //console.log(typeof (enteredOtp), typeof (sharedOtp));
             const secPassword = await securePassword(password);
             const newReferralCode = await referralCode();
             let newUserData;
@@ -146,7 +140,7 @@ const postVerifyOtp = async (req, res, next) => {
             req.app.locals.specialContext = 'Registration Successfull, Please Login.';
             return res.redirect('/login');
         } else {
-            console.log('Incorrect OTP');
+
             res.render('otpVerification', { firstName: fname, lastName: lname, email: email, mobile: mobile, password: password, message: 'Invalid OTP' });
         }
     } catch (error) {
@@ -225,7 +219,7 @@ const postLogin = async (req, res, next) => {
                     cartDPrice
                 }));
             }
-            const banner = await Banner.find({}).sort({name:1});
+            const banner = await Banner.find({}).sort({ name: 1 });
             let wishlist = userData.wishlist;
             if (userData.blocked === false) {
                 const passwordMatch = await bcrypt.compare(password, userData.password);
@@ -270,7 +264,7 @@ const postLoginResetPassword = async (req, res, next) => {
     try {
         const { newpassword, confirmpassword, email } = req.body;
         const userData = await User.findOne({ email: email });
-        if(userData){
+        if (userData) {
             req.session.user = userData;
             req.session.newPassword = newpassword;
             req.session.confirmPassword = confirmpassword;
@@ -281,7 +275,7 @@ const postLoginResetPassword = async (req, res, next) => {
             req.session.otp = OTP;
             req.session.save();
             sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
-        }else{
+        } else {
             req.app.locals.specialContext = 'Email not found';
             return res.redirect('/forgotpassword');
         }
@@ -291,7 +285,6 @@ const postLoginResetPassword = async (req, res, next) => {
 }
 const postResetPasswordVerifyOTP = async (req, res, next) => {
     try {
-        console.log('Entered to post reset password VerifyOTP')
         const otp = Number(req.body.otp);
         const userData = req.session.user;
         const OTP = Number(req.session.otp);
@@ -302,7 +295,6 @@ const postResetPasswordVerifyOTP = async (req, res, next) => {
                 req.app.locals.specialContext = 'Both passwords are not matching'
                 return res.redirect(`/forgotpassword`);
             } else {
-                console.log('enteree secpass')
                 const secPassword = await securePassword(newpassword)
                 await User.findByIdAndUpdate(
                     { _id: userData._id },
@@ -347,7 +339,6 @@ const getProfile = async (req, res, next) => {
         const user = req.session.user
         const userData = await User.findOne({ email: user.email })
         const userAddress = await Address.findOne({ userId: user._id });
-        //console.log(userData);
         if (userData) {
             req.session.cartCount = 0
             let cartData = await Cart.findOne({ user: user._id })
@@ -433,7 +424,6 @@ const postManagePassword = async (req, res, next) => {
                     }
                 }
             );
-            console.log('password updated');
             return res.redirect(`/profile/${userId}`);
         } else {
             req.app.locals.specialContext = 'Old password not match';
@@ -452,7 +442,6 @@ const getForgotPassword = async (req, res, next) => {
         const user = req.session.user;
         const userData = await User.findOne({ email: user.email });
         const OTP = req.session.OTP = getOTP();
-        //console.log(userData.email, OTP);
         sendVerifyMail(userData.firstName, userData.lastName, userData.email, OTP);
         req.session.cartCount = 0
         let cartData = await Cart.findOne({ user: user._id })
@@ -475,7 +464,7 @@ const postForgotPassword = async (req, res, next) => {
         if (userOTP == sharedOTP) {
             res.render('resetPassword', { title: 'Reset Password', user: userData, cartCount: req.session.cartCount });
         } else {
-            console.log('OTP NOT MATCHING');
+
             req.app.locals.specialContext = "Entered OTP is wrong, A new OTP has been sent to your email"
             res.redirect(`/profile/${userId}/forgotpassword`);
         }
@@ -683,22 +672,22 @@ const postWishlist = async (req, res, next) => {
 }
 /** Post Wishlist End */
 /** Wallet */
-const postAddMoneyToWallet = async(req,res,next) =>{
+const postAddMoneyToWallet = async (req, res, next) => {
     try {
-    const { amount } = req.body
-        const  id = crypto.randomBytes(8).toString('hex')
+        const { amount } = req.body
+        const id = crypto.randomBytes(8).toString('hex')
 
         var options = {
-            amount: amount*100,
-            currency:'INR',
-            receipt: "hello"+id
+            amount: amount * 100,
+            currency: 'INR',
+            receipt: "hello" + id
         }
 
         instance.orders.create(options, (err, order) => {
-            if(err){
-                res.json({status: false})
-            }else{
-                res.json({ status: true, payment:order })
+            if (err) {
+                res.json({ status: false })
+            } else {
+                res.json({ status: true, payment: order })
             }
 
         })
@@ -707,44 +696,43 @@ const postAddMoneyToWallet = async(req,res,next) =>{
     }
 }
 
-const postVerifyWalletPayment = async(req,res,next) =>{
+const postVerifyWalletPayment = async (req, res, next) => {
     try {
-        
+
         const user = req.session.user
         const userId = user._id;
         const details = req.body;
-        const amount = parseInt(details.order.amount)/100
-        let hmac = crypto.createHmac('sha256',process.env.KEY_SECRET)
-        
+        const amount = parseInt(details.order.amount) / 100
+        let hmac = crypto.createHmac('sha256', process.env.KEY_SECRET)
+
         hmac.update(
             // details['payment[razorpay_order_id]']+ '|' +details['payment[razorpay_payment_id]']
             details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id
         )
         hmac = hmac.digest('hex')
-        if(hmac == details.payment.razorpay_signature){
-            
+        if (hmac == details.payment.razorpay_signature) {
+
             const walletHistory = {
                 transactionDate: new Date(),
                 transactionDetails: 'Deposited via Razorpay',
                 transactionType: 'Credit',
-                transactionAmount:amount,
-                currentBalance: user.wallet+amount
+                transactionAmount: amount,
+                currentBalance: user.wallet + amount
             }
             await User.findByIdAndUpdate(
-                {_id: userId},
+                { _id: userId },
                 {
-                    $inc:{
+                    $inc: {
                         wallet: amount
                     },
-                    $push:{
+                    $push: {
                         walletHistory
                     }
                 }
             );
-            console.log('udddd')
-            res.json({status: true})
-        }else{
-            res.json({status: false})
+            res.json({ status: true })
+        } else {
+            res.json({ status: false })
         }
     } catch (error) {
         next(error)
@@ -803,7 +791,7 @@ const postContact = async (req, res, next) => {
                 next(error);
                 res.json({ status: false })
             } else {
-                console.log("Contact Form Email sent successfully", info.response);
+
                 res.json({ status: true })
             }
         })
@@ -826,7 +814,6 @@ const getAboutUs = async (req, res, next) => {
 /** Subscribe Newsletter */
 const postSubscribeNewsletter = async (req, res, next) => {
     try {
-        console.log('Subscribe');
         let email = req.body.sbemail;
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -849,8 +836,6 @@ const postSubscribeNewsletter = async (req, res, next) => {
                 next(error);
                 res.json({ status: false })
             } else {
-                console.log("Subscription Form Email sent successfully", info.response);
-                //res.json({ status: true })
                 const referringUrl = req.headers.referer;
                 return res.redirect(referringUrl);
             }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
+
 <body>
     <!-- Header Start -->
     <!-- Header End -->
@@ -20,68 +22,69 @@
         <div class="container w- pt-5 text-center pb-5 border w-50 border-dark">
             <h1 class="fs-3 text-black text-center pb-4">Verify OTP</h1>
             <div class="text-center text-success">
-                <%=locals.otpErrorMessage?otpErrorMessage:''%> 
+                <%=locals.otpErrorMessage?otpErrorMessage:''%>
             </div>
-                    <form action="/resetpassword-verifyotp" method="post" id="submit-form">
-                        <div class="row justify-content-center ps-4 pe-4">
-                            <div class="col-md-6 col-12">
-                                <!-- Enter OTP Field -->
-                                <div class="mb-3">
-                                    <label for="firstname-input" class="form-label"></label>
-                                    <input type="hidden" value="add ejs symbol fname ejs symbol close">
-                                    <input type="text" class="rounded-0 form-control w-100" placeholder="Enter your OTP"
-                                        name="otp" id="otp-input">
-                                </div>
-                            </div>
-                            <div class="text-danger text-center" id="message-error"></div>
+            <form action="/resetpassword-verifyotp" method="post" id="submit-form">
+                <div class="row justify-content-center ps-4 pe-4">
+                    <div class="col-md-6 col-12">
+                        <!-- Enter OTP Field -->
+                        <div class="mb-3">
+                            <label for="firstname-input" class="form-label"></label>
+                            <input type="hidden" value="add ejs symbol fname ejs symbol close">
+                            <input type="text" class="rounded-0 form-control w-100" placeholder="Enter your OTP"
+                                name="otp" id="otp-input">
                         </div>
-                        <div class="text-center pt-3">
-                            <button type="submit" class="rounded-0 btn btn-dark w-25 button-verify" id="verifyButton">Verify</button>
-                            <div>
-                                <input type="hidden" name="email" value="<%= email %>" class="form-control">
-                            </div>
-                            <br> 
-                            <div id="countdown-container">
-                                <span id="countdown"></span>
-                            </div>
-                            <div class="reset" id="resend-container" style="display: none;">
-                                <a href="/resend-otp?id=<%= email %>">Resend OTP</a>
-                            </div>
-                        </div>
-                    </form>         
+                    </div>
+                    <div class="text-danger text-center" id="message-error"></div>
+                </div>
+                <div class="text-center pt-3">
+                    <button type="submit" class="rounded-0 btn btn-dark w-25 button-verify"
+                        id="verifyButton">Verify</button>
+                    <div>
+                        <input type="hidden" name="email" value="<%= email %>" class="form-control">
+                    </div>
+                    <br>
+                    <div id="countdown-container">
+                        <span id="countdown"></span>
+                    </div>
+                    <div class="reset" id="resend-container" style="display: none;">
+                        <a href="/resend-otp?id=<%= email %>">Resend OTP</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <script>
         var timerReachedZero = false;
-        function startTimer(duration,display){
-            var timer = duration,minutes,seconds;
-            var timerInterval = setInterval(function(){
-                minutes = parseInt(timer/60,10);
-                seconds = parseInt(timer %60,10);
-                minutes = minutes<10?"0" + minutes: minutes;
-                seconds = seconds<10?"0" + seconds:seconds;
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            var timerInterval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
                 display.textContent = minutes + ":" + seconds;
-                if(timer <= 0){
+                if (timer <= 0) {
                     display.textContent = "Time's up!";
                     /**Hide the countdown container **/
                     document.getElementById("countdown-container").style.display = "none";
                     /**Display the verify button**/
-                    document.querySelector(".button-verify").disabled= true;
+                    document.querySelector(".button-verify").disabled = true;
                     /**Show the resend button**/
                     document.getElementById("resend-container").style.display = "block";
                     /**Set the variable to true**/
                     timerReachedZero = true;
                     clearInterval(timerInterval);
-                }else{
+                } else {
                     timer--;
                 }
-            },1000);
+            }, 1000);
         }
         /**Start the countdown when the page load**/
-        window.onload = function(){
+        window.onload = function () {
             var oneMinute = 60,
-            display = document.querySelector('#countdown');
-            startTimer(oneMinute,display);
+                display = document.querySelector('#countdown');
+            startTimer(oneMinute, display);
         };
     </script>
     <script>
@@ -114,7 +117,7 @@
             return rename.test(Number(otp));
         };
         const validateInput = () => {
-            console.log("Entered to validate input");
+
             const otpValue = otp.value.trim();
             if (otpValue === '') {
                 setError(otp, 'Please enter OTP');
@@ -122,14 +125,14 @@
                 //setError(username);
                 document.getElementById('message-error').innerHTML = 'Recheck and Enter your OTP';
             } else {
-                console.log("OTP Ok");
+
                 setSuccess(otp);
             }
             //FOR SUBMISSION:
             const inputs = [otp];
             if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                 form.submit();
-                console.log("hidd")
+
             }
         };
     </script>

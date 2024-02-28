@@ -44,8 +44,6 @@ const postAddCoupon = async (req, res, next) => {
         const couponId = req.params.id;
         const { discount, minpurchase, expirydate, description } = req.body;
         const code = req.body.coupon.toUpperCase();
-        // console.log('Entered to post coupons')
-        // console.log(discount, minpurchase, expirydate, description, code)
         const isCodeExist = await Coupons.findOne({ code })
         if (!isCodeExist) {
             await new Coupons({
@@ -139,13 +137,11 @@ const postApplyCoupon = async (req, res, next) => {
         const couponFound = await Coupons.findOne({ code: coupon })
         const cartData = await Cart.findOne({ user: userData._id })
         if (couponFound && couponFound.isCancelled === false) {
-            // console.log(cartData.totalPrice);
             if (cartData.totalPrice >= couponFound.minPurchase) {
                 if (couponFound.expiryDate >= new Date()) {
                     const userExist = couponFound.usedUsers.find((data) => data == userData._id)
                     if (!userExist) {
                         req.session.coupon = couponFound
-                        //console.log(req.session.coupon)
                         const totalPrice = req.session.totalPrice
                         const couponDiscountTotal = totalPrice - couponFound.discount
                         let walletActive = false

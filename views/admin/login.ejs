@@ -43,7 +43,6 @@
         const password = document.getElementById('password-input');
         form.addEventListener('submit', e => {
             e.preventDefault();
-            console.log("prevented")
             validateInput();
         });
         const setError = (element, message) => {
@@ -69,7 +68,6 @@
             return re.test(password);
         }
         const validateInput = () => {
-            console.log("Entered Validate input");
             const emailIdValue = emailId.value.trim();
             const passwordValue = password.value.trim();
             if (emailIdValue === '') {
@@ -78,7 +76,6 @@
                 //alert('Provide a valid Email address')
                 document.getElementById('message-error').innerHTML = 'Provide a valid email address';
             } else {
-                console.log("email Ok");
                 setSuccess(emailId);
             }
             if (passwordValue === '') {
@@ -88,14 +85,11 @@
                 document.getElementById('message-error').innerHTML = 'Provide a valid password';
                 //setError(password,'Provide a strong password');
             } else {
-                console.log("Password Ok")
                 setSuccess(password);
             }
             const inputs = [emailId, password];
             if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                 form.submit();
-                console.log("Form submission successful")
-                //alert('Login Successful');
             }
         };
         /** Form Validation End */

@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Add the saved image to the array
             const blob = dataURItoBlob(imgSrc);
             imageFiles[index] = new File([blob], 'image.png');
-            console.log("Image Files Array:", imageFiles);
         });
     });
     productForm.addEventListener("submit", async (e) => {
@@ -103,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         imageFiles.forEach((file, index) => {
             formData.append(`images_${index}`, file);
         });
-        console.log("Form Data Before Submit:", formData);
         try {
             const response = await fetch("/admin/updatebanner", {
                 method: "POST",

@@ -24,7 +24,6 @@ const getProceedtoCheckout = async (req, res, next) => {
         let address = [];
         if (userAddress) {
             address = userAddress.addresses;
-            //console.log(address);
         }
         let cart = await Cart.findOne({ user: userData._id }).populate('products.productId');
         if (!cart) {
@@ -54,12 +53,9 @@ const postPlaceOrder = async (req, res, next) => {
         const user = req.session.user
         const userData = await User.findOne({ email: user.email });
         const addressId = req.body.address;
-        //console.log(addressId);
         const paymentType = req.body.payment
         const walletSelected = req.body.walletCheckBox;
         const addressData = await Address.findOne({ userId: user._id })
-        // console.log(user._id);
-        // console.log(addressData)
         const findAddress = addressData.addresses.find(obj => obj._id.toString() === addressId)
         const address = {
             name: findAddress.userName,
@@ -90,7 +86,6 @@ const postPlaceOrder = async (req, res, next) => {
         let minusCouponPrice = 0
         if (req.session.coupon != null) {
             couponName = req.session.coupon.code
-            // console.log(couponName);
             couponDiscount = req.session.coupon.discount
             minusCouponPrice = couponDiscount / productList.length
         }
@@ -195,19 +190,16 @@ const postPlaceOrder = async (req, res, next) => {
 const postVerifyPayment = async (req, res, next) => {
     try {
         const details = req.body
-        //console.log(details);
         const onlineTransactionId = req.session.onlineTransactionId;
         /** Razor Pay Code */
         const crypto = require('crypto');
         let hmac = crypto.createHmac("sha256", process.env.KEY_SECRET);
         hmac.update(
-            // details['payment[razorpay_order_id]']+ '|' +details['payment[razorpay_payment_id]']
             details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id
         )
         hmac = hmac.digest('hex')
         if (hmac == details.payment.razorpay_signature) {
             const user = req.session.user;
-            //console.log(user.firstName);
             const cartData = await Cart.findOne({ user: user._id }).populate("products.productId");
             let productList = cartData.products.map(({ productId, size, quantity, cartPrice, cartDPrice, cartSubtotalPrice }) => ({
                 productId,
@@ -279,7 +271,6 @@ const postVerifyPayment = async (req, res, next) => {
             }
             res.json({paymentSuccess: true })
         }else{
-            console.log('Payment Error')
             res.json({paymentSuccess: false})
         }
     } catch (error) {
@@ -368,7 +359,6 @@ const getOrderDetails = async (req, res, next) => {
         }
         const orders = await Order.find({ user: userData._id }).populate('products.productId');
         const orderDetails = await Order.findOne({ _id: orderId }).populate('products.productId');
-        //console.log(orderDetails.deliveryAddress);
         let status = 0;
         if (orderDetails.status.toString() === 'Order Confirmed') {
             status = 1;
@@ -510,13 +500,10 @@ const postReturnOrder = async (req, res, next) => {
 const postApproveReturn = async (req, res, next) => {
     try {
         let orderId = req.params.id;
-        //console.log(orderId);
         let orderData = await Order.findOne({ _id: orderId })
         const userId = orderData.user
-        //console.log(orderData);
         const userData = await User.findOne({ _id: userId })
         let orderTotal = Math.round(orderData.totalPrice)
-        // console.log(orderTotal)
         let totalWalletBalance = userData.wallet + orderTotal;
         await User.findByIdAndUpdate({ _id: userId },
             {

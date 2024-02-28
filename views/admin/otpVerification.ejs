@@ -76,7 +76,6 @@
                 display = document.querySelector('#countdown');
             // Call the function to start the timer
             startTimer(oneMinute, display);
-            console.log('Started timer');
         };
     </script>
     <script>
@@ -85,7 +84,6 @@
         const otp = document.getElementById('otp-input');
         formTwo.addEventListener('submit', e => {
             e.preventDefault();
-            console.log("prevented")
             validateInputTwo();
         });
         const setErrorTwo = (element, message) => {
@@ -106,7 +104,6 @@
             return rename.test(Number(otp));
         };
         const validateInputTwo = () => {
-            console.log("Entered Validate input");
             const otpValue = otp.value.trim();
             if (otpValue === '') {
                 setErrorTwo(otp, 'Please enter OTP');
@@ -114,7 +111,6 @@
                 //setError(username);
                 document.getElementById('message-error').innerHTML = 'Recheck and Enter your OTP';
             } else {
-                console.log("OTP Ok");
                 setSuccessTwo(otp);
             }
             const inputs = [otp];

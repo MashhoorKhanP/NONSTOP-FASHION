@@ -83,8 +83,7 @@
         </div> -->
     <!-- Footer Useful Links End -->
     <!-- Subscribe Newsletter Start -->
-    <div
-      class="subscribelettermain-div pt-2 pb-5 col-12 col-md-12 col-lg-2 col-xl-2 d-flex text-nowrap flex-row">
+    <div class="subscribelettermain-div pt-2 pb-5 col-12 col-md-12 col-lg-2 col-xl-2 d-flex text-nowrap flex-row">
       <!-- Email Field -->
       <div class="mb-3 justify-content-center">
         <label for="email-input" class="form-label fw-bold fs-6 pb-2 text-nowrap">Subscribe to our newsletter</label>
@@ -111,8 +110,8 @@
             src="/assets/socialicons-images/glob-facebook.svg" alt="" class="socialicon-img"></a>
       </div>
       <div class="background-div">
-        <a href="https://instagram.com/_mashhoorkhan_?igshid=NGVhN2U2NjQ0Yg==" target="_blank"><img src="/assets/socialicons-images/glob-twitter.svg"
-            class="socialicon-img"></a>
+        <a href="https://instagram.com/_mashhoorkhan_?igshid=NGVhN2U2NjQ0Yg==" target="_blank"><img
+            src="/assets/socialicons-images/glob-twitter.svg" class="socialicon-img"></a>
       </div>
       <div class="background-div">
         <a href="https://www.threads.net/@_mashhoorkhan_" target="_blank"><img
@@ -121,7 +120,7 @@
     </div>
   </div>
   <hr>
-  
+
   <div class="footerlastsection-div w-100 col-12 col-md-12">
     <div class="row text-nowrap">
       <div class="copyright-div d-flex justify-content-center">
@@ -149,7 +148,7 @@
   const sbEmailId = document.getElementById('sbemail-input');
   form.addEventListener('submit', e => {
     e.preventDefault();
-    console.log("prevented")
+
     validateInput();
   });
   const setError = (element, message) => {
@@ -170,7 +169,7 @@
     return re.test(String(sbEmailId).toLowerCase());
   };
   const validateInput = () => {
-    console.log("Entered Validate input");
+
     const sbEmailIdValue = sbEmailId.value.trim();
     if (sbEmailIdValue === '') {
       setError(sbEmailId, 'Email is required');
@@ -178,13 +177,13 @@
       //alert('Provide a valid Email address')
       document.getElementById('message-error').innerHTML = 'Provide a valid email address';
     } else {
-      console.log("email Ok");
+
       setSuccess(sbEmailId);
     }
     const input = sbEmailId;
     if (input.parentElement.classList.contains('success')) {
       form.submit();
-      // console.log("Form submission successful")
+      // 
       // alert('Subscription successful');
       // window.location.reload();
     }
@@ -192,4 +191,5 @@
 </script>
 <!-- Form Validation End -->
 </body>
+
 </html>

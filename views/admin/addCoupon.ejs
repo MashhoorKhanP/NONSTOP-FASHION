@@ -70,7 +70,6 @@
                 const messageError = document.getElementById('message-error');
                 form.addEventListener('submit', e => {
                     e.preventDefault();
-                    console.log('Prevented default validation');
                     validateInput();
                 });
                 const setError = (element, message) => {
@@ -134,7 +133,6 @@
                     const inputs = [coupon, discount, minPurchase, expiryDate, description];
                     if (inputs.every(input => input.parentElement.classList.contains('success'))) {
                         form.submit();
-                        console.log('Successfully submitted');
                     }
                 };
                 /** Form Validation End **/

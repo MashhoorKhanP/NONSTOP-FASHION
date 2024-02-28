@@ -216,7 +216,6 @@
                     inputControl.classList.remove('error');
                 };
                 const validateInput = () => {
-                    console.log("Entered to validate input");
                     const brandNameValue = brandName.value.trim();
                     const proNameValue = pName.value.trim();
                     const descriptionValue = description.value;
@@ -238,7 +237,6 @@
                     if (categoriesValue === '' ||categoriesValue === 'No categories') {
                         setError(category, 'Category is required add category');
                     } else {
-                        console.log("categorySuccess");
                         setSuccess(category);
                     }
                     if (descriptionValue === '') {
@@ -249,19 +247,16 @@
                     if (quantityValue === '') {
                         setError(quantity, 'Quantity is required');
                     } else {
-                        console.log("Mobile oK")
                         setSuccess(quantity);
                     }
                     if (priceValue === '') {
                         setError(price, 'Price is required');
                     } else {
-                        console.log("Password Ok")
                         setSuccess(price);
                     }
                     if (discountPriceValue === '') {
                         setError(discountPrice, 'Discount Price is required');
                     } else {
-                        console.log("confirm Password ok");
                         setSuccess(discountPrice);
                     }
                     if (imageValue === '') {

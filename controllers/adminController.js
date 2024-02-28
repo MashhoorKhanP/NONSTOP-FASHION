@@ -19,8 +19,8 @@ const securePassword = async (password) => {
 const getLogin = async (req, res, next) => {
     try {
         var adminLoginMessage = req.app.locals.specialContext;
-        req.app.locals.specialContext=null;
-        res.render('login', { title: 'Admin Login',adminLoginMessage });
+        req.app.locals.specialContext = null;
+        res.render('login', { title: 'Admin Login', adminLoginMessage });
     } catch (error) {
         next(error);
     }
@@ -53,7 +53,7 @@ const getOTPLogin = async (req, res, next) => {
     try {
         var adminLoginMessage = req.app.locals.specialContext;
         req.app.locals.specialContext = null;
-        res.render('otpLogin', { title: 'Admin OTP Login', adminLoginMessage});
+        res.render('otpLogin', { title: 'Admin OTP Login', adminLoginMessage });
     } catch (error) {
         next(error);
     }
@@ -63,17 +63,14 @@ const postSendOTP = async (req, res, next) => {
         var adminLoginMessage = req.app.locals.specialContext;
         req.app.locals.specialContext = null;
         const email = req.body.email;
-        console.log(email);
-        // const secPassword= await securePassword(password);
         const adminData = await Admin.findOne({ email: email });
         if (adminData) {
             const OTP = getOTP();
             req.session.OTP = OTP
-            //console.log(req.session.OTP)
             sendVerifyMail(email, OTP);
-            res.render('otpVerification', { title: 'Admin Verification Login', email: adminData.email, AdminOTPLoginmessage: 'OTP Sended Successfully',adminLoginMessage})
+            res.render('otpVerification', { title: 'Admin Verification Login', email: adminData.email, AdminOTPLoginmessage: 'OTP Sended Successfully', adminLoginMessage })
         } else {
-            req.app.locals.specialContext='Email not found';
+            req.app.locals.specialContext = 'Email not found';
             res.redirect('/admin/otplogin');
         }
     } catch (error) {
@@ -82,17 +79,14 @@ const postSendOTP = async (req, res, next) => {
 }
 const postOTPLogin = async (req, res, next) => {
     try {
-        console.log(req.session.OTP);
         const enteredOtp = Number(req.body.otp);
         const sharedOtp = Number(req.session.OTP);
         const email = req.body.email;
-        const adminData = await Admin.findOne({email:email});
-        //console.log(email)
+        const adminData = await Admin.findOne({ email: email });
         if (enteredOtp === sharedOtp) {
             req.session.admin = adminData;
             return res.redirect('/admin/dashboard');
         } else {
-            console.log('Incorrect OTP');
             req.app.locals.specialContext = 'Invalid OTP, Retry again';
             res.redirect('/admin/otplogin');
         }
@@ -103,11 +97,9 @@ const postOTPLogin = async (req, res, next) => {
 const getResendOTP = async (req, res, next) => {
     try {
         const email = req.query.id;
-        //console.log(email)
         const resendedOTP = getOTP()
         req.session.OTP = resendedOTP
         sendVerifyMail(email, resendedOTP);
-        //console.log(resendedOTP);
         res.render('otpVerification', { title: 'Verification Page', email, AdminOTPLoginmessage: 'OTP resended successfully,Please check your email' });
     } catch (error) {
         next(error);
@@ -137,7 +129,7 @@ const sendVerifyMail = async (email, OTP, next) => {
             if (error) {
                 next(error);
             } else {
-                console.log("Email sent successfully", info.response);
+
             }
         })
     } catch (error) {

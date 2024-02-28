@@ -50,7 +50,8 @@
                       <td class="quantity__item align-middle">
                         <div class="quantity">
                           <div class="justify-content-center align-items-center text-nowrap">
-                            <button id="<%=prod.productId._id%>quantityminus" class="border-1 w-25 h-25 bg-dark text-white"
+                            <button id="<%=prod.productId._id%>quantityminus"
+                              class="border-1 w-25 h-25 bg-dark text-white"
                               onclick="updateCart(-1,'<%= prod.productId._id%>','<%=prod.size%>','<%=prod.productId._id%>quantity')"><i
                                 class="bi bi-dash-lg"></i>
                             </button>
@@ -58,7 +59,8 @@
                               data-max-quantity="<%= prod.productId.quantity %>">
                               <%= prod.quantity %>
                             </span>
-                            <button id="<%= prod.productId._id %>quantityplus" class="border-1 w-25 h-25 bg-dark text-white"
+                            <button id="<%= prod.productId._id %>quantityplus"
+                              class="border-1 w-25 h-25 bg-dark text-white"
                               onclick="updateCart(1,'<%=prod.productId._id%>','<%=prod.size%>','<%= prod.productId._id%>quantity')"><i
                                 class="bi bi-plus-lg"></i>
                             </button>
@@ -66,13 +68,14 @@
                         </div>
                         <!-- Check the id -->
                       </td>
-                      <td class="cart__price align-middle text-nowrap" id="<%=prod.productId._id%>quantity-singleProduct">₹<%=
-                          prod.cartPrice%>
+                      <td class="cart__price align-middle text-nowrap"
+                        id="<%=prod.productId._id%>quantity-singleProduct">₹<%= prod.cartPrice%>
                       </td>
                       <td class="cart__close align-middle justify-content-center">
-                        <button class="btn btn-link text-danger" type="button" onclick="showConfirmationModal('<%= prod.productId._id %>')" title="Remove Item"><i
-                              class="bi bi-x-lg"></i></button>
-                       </td>
+                        <button class="btn btn-link text-danger" type="button"
+                          onclick="showConfirmationModal('<%= prod.productId._id %>')" title="Remove Item"><i
+                            class="bi bi-x-lg"></i></button>
+                      </td>
                     </tr>
                     <% }); %>
                       <span id="messageServer"></span>
@@ -80,28 +83,28 @@
               </table>
             </div>
           </div>
-        <!-- Confirmation Modal -->
-        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to perform this action?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                Cancel
-              </button>
-              <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+          <!-- Confirmation Modal -->
+          <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to perform this action?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                  <a href="#" id="confirmationAction" class="btn btn-danger">Confirm</a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- Confirmation Modal -->
+          <!-- Confirmation Modal -->
           <div class="col-lg-4 border align-items-center p-4 w-auto h-100 ms-5 text-nowrap">
             <div class="cart__total">
               <h6 class="fw-bold text-decoration-underline">Cart Total</h6>
@@ -120,7 +123,7 @@
                   <li>Discount: <span id="discount" class="fw-bold text-success"> -&#8377;<%=subtotalPrice-totalPrice
                         %></span></li>
                   <li class="fs-5 mt-3 fw-bold">Total: <span id="totalPrice" class="fw-bold"> &#8377;<%=totalPrice%>
-                        </span></li>
+                    </span></li>
                   <!-- Add more li elements for total, discounts, etc. -->
                 </ul><br>
                 <% if(cartData){%>
@@ -151,21 +154,21 @@
     integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
     crossorigin="anonymous"></script>
 
-    <script>
-      function showConfirmationModal(productId) {
-        const modal = new bootstrap.Modal(
-          document.getElementById("confirmationModal")
-        );
-        const confirmationAction = document.getElementById("confirmationAction");
-        confirmationAction.href = `/removecartproduct/${productId}`;
-        modal.show();
-      }
-    </script>
+  <script>
+    function showConfirmationModal(productId) {
+      const modal = new bootstrap.Modal(
+        document.getElementById("confirmationModal")
+      );
+      const confirmationAction = document.getElementById("confirmationAction");
+      confirmationAction.href = `/removecartproduct/${productId}`;
+      modal.show();
+    }
+  </script>
   <script>
     function updateCart(operation, prodId, size, spanID) {
-      console.log(operation, prodId, size, spanID);
+
       let quantity = document.getElementById(spanID)
-      console.log(quantity);
+
       let parsedQuantity = parseInt(quantity.innerText)
       let minQuantity = 1;
       let maxQuantity = parseInt(quantity.dataset.maxQuantity);
@@ -185,17 +188,17 @@
       minusBtn.disabled = true
       plusBtn.disabled = true
       if (parsedQuantity === 1) {
-          console.log('- Btn disabled'); // Change the text color
-          minusBtn.style.border = '3px solid red';
-          minusBtn.style.display = 'none'
-          messageElement.innerText = "Max quantity reached";
-           // Change the border color
-          minusBtn.disabled = true;
+
+        minusBtn.style.border = '3px solid red';
+        minusBtn.style.display = 'none'
+        messageElement.innerText = "Max quantity reached";
+        // Change the border color
+        minusBtn.disabled = true;
       } else {
-          console.log('minus Btn disabled');// Reset the text color (empty string to remove inline style)
-          minusBtn.style.border = '';
-          minusBtn.style.display= 'inline' // Reset the border color (empty string to remove inline style)
-          minusBtn.disabled = false;
+
+        minusBtn.style.border = '';
+        minusBtn.style.display = 'inline' // Reset the border color (empty string to remove inline style)
+        minusBtn.disabled = false;
       }
       if (parsedQuantity == 10 || parsedQuantity == maxQuantity) {
         plusBtn.style.border = '3px solid red';
@@ -210,7 +213,7 @@
       } else if (parsedQuantity == maxQuantity) {
         messageElement.innerText = "Stock limit reached"; // Clear the message if not at the limit
         plusBtn.style.display = 'none'
-        plusBtn.disabled= true;
+        plusBtn.disabled = true;
       } else {
         messageElement.innerText = ""
         plusBtn.style.display = 'inline'
